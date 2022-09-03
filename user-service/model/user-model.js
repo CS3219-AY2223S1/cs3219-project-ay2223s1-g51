@@ -1,5 +1,5 @@
-import mongoose from 'mongoose';
-var Schema = mongoose.Schema
+import mongoose from "mongoose";
+var Schema = mongoose.Schema;
 let UserModelSchema = new Schema({
     username: {
         type: String,
@@ -9,7 +9,7 @@ let UserModelSchema = new Schema({
     password: {
         type: String,
         required: true,
-    }
-})
+    },
+});
 
-export default mongoose.model('UserModel', UserModelSchema)
+export default mongoose.model("UserModel", UserModelSchema);

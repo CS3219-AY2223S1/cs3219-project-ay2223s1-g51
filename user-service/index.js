@@ -7,9 +7,9 @@ app.use(express.json());
 app.use(cors()); // config cors so that front-end can use
 app.options("*", cors());
 import {
-  createUser,
-  deleteUser,
-  editPassword,
+    createUser,
+    deleteUser,
+    editPassword,
 } from "./controller/user-controller.js";
 
 const router = express.Router();
@@ -21,8 +21,8 @@ router.delete("/::username", deleteUser);
 router.put("/editpassword", editPassword);
 
 app.use("/api/user", router).all((_, res) => {
-  res.setHeader("content-type", "application/json");
-  res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader("content-type", "application/json");
+    res.setHeader("Access-Control-Allow-Origin", "*");
 });
 
 app.listen(8000, () => console.log("user-service listening on port 8000"));
