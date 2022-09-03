@@ -15,15 +15,13 @@ function HomePage() {
 
     //hardcoded for now, need to change to dynamic later
     const handleDelete = async () => {
-        const res = await axios
-            .delete(URL_USER_DELETE_SVC + "yuqitan")
-            .catch((err) => {
-                if (err.response.status === STATUS_CODE_DATABASE_ERROR) {
-                    setErrorDialog("Server error, Please try again later.");
-                } else {
-                    setErrorDialog("Please try again later.");
-                }
-            });
+        const res = await axios.delete(URL_USER_DELETE_SVC + "yuqitan").catch((err) => {
+            if (err.response.status === STATUS_CODE_DATABASE_ERROR) {
+                setErrorDialog("Server error, Please try again later.");
+            } else {
+                setErrorDialog("Please try again later.");
+            }
+        });
 
         if (res && res.status === STATUS_CODE_SUCCESS) {
             setSuccessDialog("Account successfully deleted");
@@ -102,9 +100,7 @@ function HomePage() {
                     />
                 </div>
                 <div>
-                    <Button onClick={handleChangePassword}>
-                        Change Password
-                    </Button>
+                    <Button onClick={handleChangePassword}>Change Password</Button>
                 </div>
             </div>
         </div>

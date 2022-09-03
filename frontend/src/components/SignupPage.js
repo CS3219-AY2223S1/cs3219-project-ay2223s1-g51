@@ -12,11 +12,7 @@ import {
 import { useState } from "react";
 import axios from "axios";
 import { URL_USER_SVC } from "../configs";
-import {
-    STATUS_CODE_CONFLICT,
-    STATUS_CODE_CREATED,
-    STATUS_CODE_SUCCESS,
-} from "../constants";
+import { STATUS_CODE_CONFLICT, STATUS_CODE_CREATED, STATUS_CODE_SUCCESS } from "../constants";
 import { Link } from "react-router-dom";
 
 function SignupPage() {
@@ -29,15 +25,13 @@ function SignupPage() {
 
     const handleSignup = async () => {
         setIsSignupSuccess(false);
-        const res = await axios
-            .post(URL_USER_SVC, { username, password })
-            .catch((err) => {
-                if (err.response.status === STATUS_CODE_CONFLICT) {
-                    setErrorDialog("This username already exists");
-                } else {
-                    setErrorDialog("Please try again later");
-                }
-            });
+        const res = await axios.post(URL_USER_SVC, { username, password }).catch((err) => {
+            if (err.response.status === STATUS_CODE_CONFLICT) {
+                setErrorDialog("This username already exists");
+            } else {
+                setErrorDialog("Please try again later");
+            }
+        });
         if (res && res.status === STATUS_CODE_SUCCESS) {
             setSuccessDialog("Account successfully created");
             setIsSignupSuccess(true);
@@ -79,11 +73,7 @@ function SignupPage() {
                 onChange={(e) => setPassword(e.target.value)}
                 sx={{ marginBottom: "2rem" }}
             />
-            <Box
-                display={"flex"}
-                flexDirection={"row"}
-                justifyContent={"flex-end"}
-            >
+            <Box display={"flex"} flexDirection={"row"} justifyContent={"flex-end"}>
                 <Button variant={"outlined"} onClick={handleSignup}>
                     Sign up
                 </Button>
