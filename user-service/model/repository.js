@@ -20,8 +20,20 @@ export async function createUser(params) {
 }
 
 export async function deleteUser(username) {
-  var myquery = { username: username };
+  var myquery = { username: { $eq: username } };
   db.collection("usermodels").deleteOne(myquery, function (err, obj) {
     if (err) throw err;
   });
+}
+
+export async function editPassword(username, password) {
+  var myquery = { username: { $eq: username } };
+  var newvalues = { $set: { password: password } };
+  db.collection("usermodels").updateOne(
+    myquery,
+    newvalues,
+    function (err, obj) {
+      if (err) throw err;
+    }
+  );
 }

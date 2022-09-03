@@ -1,6 +1,7 @@
 import {
   ormCreateUser as _createUser,
   ormDeleteUser as _deleteUser,
+  ormEditPassword as _editPassword,
 } from "../model/user-orm.js";
 
 export async function createUser(req, res) {
@@ -50,5 +51,30 @@ export async function deleteUser(req, res) {
     return res
       .status(500)
       .json({ message: "Database failure when deleting user!" });
+  }
+}
+
+export async function editPassword(req, res) {
+  try {
+    const { username, password } = req.body;
+    if (username && password) {
+      const resp = await _editPassword(username, password);
+      if (resp.err) {
+        return res.status(400).json({ message: "Could not edit password!" });
+      } else {
+        console.log(`Edited password for user ${username} successfully!`);
+        return res.status(201).json({
+          message: `Edited password for user ${username} successfully!`,
+        });
+      }
+    } else {
+      return res
+        .status(400)
+        .json({ message: "Username and/or Password are missing!" });
+    }
+  } catch (err) {
+    return res
+      .status(500)
+      .json({ message: "Database failure when editing password!" });
   }
 }
