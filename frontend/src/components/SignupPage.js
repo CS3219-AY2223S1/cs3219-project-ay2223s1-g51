@@ -27,7 +27,7 @@ function SignupPage() {
         setIsSignupSuccess(false)
         const res = await axios.post(URL_USER_SVC, { username, password })
             .catch((err) => {
-                if (err.response.status === STATUS_CODE_CONFLICT) {
+                if (err.response.status === STATUS_CODE_CONFLICT) { //duplicate username detected
                     setErrorDialog('This username already exists')
                 } else {
                     setErrorDialog('Please try again later')
