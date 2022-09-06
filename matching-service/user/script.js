@@ -47,7 +47,7 @@ chatForm.addEventListener("submit", function (e) {
 
 // Get message from server
 socket.on("message", (message) => {
-    console.log(message);
+    // console.log(message);
     displayMessage(message);
 
     // Scroll down
@@ -56,7 +56,7 @@ socket.on("message", (message) => {
 
 // Output message to DOM
 function displayMessage(message) {
-    console.log(message);
+    // console.log(message);
     const div = document.createElement("div");
     div.classList.add("message");
     const p = document.createElement("p");
@@ -79,9 +79,9 @@ function outputRoomName(room) {
 // Add users to DOM
 function outputUsers(users) {
     userList.innerHTML = "";
-    console.log(users);
+    // console.log(users);
     users.forEach((user) => {
-        console.log(user.username);
+        // console.log(user.username);
         const li = document.createElement("li");
         li.innerText = user.username;
         userList.appendChild(li);

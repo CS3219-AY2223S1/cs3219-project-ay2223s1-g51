@@ -20,7 +20,7 @@ const io = new Server(httpServer, {});
 io.on("connection", (socket) => {
     // Join a room with username and specified room
     socket.on("joinRoom", ({ username, room }) => {
-        console.log(username);
+        // console.log(username);
 
         // Find an empty/currently occupied room for user
         var assignedRoom = locateRoom(room);
@@ -29,7 +29,7 @@ io.on("connection", (socket) => {
         socket.join(user.room);
         // Welcome current user
         socket.emit("message", formatMessage(username, "Welcome to PeerPrep Chat App"));
-        console.log(assignedRoom);
+        // console.log(assignedRoom);
         // Broadcast when a user connects
         socket.broadcast.to(user.room).emit("message", formatMessage(botName, `${username} has joined the chat`));
 

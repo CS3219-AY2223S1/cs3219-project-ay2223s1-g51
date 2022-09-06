@@ -25,7 +25,7 @@ export function userLeave(id) {
 
 // Get room users
 export function getRoomUsers(room) {
-    console.log(users.filter((user) => user.room === room));
+    // console.log(users.filter((user) => user.room === room));
     return users.filter((user) => user.room === room);
 }
 
@@ -38,13 +38,13 @@ export function getCurrentUser(id) {
 export function addWaiting(id, username, room) {
     const user = { id, username, room };
     waitingUsers[room].push(user);
-    console.log("current waiting users: " + waitingUsers);
+    // console.log("current waiting users: " + waitingUsers);
 }
 
 // Remove waiting and return waiting user
 export function removeWaiting(room) {
     const roomType = room.split("-")[0];
     const user = waitingUsers[roomType].shift();
-    console.log("remove waiting user: " + user);
+    // console.log("remove waiting user: " + user);
     return user.username, user.room;
 }
