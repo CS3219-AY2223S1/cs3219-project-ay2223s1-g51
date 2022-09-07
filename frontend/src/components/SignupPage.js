@@ -61,76 +61,76 @@ function SignupPage() {
 
     return (
         <ThemeProvider theme={theme}>
-        <Container component="main" maxWidth="xs">
-          <CssBaseline />
-          <Box
-            sx={{
-              marginTop: 8,
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-            }}
-          >
-            <Typography component="h1" variant="h5">Sign Up</Typography>
-            <Box component="form" noValidate sx={{ mt: 1 }}>
-                <TextField
-                    margin="normal"
-                    required
-                    fullWidth
-                    label="Username"
-                    variant="standard"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                    sx={{marginBottom: "1rem"}}
-                    autoFocus
-                    />
-                <TextField
-                    margin="normal"
-                    required
-                    fullWidth
-                    label="Password"
-                    variant="standard"
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    sx={{marginBottom: "2rem"}}
-                    />
-                
-                <Box display={"flex"} flexDirection={"column"} justifyContent={"flex-end"}>
-                    <Button 
-                        variant="contained" 
-                        sx={{ mt: 3, mb: 2 }}
-                        onClick={handleSignup}>
-                            Sign up
-                    </Button>
-                    <Grid container>
-                        <Grid item xs>
-                            <Link href="/login" variant="body2">
-                                {"Have an account? Log in"}
-                            </Link>
-                        </Grid>
-                    </Grid>
-                </Box>
-            </Box>
-
-            <Dialog
-                open={isDialogOpen}
-                onClose={closeDialog}
+            <Container component="main" maxWidth="xs">
+                <CssBaseline />
+                <Box
+                    sx={{
+                    marginTop: 8,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    }}
                 >
-                <DialogTitle>{dialogTitle}</DialogTitle>
-                <DialogContent>
-                    <DialogContentText>{dialogMsg}</DialogContentText>
-                </DialogContent>
-                <DialogActions>
-                    {isSignupSuccess
-                        ? <Button href="/home">Log in</Button>
-                        : <Button onClick={closeDialog}>Done</Button>
-                    }
-                </DialogActions>
-            </Dialog>
-        </Box>
-        </Container>
-    </ThemeProvider>
+                    <Typography component="h1" variant="h5">Sign Up</Typography>
+                    <Box component="form" noValidate sx={{ mt: 1 }}>
+                        <TextField
+                            margin="normal"
+                            required
+                            fullWidth
+                            label="Username"
+                            variant="standard"
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value)}
+                            sx={{marginBottom: "1rem"}}
+                            autoFocus
+                            />
+                        <TextField
+                            margin="normal"
+                            required
+                            fullWidth
+                            label="Password"
+                            variant="standard"
+                            type="password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            sx={{marginBottom: "2rem"}}
+                            />
+                        
+                        <Box display={"flex"} flexDirection={"column"} justifyContent={"flex-end"}>
+                            <Button 
+                                variant="contained" 
+                                sx={{ mt: 3, mb: 2 }}
+                                onClick={handleSignup}>
+                                    Sign up
+                            </Button>
+                            <Grid container>
+                                <Grid item xs>
+                                    <Link href="/login" variant="body2">
+                                        {"Have an account? Log in"}
+                                    </Link>
+                                </Grid>
+                            </Grid>
+                        </Box>
+                    </Box>
+
+                    <Dialog
+                        open={isDialogOpen}
+                        onClose={closeDialog}
+                    >
+                        <DialogTitle>{dialogTitle}</DialogTitle>
+                        <DialogContent>
+                            <DialogContentText>{dialogMsg}</DialogContentText>
+                        </DialogContent>
+                        <DialogActions>
+                            {isSignupSuccess
+                                ? <Button href="/home">Log in</Button>
+                                : <Button onClick={closeDialog}>Done</Button>
+                            }
+                        </DialogActions>
+                    </Dialog>
+                </Box>
+            </Container>
+        </ThemeProvider>
     )
 }
 
