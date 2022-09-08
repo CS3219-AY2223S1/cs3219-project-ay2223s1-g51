@@ -9,8 +9,11 @@ export async function createUser(req, res) {
             if(resp == null) {
                 console.log(`New user ${username} created successfully.`)
                 return res.status(201).json({message: `Created new user ${username} successfully!`});
-            }
-        } else {
+            } else if(resp) {
+                return res.status(409).json({message: `User ${username} found, please use another username!`});
+            } 
+        } 
+		else {
             return res.status(400).json({message: 'Username and/or Password are missing!'});
         }
     } catch (err) {
