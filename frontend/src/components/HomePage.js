@@ -27,17 +27,17 @@ const themeLight = createTheme({
     }
 });
 
-function HomePage() {
+function HomePage(props) {
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [dialogTitle, setDialogTitle] = useState("");
     const [dialogMsg, setDialogMsg] = useState("");
     const [isDelete, setIsDelete] = useState(false);
     const [changedPassword, setChangedPassword] = useState("");
-    
+
 
     //hardcoded for now, need to change to dynamic later
     const handleDelete = async () => {
-        const res = await axios.delete(URL_USER_DELETE_SVC + "ryan124352").catch((err) => {
+        const res = await axios.delete(URL_USER_DELETE_SVC + props.username).catch((err) => {
             if (err.response.status === STATUS_CODE_DATABASE_ERROR) {
                 setErrorDialog("Server error, Please try again later.");
             } else {
@@ -55,7 +55,7 @@ function HomePage() {
     const handleChangePassword = async () => {
         const res = await axios
             .put(URL_USER_EDITPASSWORD_SVC, {
-                username: "ryan1234",
+                username: props.username,
                 password: changedPassword,
             })
             .catch((err) => {
@@ -65,7 +65,6 @@ function HomePage() {
                     setErrorDialog("Please try again later.");
                 }
             });
-
         if (res && res.status === STATUS_CODE_SUCCESS) {
             setSuccessDialog("Password successfully changed");
         }

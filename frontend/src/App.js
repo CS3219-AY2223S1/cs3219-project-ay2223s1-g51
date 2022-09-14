@@ -1,19 +1,22 @@
+import React, { useState } from "react";
 import {BrowserRouter as Router, Routes, Route, Navigate} from "react-router-dom";
 import SignupPage from './components/SignupPage';
 import Login from './components/Login';
 import {Box} from "@mui/material";
 import HomePage from "./components/HomePage";
 
-function App() {
+function App(props) {
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
     return (
         <div className="App">
             <Box display={"flex"} flexDirection={"column"} padding={"4rem"}>
                 <Router>
                     <Routes>
                         <Route exact path="/" element={<Navigate replace to="/login" />}></Route>
-                        <Route path="/login" element={<Login/>}/>
+                        <Route path="/login" element={<Login username={username} password={password} setUsername={setUsername} setPassword={setPassword}/>}/>
                         <Route path="/signup" element={<SignupPage/>}/>
-                        <Route path="/home" element={<HomePage/>}/>
+                        <Route path="/home" element={<HomePage username={username} password={password} setPassword={setPassword}/>}/>
                     </Routes>
                 </Router>
             </Box>

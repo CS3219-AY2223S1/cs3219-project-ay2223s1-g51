@@ -28,7 +28,6 @@ function SignupPage() {
     const [dialogTitle, setDialogTitle] = useState("")
     const [dialogMsg, setDialogMsg] = useState("")
     const [isSignupSuccess, setIsSignupSuccess] = useState(false)
-
     const handleSignup = async () => {
         setIsSignupSuccess(false)
         const res = await axios.post(URL_USER_SVC, { username, password })
@@ -123,7 +122,7 @@ function SignupPage() {
                         </DialogContent>
                         <DialogActions>
                             {isSignupSuccess
-                                ? <Button href="/home">Log in</Button>
+                                ? <Button href="/login">Log in</Button>
                                 : <Button onClick={closeDialog}>Done</Button>
                             }
                         </DialogActions>

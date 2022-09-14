@@ -51,14 +51,13 @@ const themeLight = createTheme({
 	}
 });
 
-export default function Login() {
+export default function Login(props) {
 	const navigate = useNavigate();
 	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
 	const [isDialogOpen, setIsDialogOpen] = useState(false)
     const [dialogTitle, setDialogTitle] = useState("")
     const [dialogMsg, setDialogMsg] = useState("")
-	
 	const handleLogin = async (event) => {
 		event.preventDefault()
         const res = await axios.post(URL_USER_FINDUSER_SVC, { username, password })
@@ -85,6 +84,16 @@ export default function Login() {
         setDialogTitle('Error')
         setDialogMsg(msg)
     }
+
+	const usernameHandler = (e) => {
+		props.setUsername(e.target.value)
+		setUsername(e.target.value)
+	}
+
+	const passwordHandler = (e) => {
+		props.setPassword(e.target.value)
+		setPassword(e.target.value)
+	}
 
 	return (
 		<ThemeProvider theme={themeLight}>
@@ -115,9 +124,9 @@ export default function Login() {
 							label="Username"
 							name="username"
 							autoComplete="username"
-							value={username}
+							value={props.username}
 							autoFocus
-							onChange={(e) => setUsername(e.target.value)}
+							onChange={usernameHandler}
 						/>
 						<TextField
 							margin="normal"
@@ -127,9 +136,9 @@ export default function Login() {
 							label="Password"
 							type="password"
 							id="password"
-							value={password} 
+							value={props.password} 
 							autoComplete="current-password"
-							onChange={(e) => setPassword(e.target.value)}
+							onChange={passwordHandler}
 						/>
 						<FormControlLabel
 							control={<Checkbox value="remember" color="primary" />}
