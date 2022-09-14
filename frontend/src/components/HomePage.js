@@ -33,10 +33,11 @@ function HomePage() {
     const [dialogMsg, setDialogMsg] = useState("");
     const [isDelete, setIsDelete] = useState(false);
     const [changedPassword, setChangedPassword] = useState("");
+    
 
     //hardcoded for now, need to change to dynamic later
     const handleDelete = async () => {
-        const res = await axios.delete(URL_USER_DELETE_SVC + "cs123").catch((err) => {
+        const res = await axios.delete(URL_USER_DELETE_SVC + "ryan124352").catch((err) => {
             if (err.response.status === STATUS_CODE_DATABASE_ERROR) {
                 setErrorDialog("Server error, Please try again later.");
             } else {
@@ -54,7 +55,7 @@ function HomePage() {
     const handleChangePassword = async () => {
         const res = await axios
             .put(URL_USER_EDITPASSWORD_SVC, {
-                username: "yuqitan",
+                username: "ryan1234",
                 password: changedPassword,
             })
             .catch((err) => {

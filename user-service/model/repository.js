@@ -10,10 +10,10 @@ mongoose.connect(mongoDB, { useNewUrlParser: true , useUnifiedTopology: true});
 let db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
-export async function createUser(params) {
+export async function findUser(params) {
     const username = params.username;
     //create a promise object which resolves to either an error or a user object from the DB
-    return new Promise((resolve, reject) => { 
+    return new Promise((resolve, reject) => {
         db.collection("usermodels").findOne({ username: username }, function (err, obj) {
             if (err) reject(err);
             resolve(obj);
