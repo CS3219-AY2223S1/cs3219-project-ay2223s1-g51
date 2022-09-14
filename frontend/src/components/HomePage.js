@@ -36,7 +36,7 @@ function HomePage() {
 
     //hardcoded for now, need to change to dynamic later
     const handleDelete = async () => {
-        const res = await axios.delete(URL_USER_DELETE_SVC + "yuqitan").catch((err) => {
+        const res = await axios.delete(URL_USER_DELETE_SVC + "cs123").catch((err) => {
             if (err.response.status === STATUS_CODE_DATABASE_ERROR) {
                 setErrorDialog("Server error, Please try again later.");
             } else {
