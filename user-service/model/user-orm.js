@@ -1,21 +1,23 @@
-import { createUser } from './repository.js';
+import { findUser } from './repository.js';
 import UserModel from "./user-model.js";
 
-//need to separate orm functions from repository to decouple business logic from persistence
-export async function ormCreateUser(username, password) {
-    try {          
-        const newUser = await createUser({username, password})
-        
+export async function ormFindUser(username, password) {
+    try {
+        const newUser = await findUser({username, password})
         if (newUser == null) { //Username not found in DB
-            var userMod = new UserModel({username, password}) //Create new user with 
-            userMod.save()
-            return newUser //returning null value
+            return null
         } else {
-            console.log('Username already exists in the DB');
-            return newUser //returning User object from the DB
+            console.log('Username already exists in the database');
+            return newUser
         }
     } catch (err) {
-        console.log('ERROR: Could not create new user');
+        console.log('ERROR: Finding the user led to an error');
         return err
     }
 }
+//need to separate orm functions from repository to decouple business logic from persistence
+export function ormCreateUser(username, password) {
+        var userMod = new UserModel({username, password}) //Create new user 
+        userMod.save()
+}
+
