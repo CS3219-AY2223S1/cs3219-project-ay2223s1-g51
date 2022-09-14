@@ -5,14 +5,15 @@ export async function createUser(req, res) {
         const { username, password } = req.body;
         if (username && password) {
             const resp = await _createUser(username, password);
-            console.log(resp);
-            if (resp.err) {
-                return res.status(400).json({message: 'Could not create a new user!'});
-            } else {
-                console.log(`Created new user ${username} successfully!`)
+            console.log(resp)
+            if(resp == null) {
+                console.log(`New user ${username} created successfully.`)
                 return res.status(201).json({message: `Created new user ${username} successfully!`});
-            }
-        } else {
+            } else if(resp) {
+                return res.status(409).json({message: `User ${username} found, please use another username!`});
+            } 
+        } 
+		else {
             return res.status(400).json({message: 'Username and/or Password are missing!'});
         }
     } catch (err) {
