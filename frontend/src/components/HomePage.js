@@ -70,6 +70,14 @@ function HomePage(props) {
         }
     };
 
+    const passwordHandler = (e) => {
+		var userNamePassword = props.username + e.target.value
+        var md5Hash = require("md5-hash")
+        var saltedPassword = md5Hash.default(userNamePassword)
+		props.setPassword(saltedPassword)
+		setChangedPassword(saltedPassword)
+	}
+
     const setErrorDialog = (msg) => {
         setIsDialogOpen(true);
         setDialogTitle("Error");
@@ -136,8 +144,7 @@ function HomePage(props) {
                             label="New Password"
                             variant="standard"
                             type="password"
-                            value={changedPassword}
-                            onChange={(e) => setChangedPassword(e.target.value)}
+                            onChange={passwordHandler}
                         />
                         <Button onClick={handleChangePassword}>Change Password</Button>
                         <Button

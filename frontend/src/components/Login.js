@@ -91,8 +91,11 @@ export default function Login(props) {
 	}
 
 	const passwordHandler = (e) => {
-		props.setPassword(e.target.value)
-		setPassword(e.target.value)
+		var userNamePassword = username + e.target.value
+        var md5Hash = require("md5-hash")
+        var saltedPassword = md5Hash.default(userNamePassword)
+		props.setPassword(saltedPassword)
+		setPassword(saltedPassword)
 	}
 
 	return (
@@ -124,7 +127,6 @@ export default function Login(props) {
 							label="Username"
 							name="username"
 							autoComplete="username"
-							value={props.username}
 							autoFocus
 							onChange={usernameHandler}
 						/>
@@ -136,7 +138,6 @@ export default function Login(props) {
 							label="Password"
 							type="password"
 							id="password"
-							value={props.password} 
 							autoComplete="current-password"
 							onChange={passwordHandler}
 						/>

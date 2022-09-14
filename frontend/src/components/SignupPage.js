@@ -44,6 +44,13 @@ function SignupPage() {
         }
     }
 
+    const passwordHandler = (e) => {
+		var userNamePassword = username + e.target.value
+        var md5Hash = require("md5-hash")
+        var saltedPassword = md5Hash.default(userNamePassword)
+		setPassword(saltedPassword)
+	}
+
     const closeDialog = () => setIsDialogOpen(false)
 
     const setSuccessDialog = (msg) => {
@@ -78,7 +85,6 @@ function SignupPage() {
                             fullWidth
                             label="Username"
                             variant="standard"
-                            value={username}
                             onChange={(e) => setUsername(e.target.value)}
                             sx={{marginBottom: "1rem"}}
                             autoFocus
@@ -90,8 +96,7 @@ function SignupPage() {
                             label="Password"
                             variant="standard"
                             type="password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
+                            onChange={passwordHandler}
                             sx={{marginBottom: "2rem"}}
                             />
                         
