@@ -17,12 +17,12 @@ export default function ChatApp(props) {
       console.log("results: " + room + ", " + users);
       outputRoomName(room);
       outputUsers(users);
-      //   setTimeout(() => {
-      //     const leaveRoom = window.confirm("Sorry! Connection timed out. Leave the chatroom?");
-      //     if (leaveRoom) {
-      //       window.location = "./selectroom";
-      //     }
-      //   }, 30000);
+        setTimeout(() => {
+          const leaveRoom = window.confirm("Sorry! Connection timed out. Leave the chatroom?");
+          if (leaveRoom) {
+            window.location = "./selectroom";
+          }
+        }, 30000);
     });
   }, []);
 
@@ -84,9 +84,6 @@ export default function ChatApp(props) {
         <h1>
           <i className="fas fa-smile"></i> PeerPrep
         </h1>
-        <a id="collab-btn" className="btn">
-          Collab
-        </a>
         <a id="leave-btn" className="btn" onClick={handleLeaveRoom}>
           Leave Room
         </a>

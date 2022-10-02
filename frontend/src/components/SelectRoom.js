@@ -19,7 +19,7 @@ export default function ChatApp(props) {
     const room = roomtype;
     const username = "dog";
     socket.emit("joinRoom", { username, room });
-    navigate("/chatapp");
+    navigate("/room");
   };
 
   return (
