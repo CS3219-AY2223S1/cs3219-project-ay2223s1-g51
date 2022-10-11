@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import { Box } from "@mui/material";
 import SignupPage from "./components/SignupPage";
 import Login from "./components/Login";
-import { Box } from "@mui/material";
 import HomePage from "./components/HomePage";
+import ProfilePage from './components/ProfilePage';
+import NavBar from "./components/NavBar";
 import Room from "./components/Room";
 import SelectRoom from "./components/SelectRoom";
 import io from "socket.io-client";
@@ -19,6 +21,7 @@ function App(props) {
 
   return (
     <div className="App">
+      <NavBar username={username} password={password} setUsername={setUsername} setPassword={setPassword} ></NavBar>
       <Box display={"flex"} flexDirection={"column"} padding={"4rem"}>
         <Router>
           <Routes>
@@ -30,6 +33,7 @@ function App(props) {
               }
             />
             <Route path="/signup" element={<SignupPage />} />
+            <Route path="/profile" element={<ProfilePage username={username}  password={password} setPassword={setPassword}/>}/>
             <Route
               path="/home"
               element={<HomePage username={username} password={password} setPassword={setPassword} />}
