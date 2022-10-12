@@ -22,7 +22,7 @@ function App(props) {
   return (
     <div className="App">
       <NavBar username={username} password={password} setUsername={setUsername} setPassword={setPassword} ></NavBar>
-      <Box display={"flex"} flexDirection={"column"} padding={"4rem"}>
+      <Box display={"flex"} flexDirection={"column"} padding={"1rem"}>
         <Router>
           <Routes>
             <Route exact path="/" element={<Navigate replace to="/login" />}></Route>
