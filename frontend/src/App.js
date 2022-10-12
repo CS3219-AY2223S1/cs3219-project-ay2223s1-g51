@@ -11,7 +11,7 @@ import SelectRoom from "./components/SelectRoom";
 import io from "socket.io-client";
 import Editor from "./components/RealTimeEditor";
 
-const socket = io("http://localhost:8000");
+const socket = io("http://localhost:8001");
 
 function App(props) {
   const [username, setUsername] = useState("");
