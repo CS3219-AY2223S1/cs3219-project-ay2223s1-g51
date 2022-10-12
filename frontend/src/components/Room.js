@@ -10,10 +10,13 @@ export default function Room(props) {
   return (
     <div>
       <Grid container spacing={1}>
+        <Grid item xs={4}>
+          Question
+        </Grid>
         <Grid item xs={8}>
           <Editor username={username} room={room} />
         </Grid>
-        <Grid item xs={4}>
+        <Grid item xs={12}>
           <ChatApp username={username} roomtype={roomtype} room={room} setRoom={setRoom} socket={socket} />
         </Grid>
       </Grid>
