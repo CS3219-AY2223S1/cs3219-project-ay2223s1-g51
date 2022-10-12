@@ -11,7 +11,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 const themeLight = createTheme({
   palette: {
     background: {
-      default: "#ffffff",
+      default: "#e8ecfc",
     },
   },
 });
