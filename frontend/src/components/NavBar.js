@@ -25,7 +25,7 @@ const NavBar = (props) => {
     }, [isRefresh]);
 
     return (
-        <AppBar position='static'>
+        <AppBar position='static' style={{ background:'#667aff' }}>
             <Toolbar>
                 <IconButton size='large' edge= 'start' color='inherit' aria-label='logo'>
                     
