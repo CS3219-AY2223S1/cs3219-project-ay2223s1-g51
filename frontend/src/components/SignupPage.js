@@ -19,7 +19,13 @@ import axios from "axios";
 import {URL_USER_SVC} from "../configs";
 import {STATUS_CODE_CONFLICT, STATUS_CODE_CREATED} from "../constants";
 
-const theme = createTheme();
+const themeLight = createTheme({
+    palette: {
+      background: {
+        default: "#e8ecfc",
+      },
+    },
+  });
 
 function SignupPage() {
     const [username, setUsername] = useState("")
@@ -66,7 +72,7 @@ function SignupPage() {
     }
 
     return (
-        <ThemeProvider theme={theme}>
+        <ThemeProvider theme={themeLight}>
             <Container component="main" maxWidth="xs">
                 <CssBaseline />
                 <Box
