@@ -4,6 +4,7 @@ import Box from "./Editor/Box";
 import axios from "axios";
 import InputBox from "./Editor/Input";
 import { useSnackbar } from "notistack";
+import Question from "./Question";
 
 import "react-reflex/styles.css";
 

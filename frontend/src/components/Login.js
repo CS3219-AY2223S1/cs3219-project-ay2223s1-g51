@@ -65,8 +65,10 @@ export default function Login(props) {
 				console.log(err)
 				setErrorDialog('Wrong username or password. Please try again.')
             })
-
+		
         if (res && res.status === STATUS_CODE_SUCCESS) {
+			props.setUsername(username);
+			props.setPassword(password);
 			navigate("/home", { replace: true })
         }
     }
