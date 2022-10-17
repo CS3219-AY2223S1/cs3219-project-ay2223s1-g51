@@ -22,7 +22,7 @@ import {STATUS_CODE_CONFLICT, STATUS_CODE_CREATED} from "../constants";
 const themeLight = createTheme({
     palette: {
       background: {
-        default: "#e8ecfc",
+        default: "#ffffff",
       },
     },
   });

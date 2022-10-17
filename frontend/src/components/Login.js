@@ -46,7 +46,7 @@ function Copyright(props) {
 const themeLight = createTheme({
 	palette: {
 	  	background: {
-			default: "#e8ecfc"
+			default: "#ffffff"
 	 	}
 	}
 });
