@@ -2,8 +2,8 @@ import React, { useState, Component, useEffect } from "react";
 import { Box, Button, Container, Typography, Select, MenuItem, FormControl, InputLabel } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
-export default function ChatApp(props) {
-  const { username, roomtype, setRoomType, socket } = props;
+export default function SelectRoom(props) {
+  const { user, roomtype, setRoomType, socket } = props;
   const navigate = useNavigate();
 
   const handleChange = (event) => {
@@ -17,9 +17,9 @@ export default function ChatApp(props) {
     event.preventDefault();
     console.log(roomtype);
     const room = roomtype;
-    const username = "dog";
-    socket.emit("joinRoom", { username, room });
-    navigate("/room");
+    const username = user;
+    socket.emit("join-room", { username, room });
+    navigate(`/room/${room}`);
   };
 
   return (
