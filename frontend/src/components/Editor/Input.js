@@ -14,7 +14,7 @@ export default function Input(props) {
       <section>
         <Editor
           defaultLanguage="plaintext"
-          height="21vh"
+          height="30vh"
           theme={props.theme}
           defaultValue=""
           onChange={handleEditorChange}

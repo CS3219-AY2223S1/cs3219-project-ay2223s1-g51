@@ -10,19 +10,20 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 
 export default function Question(props) {
     return (
-        <Container component="main" width="200px" maxWidth="xs">
+        <Container component="main">
             <Box
                 sx={{
                     display: "flex",
                     flexDirection: "column",
                     alignItems: "center",
-                    background: 'black',
+                    backgroundColor: '#1e1e1e',
                     color: 'white',
-                    overflow: 'auto'
+                    overflow: 'auto',
+                    width: '500px'
                 }}
             >
                 <Typography component="h1" variant="h5">
-                    Question/n
+                    Question
                     1. Two sum
                 </Typography>
                 <Box
@@ -33,7 +34,7 @@ export default function Question(props) {
                         flexDirection: "column",
                         alignItems: "center"
                     }}
-                    height="85vh"
+                    height="70vh"
                 >
                     <div style={{}}>
                         <Button variant="contained" sx={{ mt: 3, mb: 2 }} href="/selectroom">

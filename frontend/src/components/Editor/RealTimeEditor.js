@@ -8,6 +8,7 @@ import { AppBar, IconButton } from "@material-ui/core";
 import { RiCheckFill } from "react-icons/ri";
 import Messages from "../Chat/Messages";
 import Input from "../Chat/Input";
+import Question from "../Question";
 import GetAppRoundedIcon from "@material-ui/icons/GetAppRounded";
 import PublishRoundedIcon from "@material-ui/icons/PublishRounded";
 import ExitToAppRoundedIcon from "@material-ui/icons/ExitToAppRounded";
@@ -379,10 +380,30 @@ export default function RealTimeEditor(props) {
           </div>
         </nav>
 
-        <div className="d-flex">
+        <div className="d-flex" style={{ paddingTop: "10px" }}>
+          {/* <section className="mr-auto ml-1" style={{ width: "68.5%" }}>
+            <Question
+              height="65vh"
+              width="100%"
+              options={{ fontSize: fontsize }}
+            />
+          </section> */}
+          <section className="ml-auto mr-1 d-flex" style={{ width: "31.5%" }}>
+            <div
+              style={{
+                minWidth: "60vh",
+                width: "100%",
+                height: "65vh",
+                backgroundColor: "white",
+                borderRadius: "20px",
+              }}
+            >
+              <Question></Question>
+            </div>
+          </section>
           <section className="mr-auto ml-1" style={{ width: "68.5%" }}>
             <Editor
-              height="65vh"
+              height="75vh"
               width="100%"
               theme={theme}
               language={language}
@@ -392,21 +413,6 @@ export default function RealTimeEditor(props) {
               loading={"Loading..."}
               options={{ fontSize: fontsize }}
             />
-          </section>
-          <section className="ml-auto mr-1 d-flex" style={{ width: "30.5%" }}>
-            <div
-              className="mr-auto d-flex flex-column border border-warning"
-              style={{
-                minWidth: "60vh",
-                width: "100%",
-                height: "65vh",
-                backgroundColor: "white",
-                borderRadius: "20px",
-              }}
-            >
-              <Messages messages={messages} username={username}></Messages>
-              <Input message={message} setMessage={setMessage} sendMessage={sendMessage}></Input>
-            </div>
           </section>
         </div>
       </BrowserView>

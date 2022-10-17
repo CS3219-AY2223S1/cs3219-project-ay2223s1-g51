@@ -4,7 +4,8 @@ import Box from "./Editor/Box";
 import axios from "axios";
 import InputBox from "./Editor/Input";
 import { useSnackbar } from "notistack";
-import Question from "./Question";
+import Messages from "./Chat/Messages";
+import Input from "./Chat/Input";
 
 import "react-reflex/styles.css";
 
@@ -35,6 +36,8 @@ export default function Room(props) {
   const [RoomTheme, setRoomTheme] = useState("vs-dark");
   const [isError, setisError] = useState(false);
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+  const [message, setMessage] = useState("");
+  const [messages, setMessages] = useState([]);
 
   const runCode = async () => {
     const script = codeInRoom;
@@ -89,6 +92,15 @@ export default function Room(props) {
       });
     }
   };
+  
+  const sendMessage = (event) => {
+    event.preventDefault();
+
+    if (message) {
+      socket.emit("sendMessage", message);
+      setMessage("");
+    }
+  };
 
   return (
     <div>
@@ -106,14 +118,28 @@ export default function Room(props) {
       </div>
 
       <div className="d-flex">
-        <div className="border mr-auto ml-1" style={{ width: "37.5%" }}>
-          <InputBox feature="Input" theme={RoomTheme} setProperty={setInput} fontSize={RoomFontSize} />
+        <div style={{ width: "30.5%" , padding: "10px" }}>
+          <div
+            className="mr-auto d-flex flex-column border border-warning"
+            style={{
+              minWidth: "50vh",
+              width: "100%",
+              height: "65vh",
+              backgroundColor: "#1e1e1e",
+              borderRadius: "20px",
+              color: "white"
+            }}
+          >
+            <Messages messages={messages} username={username}></Messages>
+            <Input message={message} setMessage={setMessage} sendMessage={sendMessage}></Input>
+          </div>
         </div>
-        <div className="border" style={{ width: "37.5%" }}>
+        <div className="border mr-auto ml-1" style={{ width: "40.5%", height: "65vh", padding: "10px" }}>
+          <InputBox feature="Input" theme={RoomTheme} setProperty={setInput} fontSize={RoomFontSize} height="32.5vh"/>
           <Box feature={isError ? "Error" : "Output"} theme={RoomTheme} value={output} fontSize={RoomFontSize} />
         </div>
-        <div className="border ml-auto mr-1" style={{ width: "24%" }}>
-          <Box feature="Stats" theme={RoomTheme} value={stats} fontSize={RoomFontSize} />
+        <div className="border ml-auto mr-1" style={{ width: "29%" , padding: "10px" }}>
+          <Box feature="Stats" theme={RoomTheme} value={stats} fontSize={RoomFontSize}  stlye={{ height: "60vh" }}/>
         </div>
       </div>
     </div>
