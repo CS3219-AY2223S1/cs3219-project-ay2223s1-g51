@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Editor from "./Editor/RealTimeEditor";
 import Box from "./Editor/Box";
 import axios from "axios";
 import InputBox from "./Editor/Input";
 import { useSnackbar } from "notistack";
+import Messages from "./Chat/Messages";
+import Input from "./Chat/Input";
 import Question from "./Question";
 
 import "react-reflex/styles.css";
@@ -34,6 +36,10 @@ export default function Room(props) {
   const [RoomFontSize, setRoomFontSize] = useState("");
   const [RoomTheme, setRoomTheme] = useState("vs-dark");
   const [isError, setisError] = useState(false);
+
+  const [message, setMessage] = useState("");
+  const [messages, setMessages] = useState([]);
+
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
   const runCode = async () => {
@@ -90,19 +96,51 @@ export default function Room(props) {
     }
   };
 
+  useEffect(() => {
+    socket.on("receive-message", (message) => {
+      setMessages((messages) => [...messages, message]);
+    });
+  }, []);
+
+  const sendMessage = (event) => {
+    event.preventDefault();
+
+    if (message) {
+      socket.emit("sendMessage", message);
+      setMessage("");
+    }
+  };
+
   return (
     <div>
       <div className="d-flex">
-        <Editor
-          socket={socket}
-          username={username}
-          setIsDisconnected={setIsDisconnected}
-          setRoomTheme={setRoomTheme}
-          setRoomFontSize={setRoomFontSize}
-          runCode={runCode}
-          setcodeInRoom={setcodeInRoom}
-          setlanguageInRoom={setlanguageInRoom}
-        ></Editor>
+        <section className="mr-auto ml-1" style={{ width: "68.5%" }}>
+          <Editor
+            socket={socket}
+            username={username}
+            setIsDisconnected={setIsDisconnected}
+            setRoomTheme={setRoomTheme}
+            setRoomFontSize={setRoomFontSize}
+            runCode={runCode}
+            setcodeInRoom={setcodeInRoom}
+            setlanguageInRoom={setlanguageInRoom}
+          ></Editor>
+        </section>
+        <section className="ml-auto mr-1 d-flex" style={{ width: "30.5%" }}>
+          <div
+            className="mr-auto d-flex flex-column border border-warning"
+            style={{
+              minWidth: "60vh",
+              width: "100%",
+              height: "65vh",
+              backgroundColor: "white",
+              borderRadius: "20px",
+            }}
+          >
+            <Messages messages={messages} username={username}></Messages>
+            <Input message={message} setMessage={setMessage} sendMessage={sendMessage}></Input>
+          </div>
+        </section>
       </div>
 
       <div className="d-flex">
