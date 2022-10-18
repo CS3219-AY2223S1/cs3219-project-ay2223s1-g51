@@ -6,8 +6,6 @@ import { useNavigate, useParams, NavLink } from "react-router-dom";
 import { useSnackbar } from "notistack";
 import { AppBar, IconButton } from "@material-ui/core";
 import { RiCheckFill } from "react-icons/ri";
-import Messages from "../Chat/Messages";
-import Input from "../Chat/Input";
 import GetAppRoundedIcon from "@material-ui/icons/GetAppRounded";
 import PublishRoundedIcon from "@material-ui/icons/PublishRounded";
 import ExitToAppRoundedIcon from "@material-ui/icons/ExitToAppRounded";
@@ -50,9 +48,6 @@ export default function RealTimeEditor(props) {
   const [titleChange, setTitleChange] = useState(false);
   const [fileExtensionValue, setfileExtensionValue] = useState(0);
 
-  const [currentUsers, setcurrentUsers] = useState("");
-  const [message, setMessage] = useState("");
-  const [messages, setMessages] = useState([]);
   const [fontsize, setFontsize] = useState("16px");
 
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
@@ -144,10 +139,6 @@ export default function RealTimeEditor(props) {
         setTitleInfo(data);
       });
 
-      socket.on("receive-message", (message) => {
-        setMessages((messages) => [...messages, message]);
-      });
-
       socket.on("request-info", (data) => {
         setSendInitialData(true);
       });
@@ -211,15 +202,6 @@ export default function RealTimeEditor(props) {
       socket.disconnect();
       setIsDisconnected(true);
       navigate("/");
-    }
-  };
-
-  const sendMessage = (event) => {
-    event.preventDefault();
-
-    if (message) {
-      socket.emit("sendMessage", message);
-      setMessage("");
     }
   };
 
@@ -380,34 +362,17 @@ export default function RealTimeEditor(props) {
         </nav>
 
         <div className="d-flex">
-          <section className="mr-auto ml-1" style={{ width: "68.5%" }}>
-            <Editor
-              height="65vh"
-              width="100%"
-              theme={theme}
-              language={language}
-              value={value}
-              editorDidMount={handleEditorDidMount}
-              onChange={handleEditorChange}
-              loading={"Loading..."}
-              options={{ fontSize: fontsize }}
-            />
-          </section>
-          <section className="ml-auto mr-1 d-flex" style={{ width: "30.5%" }}>
-            <div
-              className="mr-auto d-flex flex-column border border-warning"
-              style={{
-                minWidth: "60vh",
-                width: "100%",
-                height: "65vh",
-                backgroundColor: "white",
-                borderRadius: "20px",
-              }}
-            >
-              <Messages messages={messages} username={username}></Messages>
-              <Input message={message} setMessage={setMessage} sendMessage={sendMessage}></Input>
-            </div>
-          </section>
+          <Editor
+            height="65vh"
+            width="100%"
+            theme={theme}
+            language={language}
+            value={value}
+            editorDidMount={handleEditorDidMount}
+            onChange={handleEditorChange}
+            loading={"Loading..."}
+            options={{ fontSize: fontsize }}
+          />
         </div>
       </BrowserView>
       <MobileView>
