@@ -7,6 +7,7 @@ app.use(express.json())
 app.use(cors()) // config cors so that front-end can use
 app.options('*', cors())
 import { createUser, deleteUser, editPassword, findUser } from './controller/user-controller.js';
+import { getQuestions } from './controller/question-controller.js';
 
 const router = express.Router()
 
@@ -16,6 +17,7 @@ router.post('/', createUser)
 router.post('/finduser', findUser)
 router.delete("/::username", deleteUser)
 router.put("/editpassword", editPassword)
+router.post('/getQuestion/::difficulty', getQuestions)
 
 app.use('/api/user', router).all((_, res) => {
     res.setHeader('content-type', 'application/json')

@@ -114,7 +114,7 @@ export default function Room(props) {
   return (
     <div>
       <div className="d-flex">
-        <section className="mr-auto ml-1" style={{ width: "68.5%" }}>
+        <section className="mr-auto ml-1" style={{ width: "67.5%" }}>
           <Editor
             socket={socket}
             username={username}
@@ -126,32 +126,31 @@ export default function Room(props) {
             setlanguageInRoom={setlanguageInRoom}
           ></Editor>
         </section>
-        <section className="ml-auto mr-1 d-flex" style={{ width: "30.5%" }}>
-          <div
-            className="mr-auto d-flex flex-column border border-warning"
-            style={{
-              minWidth: "60vh",
-              width: "100%",
-              height: "65vh",
-              backgroundColor: "white",
-              borderRadius: "20px",
-            }}
-          >
-            <Messages messages={messages} username={username}></Messages>
-            <Input message={message} setMessage={setMessage} sendMessage={sendMessage}></Input>
+        <section style={{ width: "30.5%" }}>
+          <div className="ml-auto ml-1 d-flex">
+            <Question></Question>
           </div>
         </section>
       </div>
 
       <div className="d-flex">
-        <div className="border mr-auto ml-1" style={{ width: "37.5%" }}>
+        <div className="border mr-auto ml-1 mt-2" style={{ width: "70.5%" }}>
           <InputBox feature="Input" theme={RoomTheme} setProperty={setInput} fontSize={RoomFontSize} />
-        </div>
-        <div className="border" style={{ width: "37.5%" }}>
           <Box feature={isError ? "Error" : "Output"} theme={RoomTheme} value={output} fontSize={RoomFontSize} />
-        </div>
-        <div className="border ml-auto mr-1" style={{ width: "24%" }}>
           <Box feature="Stats" theme={RoomTheme} value={stats} fontSize={RoomFontSize} />
+        </div>
+        <div
+          className="mr-auto d-flex mt-4 m1-2 flex-column border border-warning"
+          style={{
+            minWidth: "60vh",
+            width: "30.5%",
+            height: "65vh",
+            backgroundColor: "white",
+            borderRadius: "20px",
+          }}
+        >
+          <Messages messages={messages} username={username}></Messages>
+          <Input message={message} setMessage={setMessage} sendMessage={sendMessage}></Input>
         </div>
       </div>
     </div>

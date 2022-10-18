@@ -39,3 +39,13 @@ export async function editPassword(username, password) {
       if (err) throw err;
   });
 }
+
+export async function getQuestions(params) {
+  const difficulty = params.difficulty;
+  return new Promise((resolve, reject) => {
+      db.collection("questionmodels").find({ difficulty: difficulty }, function (err, obj) {
+          if (err) reject(err);
+          resolve(obj);
+      });
+  });
+}
