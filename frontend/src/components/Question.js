@@ -8,7 +8,8 @@ import { STATUS_CODE_SUCCESS } from "../constants";
 export default function Question(props) {
   const [question, setQuestion] = useState("");
   const [questions, setQuestions] = useState([]);
-  const [title, setTitle] = useState("Two Sum (hard coded)");
+  const [difficulty, setDifficulty] = useState("Easy")
+  const [title, setTitle] = useState("Two Sum");
   const [desc, setDesc] = useState("");
   const [examples, setExamples] = useState("");
   const [constraints, setConstraints] = useState("");
@@ -69,7 +70,7 @@ export default function Question(props) {
           borderRadius: "20px",
         }}
       >   
-        <h1 className="m-2 text-center">{question.difficulty}: {title}</h1>
+        <h1 className="m-2 text-center">{difficulty}: {title}</h1>
         <p className="mt-3 px-4">Problem Description:</p>
         <p className="mt-3 px-4">{desc}</p>
         <p className="mt-3 px-4">Eg:</p>
