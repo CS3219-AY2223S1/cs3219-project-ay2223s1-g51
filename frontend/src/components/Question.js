@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Button } from "@mui/material";
+import { Button, containerClasses } from "@mui/material";
 import { useState } from "react";
 import { useEffect } from "react";
 import { URL_QUESTION_GETQUESTION_SVC } from "../configs";
@@ -24,6 +24,16 @@ export default function Question(props) {
     setDesc(data[questionNum].desc);
     setExamples(data[questionNum].examples);
     setConstraints(data[questionNum].constraints);
+    console.log("done setting");
+  };
+
+  const handleQuestion = () => {
+    setQuestion(questions[questionNum]);
+    setTitle(questions[questionNum].title);
+    setDesc(questions[questionNum].desc);
+    setExamples(questions[questionNum].examples);
+    setConstraints(questions[questionNum].constraints);
+    console.log("here monkey");
   };
 
   useEffect(() => {
@@ -35,7 +45,7 @@ export default function Question(props) {
       res.then((obj) => {
         console.log(obj.data.resp.questions);
         setDifficulty(obj.data.resp.difficulty);
-        handleQuestions(obj.data.resp.questions[0]);
+        handleQuestions(obj.data.resp.questions);
       });
     } catch (err) {
       console.log(err);
@@ -43,11 +53,17 @@ export default function Question(props) {
   }, []);
 
   useEffect(() => {
-    setQuestion(questions[questionNum]);
+    if (questions != null) {
+      console.log(questions[questionNum]);
+      handleQuestion();
+    } else {
+      console.log('questions is empty'); 
+    }
   }, [questionNum]);
 
   const increaseCounter = () => {
-    if (questionNum < questions.length) {
+    if (questionNum < questions.length - 1) {
+      console.log(questionNum + 1);
       setQuestionNum(questionNum + 1);
     } else {
       console.log("no next question");
@@ -55,7 +71,8 @@ export default function Question(props) {
   };
 
   const decreaseCounter = () => {
-    if (questionNum > 1) {
+    if (questionNum > 0) {
+      console.log(questionNum - 1);
       setQuestionNum(questionNum - 1);
     } else {
       console.log("no previous question");
@@ -78,17 +95,15 @@ export default function Question(props) {
           height: "65vh",
           backgroundColor: "white",
           borderRadius: "20px",
+          overflowY: "scroll"
         }}
       >
         <h1 className="m-2 text-center">
           {difficulty}: {title}
         </h1>
-        <p className="mt-3 px-4">Problem Description:</p>
-        <p className="mt-3 px-4">{desc}</p>
-        <p className="mt-3 px-4">Eg:</p>
-        <p className="mt-3 px-4">{examples}</p>
-        <p className="mt-3 px-4">Constraint</p>
-        <p className="mt-3 px-4">{constraints}</p>
+        <div className="mt-3 px-4" style={{ whiteSpace: "pre-line"}}>{desc}</div>
+        <div className="mt-3 px-4" style={{ whiteSpace: "pre-line"}}>{examples}</div>
+        <div className="mt-3 px-4" style={{ whiteSpace: "pre-line"}}>{constraints}</div>
       </div>
     </div>
   );
