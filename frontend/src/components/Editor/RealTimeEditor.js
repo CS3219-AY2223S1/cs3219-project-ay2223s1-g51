@@ -126,7 +126,7 @@ export default function RealTimeEditor(props) {
       navigate("/");
     } else {
       socket.on("code-update", (data) => {
-        console.log("receive code update!");
+        // console.log("receive code update!");
         setValue(data);
         setcodeInRoom(data.code);
       });

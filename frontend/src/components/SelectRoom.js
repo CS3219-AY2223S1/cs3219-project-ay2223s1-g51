@@ -10,12 +10,12 @@ export default function SelectRoom(props) {
     event.preventDefault();
     setRoomType(event.target.value);
 
-    console.log(event);
+    // console.log(event);
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log(roomtype);
+    // console.log(roomtype);
     const room = roomtype;
     const username = user;
     socket.emit("join-room", { username, room });

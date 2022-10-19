@@ -24,7 +24,7 @@ export default function Question(props) {
     setDesc(data[questionNum].desc);
     setExamples(data[questionNum].examples);
     setConstraints(data[questionNum].constraints);
-    console.log("done setting");
+    // console.log("done setting");
   };
 
   const handleQuestion = () => {
@@ -33,7 +33,7 @@ export default function Question(props) {
     setDesc(questions[questionNum].desc);
     setExamples(questions[questionNum].examples);
     setConstraints(questions[questionNum].constraints);
-    console.log("here monkey");
+    // console.log("here monkey");
   };
 
   useEffect(() => {
@@ -43,7 +43,7 @@ export default function Question(props) {
       };
       const res = getQuestions();
       res.then((obj) => {
-        console.log(obj.data.resp.questions);
+        // console.log(obj.data.resp.questions);
         setDifficulty(obj.data.resp.difficulty);
         handleQuestions(obj.data.resp.questions);
       });
@@ -54,7 +54,7 @@ export default function Question(props) {
 
   useEffect(() => {
     if (questions != null) {
-      console.log(questions[questionNum]);
+      // console.log(questions[questionNum]);
       handleQuestion();
     } else {
       console.log('questions is empty'); 
@@ -63,7 +63,7 @@ export default function Question(props) {
 
   const increaseCounter = () => {
     if (questionNum < questions.length - 1) {
-      console.log(questionNum + 1);
+      // console.log(questionNum + 1);
       setQuestionNum(questionNum + 1);
     } else {
       console.log("no next question");
@@ -72,7 +72,7 @@ export default function Question(props) {
 
   const decreaseCounter = () => {
     if (questionNum > 0) {
-      console.log(questionNum - 1);
+      // console.log(questionNum - 1);
       setQuestionNum(questionNum - 1);
     } else {
       console.log("no previous question");

@@ -47,14 +47,14 @@ export default function Room(props) {
 
   const runCode = async () => {
     const script = codeInRoom;
-    console.log("script:" + script);
-    console.log("language in room-->" + languageInRoom);
+    // console.log("script:" + script);
+    // console.log("language in room-->" + languageInRoom);
     const language = getLanguage[languageInRoom];
     const versionIndex = getLanguageVersion[language];
     const stdin = input;
-    console.log("languageinRunCode" + language);
-    console.log("versionIndexinRunCode" + versionIndex);
-    console.log("stdininRunCode" + stdin);
+    // console.log("languageinRunCode" + language);
+    // console.log("versionIndexinRunCode" + versionIndex);
+    // console.log("stdininRunCode" + stdin);
 
     const response = await axios({
       method: "POST",
@@ -69,18 +69,18 @@ export default function Room(props) {
     });
 
     if (response.status === 200) {
-      console.log(response);
-      console.log(response.data);
+      // console.log(response);
+      // console.log(response.data);
       const data = response.data;
       if (data.memory === null || data.cpu === null) {
-        console.log("in true");
+        // console.log("in true");
         setisError(true);
         enqueueSnackbar("Compilation Error", {
           variant: "warning",
         });
         setOutput(data.output.substr(1));
       } else {
-        console.log("in false");
+        // console.log("in false");
         setisError(false);
         enqueueSnackbar("Code executed successfully", {
           variant: "success",
@@ -90,7 +90,7 @@ export default function Room(props) {
       const statement1 = `Memory used: ${data.memory} kilobyte(s).\n`;
       const statement2 = `CPU time: ${data.cpuTime} sec(s).`;
       var sta = statement1.concat(statement2);
-      console.log(isError + "--");
+      // console.log(isError + "--");
       setStats(sta);
     } else {
       enqueueSnackbar("Some Error occurred", {
@@ -113,7 +113,7 @@ export default function Room(props) {
     });
 
     socket.on("input-update", (input) => {
-      console.log("received input update!");
+      // console.log("received input update!");
       setInput(input);
     });
   }, []);
@@ -123,7 +123,7 @@ export default function Room(props) {
     if (socket === undefined) {
       navigate("/");
     } else {
-      console.log("someone typed input!");
+      // console.log("someone typed input!");
       socket.emit("input-change", input);
     }
   }, [input]);
