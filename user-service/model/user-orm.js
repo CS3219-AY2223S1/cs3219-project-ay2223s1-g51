@@ -1,5 +1,28 @@
-import { deleteUser, editPassword, findUser } from './repository.js';
-import UserModel from "./user-model.js";
+import { createUser, logInUser, deleteUser, editPassword, findUser } from './repository.js';
+
+export async function ormCreateUser(username, password) { 
+    try {
+        const newUser = await createUser({username, password})
+        return newUser;
+    } catch (err) {
+        console.log(err)
+        console.log('ERROR: Creating the user led to an error');
+        throw err
+    }
+}
+
+export async function ormLogInUser(username, password) { 
+    try {
+        const newUser = await logInUser({username, password})
+        return newUser;
+
+    } catch (err) {
+        console.log(err)
+        console.log('ERROR: Error occured when trying to log in');
+        return err
+    }
+    
+}
 
 export async function ormFindUser(username, password) {
     try {
@@ -15,13 +38,7 @@ export async function ormFindUser(username, password) {
         return err
     }
 }
-//need to separate orm functions from repository to decouple business logic from persistence
-export function ormCreateUser(username, password) {
-        var userMod = new UserModel({username, password}) //Create new user 
-        userMod.save()
-}
 
-    
 export async function ormDeleteUser(username) {
     try {
         await deleteUser(username);
