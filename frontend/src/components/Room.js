@@ -6,6 +6,8 @@ import InputBox from "./Editor/Input";
 import { useSnackbar } from "notistack";
 import Messages from "./Chat/Messages";
 import Input from "./Chat/Input";
+import { useNavigate } from "react-router-dom";
+
 import Question from "./Question";
 
 import "react-reflex/styles.css";
@@ -27,12 +29,13 @@ export default function Room(props) {
     go: "go",
     javascript: "nodejs",
   };
+  const navigate = useNavigate();
 
   const [input, setInput] = useState("");
   const [languageInRoom, setlanguageInRoom] = useState("cpp");
-  const [output, setoutput] = useState("");
+  const [output, setOutput] = useState("");
   const [codeInRoom, setcodeInRoom] = useState("");
-  const [stats, setstats] = useState("");
+  const [stats, setStats] = useState("");
   const [RoomFontSize, setRoomFontSize] = useState("");
   const [RoomTheme, setRoomTheme] = useState("vs-dark");
   const [isError, setisError] = useState(false);
@@ -75,20 +78,20 @@ export default function Room(props) {
         enqueueSnackbar("Compilation Error", {
           variant: "warning",
         });
-        setoutput(data.output.substr(1));
+        setOutput(data.output.substr(1));
       } else {
         console.log("in false");
         setisError(false);
         enqueueSnackbar("Code executed successfully", {
           variant: "success",
         });
-        setoutput(data.output);
+        setOutput(data.output);
       }
       const statement1 = `Memory used: ${data.memory} kilobyte(s).\n`;
       const statement2 = `CPU time: ${data.cpuTime} sec(s).`;
       var sta = statement1.concat(statement2);
       console.log(isError + "--");
-      setstats(sta);
+      setStats(sta);
     } else {
       enqueueSnackbar("Some Error occurred", {
         variant: "error",
@@ -100,7 +103,50 @@ export default function Room(props) {
     socket.on("receive-message", (message) => {
       setMessages((messages) => [...messages, message]);
     });
+
+    socket.on("output-update", (output) => {
+      setOutput(output);
+    });
+
+    socket.on("stats-update", (stats) => {
+      setStats(stats);
+    });
+
+    socket.on("input-update", (input) => {
+      console.log("received input update!");
+      setInput(input);
+    });
   }, []);
+
+  // If there is a input box change on a socket, emit to all other
+  useEffect(() => {
+    if (socket === undefined) {
+      navigate("/");
+    } else {
+      console.log("someone typed input!");
+      socket.emit("input-change", input);
+    }
+  }, [input]);
+
+  // If there is a output box change on a socket, emit to all other
+  useEffect(() => {
+    if (socket === undefined) {
+      navigate("/");
+    } else {
+      // console.log("someone typed input!");
+      socket.emit("output-change", output);
+    }
+  }, [output]);
+
+  // If there is a stats box change on a socket, emit to all other
+  useEffect(() => {
+    if (socket === undefined) {
+      navigate("/");
+    } else {
+      // console.log("someone typed input!");
+      socket.emit("stats-change", stats);
+    }
+  }, [stats]);
 
   const sendMessage = (event) => {
     event.preventDefault();
@@ -134,10 +180,21 @@ export default function Room(props) {
       </div>
 
       <div className="d-flex">
+<<<<<<< HEAD
         <div className="border mr-auto ml-1 mt-2" style={{ width: "70.5%" }}>
           <InputBox feature="Input" theme={RoomTheme} setProperty={setInput} fontSize={RoomFontSize} />
           <Box feature={isError ? "Error" : "Output"} theme={RoomTheme} value={output} fontSize={RoomFontSize} />
           <Box feature="Stats" theme={RoomTheme} value={stats} fontSize={RoomFontSize} />
+=======
+        <div className="border mr-auto ml-1" style={{ width: "37.5%" }}>
+          <InputBox feature="Input" value={input} theme={RoomTheme} setProperty={setInput} fontSize={RoomFontSize} />
+        </div>
+        <div className="border" style={{ width: "37.5%" }}>
+          <Box feature={isError ? "Error" : "Output"} theme={RoomTheme} value={output} fontSize={RoomFontSize} />
+        </div>
+        <div className="border ml-auto mr-1" style={{ width: "24%" }}>
+          <Box feature="Stats" value={stats} theme={RoomTheme} fontSize={RoomFontSize} />
+>>>>>>> 43b4184f937846b5f384d338acdf21bad6d857cf
         </div>
         <div
           className="mr-auto d-flex mt-4 m1-2 flex-column border border-warning"

@@ -14,7 +14,7 @@ export default function Box(props) {
           theme={props.theme}
           defaultValue=""
           value={props.value}
-          options={{ fontSize: props.fontSize }}
+          options={{ fontSize: props.fontSize, readOnly: true }}
         />
       </section>
     </>
