@@ -11,7 +11,7 @@ import Question from "./Question";
 import "react-reflex/styles.css";
 
 export default function Room(props) {
-  const { username, socket, setIsDisconnected } = props;
+  const { username, socket, setIsDisconnected, roomtype } = props;
 
   const getLanguageVersion = {
     cpp17: "0", // g++ 17 GCC 9.10
@@ -128,7 +128,7 @@ export default function Room(props) {
         </section>
         <section style={{ width: "30.5%" }}>
           <div className="ml-auto ml-1 d-flex">
-            <Question></Question>
+            <Question roomtype={roomtype} ></Question>
           </div>
         </section>
       </div>

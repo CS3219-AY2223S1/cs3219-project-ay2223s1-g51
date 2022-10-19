@@ -13,32 +13,36 @@ export default function Question(props) {
   const [desc, setDesc] = useState("");
   const [examples, setExamples] = useState("");
   const [constraints, setConstraints] = useState("");
-  const [questionNum, setQuestionNum] = useState(1);
+  const [questionNum, setQuestionNum] = useState(0);
+  const { roomtype } = props;
 
-  // useEffect(() => {
-  //   const res = axios.get(URL_QUESTION_GETQUESTION_SVC,  props.difficulty )
-  //     .catch((err) => {
-  //       console.log(err)
-  //     })
-  //   if (res && res.status === STATUS_CODE_SUCCESS) {
-  //     setQuestions(res.data);
-  //   }
-  // }, []);
+  useEffect(() => {
+    console.log(roomtype);
+    console.log(URL_QUESTION_GETQUESTION_SVC + roomtype);
+    const res = axios.post(URL_QUESTION_GETQUESTION_SVC + roomtype, { roomtype: roomtype })
+      .catch((err) => {
+        console.log(err)
+      })
+    if (res && res.status === STATUS_CODE_SUCCESS) {
+      setQuestions(res.data);
+      console.log('questions set!!!')
+    }
+  }, []);
 
-  // useEffect(() => {
-  //   setQuestion(questions[questionNum]);
-  // }, [questions]);
+  useEffect(() => {
+    setQuestion(questions[questionNum]);
+  }, [questions]);
 
-  // useEffect(() => {
-  //   setQuestion(questions[questionNum]);    
-  // }, [questionNum]) 
+  useEffect(() => {
+    setQuestion(questions[questionNum]);    
+  }, [questionNum]) 
 
-  // useEffect(() => {
-  //   setTitle(questions[questionNum].title);
-  //   setDesc(questions[questionNum].desc);
-  //   setExamples(questions[questionNum].examples);
-  //   setConstraints(questions[questionNum].constraints);    
-  // }, [question])
+  useEffect(() => {
+    setTitle(questions[questionNum].title);
+    setDesc(questions[questionNum].desc);
+    setExamples(questions[questionNum].examples);
+    setConstraints(questions[questionNum].constraints);    
+  }, [question])
 
   const increaseCounter = () => {
     if (questionNum < questions.length) {

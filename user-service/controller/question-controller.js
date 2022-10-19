@@ -2,17 +2,19 @@ import {
     ormGetQuestions as _getQuestions
 } from "../model/question-orm.js";
 
-export async function getQuestion(req, res) {
+export async function getQuestions(req, res) {
+    console.log("monkey");
     try {
-        const { difficulty } = req.body;
-        if (difficulty) {
-            const resp = await _getQuestions(difficulty);
+        const { roomtype } = req.body;
+        console.log(roomtype)
+        if (roomtype) {
+            const resp = await _getQuestions(roomtype);
             if (resp == null) {
-                console.log(res.status(404).json({ message: `No ${difficulty} questions found!` }));
+                console.log(res.status(404).json({ message: `No ${roomtype} questions found!` }));
                 return res;
             } else if (resp) {
                 console.log(`User ${username} found.`)
-                console.log(res.status(200).json({ message: `${difficulty} questions found!` }));
+                console.log(res.status(200).json({ message: `${roomtype} questions found!` }));
                 return res;
             }
         } else {
