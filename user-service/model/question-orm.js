@@ -1,11 +1,10 @@
 import { getQuestions } from './repository.js';
 
-export async function ormGetQuestions(difficulty) {
+export async function ormGetQuestions(roomtype) {
     try {
-        const questions = await getQuestions({ difficulty })
-        if (questions && questions.status === 200) {
+        const questions = await getQuestions(roomtype)
+        if (questions) {
             console.log('Questions retrieved');
-            console.log(questions);
             return questions;
         }
         if (questions == null) {

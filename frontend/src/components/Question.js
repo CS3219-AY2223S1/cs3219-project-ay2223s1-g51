@@ -17,16 +17,15 @@ export default function Question(props) {
   const { roomtype } = props;
 
   useEffect(() => {
-    console.log(roomtype);
-    console.log(URL_QUESTION_GETQUESTION_SVC + roomtype);
-    const res = axios.post(URL_QUESTION_GETQUESTION_SVC + roomtype, { roomtype: roomtype })
-      .catch((err) => {
-        console.log(err)
-      })
-    if (res && res.status === STATUS_CODE_SUCCESS) {
-      setQuestions(res.data);
-      console.log('questions set!!!')
-    }
+    axios.get(URL_QUESTION_GETQUESTION_SVC + roomtype)
+    .then ((obj) => {
+      console.log(obj);
+      setQuestions(obj);
+      console.log('questions set!!!');
+    })
+    .catch((err) => {
+      console.log(err)
+    })
   }, []);
 
   useEffect(() => {

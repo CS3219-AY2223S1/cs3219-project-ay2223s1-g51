@@ -40,12 +40,14 @@ export async function editPassword(username, password) {
   });
 }
 
-export async function getQuestions(params) {
-  const difficulty = params.roomtype;
-  return new Promise((resolve, reject) => {
-      db.collection("questionmodels").find({ difficulty: difficulty }, function (err, obj) {
-          if (err) reject(err);
-          resolve(obj);
-      });
-  });
+export async function getQuestions(roomtype) {
+  console.log(">" + roomtype);
+  return db.collection("questionmodels").findOne( { difficulty: roomtype }); 
+  // return new Promise((resolve, reject) => {
+  //     db.collection("questionmodels").findOne( { difficulty: roomtype },function (err, obj) {
+  //       console.log(obj);
+  //       if (err) reject(err);
+  //       resolve(obj);
+  //     });
+  // });
 }

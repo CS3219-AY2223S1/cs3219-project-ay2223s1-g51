@@ -7,6 +7,7 @@ import { useSnackbar } from "notistack";
 import Messages from "./Chat/Messages";
 import Input from "./Chat/Input";
 import Question from "./Question";
+import { URL_QUESTION_GETQUESTION_SVC } from "../configs";
 
 import "react-reflex/styles.css";
 
@@ -100,6 +101,16 @@ export default function Room(props) {
     socket.on("receive-message", (message) => {
       setMessages((messages) => [...messages, message]);
     });
+    axios.get(URL_QUESTION_GETQUESTION_SVC + roomtype)
+    .then ((obj) => {
+      console.log(obj);
+      // setQuestions(obj);
+      console.log('questions set!!!')
+    })
+    .catch((err) => {
+      console.log(err)
+    })
+
   }, []);
 
   const sendMessage = (event) => {

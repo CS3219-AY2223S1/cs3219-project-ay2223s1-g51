@@ -17,7 +17,7 @@ router.post('/', createUser)
 router.post('/finduser', findUser)
 router.delete("/::username", deleteUser)
 router.put("/editpassword", editPassword)
-router.post('/getquestions/:difficulty', getQuestions)
+router.get('/getquestions/:difficulty', getQuestions)
 
 app.use('/api/user', router).all((_, res) => {
     res.setHeader('content-type', 'application/json')
