@@ -1,4 +1,9 @@
 import 'dotenv/config'
+import { auth } from "../firebase-config.js"
+import { 
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from "firebase/auth"
 
 //Set up mongoose connection
 import mongoose from 'mongoose';
@@ -10,12 +15,40 @@ mongoose.connect(mongoDB, { useNewUrlParser: true , useUnifiedTopology: true});
 let db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
+export async function createUser(params) {
+  const username = params.username
+  const password = params.password
+
+  return createUserWithEmailAndPassword(auth, username, password)
+    .then((userCredential) => {
+      const user = userCredential.user
+      return {"key": "user" , "obj": user}
+    }).catch((error)=> {
+      return {"key": "error", "obj": error.code}
+    })
+  }
+
+export async function logInUser(params) {
+  const username = params.username
+  const password = params.password
+
+  return signInWithEmailAndPassword(auth, username, password)
+  .then((userCredential) => {
+    const user = userCredential.user
+    return {"key": "user" , "obj": user}
+  }).catch((error)=> {
+    return {"key": "error", "obj": error.code}
+  })
+}
+
 export async function findUser(params) {
     const username = params.username;
     const password = params.password
     //create a promise object which resolves to either an error or a user object from the DB
     return new Promise((resolve, reject) => {
-        db.collection("usermodels").findOne({ username: username, password: password }, function (err, obj) {
+        db.collection("usermodels")
+        .findOne({ username: username, password: password }, 
+          function (err, obj) {
             if (err) reject(err);
             resolve(obj);
         });
@@ -31,9 +64,6 @@ export async function deleteUser(username) {
 
 export async function editPassword(username, password) {
   var myquery = { username: { $eq: username } };
-//   var userNamePassword = username + password;
-//   var md5Hash = require("md5-hash");
-//   var saltedPassword = md5Hash.default(userNamePassword);
   var newvalues = { $set: { password: password } };
   db.collection("usermodels").updateOne(myquery, newvalues, function (err, obj) {
       if (err) throw err;
