@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import {BrowserRouter as Router, Routes, Route, Navigate} from "react-router-dom";
 import SignupPage from './components/SignupPage';
 import Login from './components/Login';
-import {Box} from "@mui/material";
 import HomePage from "./components/HomePage";
+import {Box} from "@mui/material";
 
 function App(props) {
     const [username, setUsername] = useState("");
