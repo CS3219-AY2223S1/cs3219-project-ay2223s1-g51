@@ -8,3 +8,4 @@ export const URL_USER_LOGOUTUSER_SVC = URL_USER_SVC + "/logoutuser";
 export const URL_USER_FINDUSER_SVC = URL_USER_SVC + "/finduser";
 export const URL_USER_DELETE_SVC = URL_USER_SVC + "/:";
 export const URL_USER_EDITPASSWORD_SVC = URL_USER_SVC + "/editpassword";
+export const URL_QUESTION_GETQUESTION_SVC = URL_USER_SVC + "/getquestions/";

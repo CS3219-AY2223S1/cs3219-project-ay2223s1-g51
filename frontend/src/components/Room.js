@@ -1,17 +1,20 @@
 import React, { useEffect, useState } from "react";
 import Editor from "./Editor/RealTimeEditor";
-import Box from "./Editor/Box";
+import EditorBox from "./Editor/EditorBox";
 import axios from "axios";
 import InputBox from "./Editor/Input";
 import { useSnackbar } from "notistack";
 import Messages from "./Chat/Messages";
 import Input from "./Chat/Input";
+import { Grid, Box, Stack, Container } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+
 import Question from "./Question";
 
 import "react-reflex/styles.css";
 
 export default function Room(props) {
-  const { username, socket, setIsDisconnected } = props;
+  const { username, socket, setIsDisconnected, roomtype } = props;
 
   const getLanguageVersion = {
     cpp17: "0", // g++ 17 GCC 9.10
@@ -27,12 +30,13 @@ export default function Room(props) {
     go: "go",
     javascript: "nodejs",
   };
+  const navigate = useNavigate();
 
   const [input, setInput] = useState("");
   const [languageInRoom, setlanguageInRoom] = useState("cpp");
-  const [output, setoutput] = useState("");
+  const [output, setOutput] = useState("");
   const [codeInRoom, setcodeInRoom] = useState("");
-  const [stats, setstats] = useState("");
+  const [stats, setStats] = useState("");
   const [RoomFontSize, setRoomFontSize] = useState("");
   const [RoomTheme, setRoomTheme] = useState("vs-dark");
   const [isError, setisError] = useState(false);
@@ -44,14 +48,14 @@ export default function Room(props) {
 
   const runCode = async () => {
     const script = codeInRoom;
-    console.log("script:" + script);
-    console.log("language in room-->" + languageInRoom);
+    // console.log("script:" + script);
+    // console.log("language in room-->" + languageInRoom);
     const language = getLanguage[languageInRoom];
     const versionIndex = getLanguageVersion[language];
     const stdin = input;
-    console.log("languageinRunCode" + language);
-    console.log("versionIndexinRunCode" + versionIndex);
-    console.log("stdininRunCode" + stdin);
+    // console.log("languageinRunCode" + language);
+    // console.log("versionIndexinRunCode" + versionIndex);
+    // console.log("stdininRunCode" + stdin);
 
     const response = await axios({
       method: "POST",
@@ -66,29 +70,29 @@ export default function Room(props) {
     });
 
     if (response.status === 200) {
-      console.log(response);
-      console.log(response.data);
+      // console.log(response);
+      // console.log(response.data);
       const data = response.data;
       if (data.memory === null || data.cpu === null) {
-        console.log("in true");
+        // console.log("in true");
         setisError(true);
         enqueueSnackbar("Compilation Error", {
           variant: "warning",
         });
-        setoutput(data.output.substr(1));
+        setOutput(data.output.substr(1));
       } else {
-        console.log("in false");
+        // console.log("in false");
         setisError(false);
         enqueueSnackbar("Code executed successfully", {
           variant: "success",
         });
-        setoutput(data.output);
+        setOutput(data.output);
       }
       const statement1 = `Memory used: ${data.memory} kilobyte(s).\n`;
       const statement2 = `CPU time: ${data.cpuTime} sec(s).`;
       var sta = statement1.concat(statement2);
-      console.log(isError + "--");
-      setstats(sta);
+      // console.log(isError + "--");
+      setStats(sta);
     } else {
       enqueueSnackbar("Some Error occurred", {
         variant: "error",
@@ -100,7 +104,50 @@ export default function Room(props) {
     socket.on("receive-message", (message) => {
       setMessages((messages) => [...messages, message]);
     });
+
+    socket.on("output-update", (output) => {
+      setOutput(output);
+    });
+
+    socket.on("stats-update", (stats) => {
+      setStats(stats);
+    });
+
+    socket.on("input-update", (input) => {
+      // console.log("received input update!");
+      setInput(input);
+    });
   }, []);
+
+  // If there is a input box change on a socket, emit to all other
+  useEffect(() => {
+    if (socket === undefined) {
+      navigate("/");
+    } else {
+      // console.log("someone typed input!");
+      socket.emit("input-change", input);
+    }
+  }, [input]);
+
+  // If there is a output box change on a socket, emit to all other
+  useEffect(() => {
+    if (socket === undefined) {
+      navigate("/");
+    } else {
+      // console.log("someone typed input!");
+      socket.emit("output-change", output);
+    }
+  }, [output]);
+
+  // If there is a stats box change on a socket, emit to all other
+  useEffect(() => {
+    if (socket === undefined) {
+      navigate("/");
+    } else {
+      // console.log("someone typed input!");
+      socket.emit("stats-change", stats);
+    }
+  }, [stats]);
 
   const sendMessage = (event) => {
     event.preventDefault();
@@ -112,9 +159,9 @@ export default function Room(props) {
   };
 
   return (
-    <div>
-      <div className="d-flex">
-        <section className="mr-auto ml-1" style={{ width: "68.5%" }}>
+    <Stack>
+      <Grid container spacing={1}>
+        <Grid item xs={8}>
           <Editor
             socket={socket}
             username={username}
@@ -124,36 +171,35 @@ export default function Room(props) {
             runCode={runCode}
             setcodeInRoom={setcodeInRoom}
             setlanguageInRoom={setlanguageInRoom}
-          ></Editor>
-        </section>
-        <section className="ml-auto mr-1 d-flex" style={{ width: "30.5%" }}>
-          <div
-            className="mr-auto d-flex flex-column border border-warning"
-            style={{
-              minWidth: "60vh",
-              width: "100%",
-              height: "65vh",
-              backgroundColor: "white",
-              borderRadius: "20px",
-            }}
-          >
-            <Messages messages={messages} username={username}></Messages>
-            <Input message={message} setMessage={setMessage} sendMessage={sendMessage}></Input>
-          </div>
-        </section>
-      </div>
-
-      <div className="d-flex">
-        <div className="border mr-auto ml-1" style={{ width: "37.5%" }}>
-          <InputBox feature="Input" theme={RoomTheme} setProperty={setInput} fontSize={RoomFontSize} />
-        </div>
-        <div className="border" style={{ width: "37.5%" }}>
-          <Box feature={isError ? "Error" : "Output"} theme={RoomTheme} value={output} fontSize={RoomFontSize} />
-        </div>
-        <div className="border ml-auto mr-1" style={{ width: "24%" }}>
-          <Box feature="Stats" theme={RoomTheme} value={stats} fontSize={RoomFontSize} />
-        </div>
-      </div>
-    </div>
+          />
+        </Grid>
+        <Grid item xs={4} direction="column">
+          <Stack>
+            <Question roomtype={roomtype}></Question>
+            <Box>
+              <Messages messages={messages} username={username}></Messages>
+              <Input message={message} setMessage={setMessage} sendMessage={sendMessage}></Input>
+            </Box>
+          </Stack>
+        </Grid>
+      </Grid>
+      <Grid
+        sx={{
+          display: "flex",
+        }}
+        container
+        spacing={1}
+      >
+        <Grid item xs={4}>
+          <InputBox feature="Input" value={input} theme={RoomTheme} setProperty={setInput} fontSize={RoomFontSize} />
+        </Grid>
+        <Grid item xs={4}>
+          <EditorBox feature={isError ? "Error" : "Output"} theme={RoomTheme} value={output} fontSize={RoomFontSize} />
+        </Grid>
+        <Grid item xs={4}>
+          <EditorBox feature="Stats" value={stats} theme={RoomTheme} fontSize={RoomFontSize} />
+        </Grid>
+      </Grid>
+    </Stack>
   );
 }

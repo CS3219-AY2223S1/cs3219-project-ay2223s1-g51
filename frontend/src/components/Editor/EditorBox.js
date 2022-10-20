@@ -1,7 +1,7 @@
 import React from "react";
 import Editor from "@monaco-editor/react";
 
-export default function Box(props) {
+export default function EditorBox(props) {
   return (
     <>
       <div className={props.theme === "vs-dark" ? "text-center bg-light" : "text-center bg-dark text-light"}>
@@ -14,7 +14,7 @@ export default function Box(props) {
           theme={props.theme}
           defaultValue=""
           value={props.value}
-          options={{ fontSize: props.fontSize }}
+          options={{ fontSize: props.fontSize, readOnly: true }}
         />
       </section>
     </>

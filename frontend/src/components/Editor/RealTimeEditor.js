@@ -104,7 +104,7 @@ export default function RealTimeEditor(props) {
     if (socket === undefined) {
       navigate("/");
     } else {
-      console.log("someone typed!");
+      // console.log("someone typed!");
       socket.emit("code-change", editorCode);
     }
   }, [editorCode]);
@@ -126,7 +126,7 @@ export default function RealTimeEditor(props) {
       navigate("/");
     } else {
       socket.on("code-update", (data) => {
-        console.log("receive code update!");
+        // console.log("receive code update!");
         setValue(data);
         setcodeInRoom(data.code);
       });
