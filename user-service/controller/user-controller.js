@@ -12,7 +12,6 @@ export async function createUser(req, res) {
         if (username && password) {
             try {
                 const resp = await _createUser(username, password);
-
                 if (resp['key'] == "error") {
                     errorMsg = resp['obj']
                     console.log(errorMsg);
