@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
-  AppBar,
   Box,
   Button,
   Checkbox,
@@ -15,9 +14,7 @@ import {
   FormControlLabel,
   Grid,
   Link,
-  SliderMarkLabel,
   TextField,
-  Toolbar,
   Typography,
 } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
@@ -48,13 +45,10 @@ const themeLight = createTheme({
 
 export default function Login(props) {
   const navigate = useNavigate();
-  // const [username, setUsername] = useState("");
-  // const [password, setPassword] = useState("");
   const {username, password, setUsername, setPassword, setIsLogin} = props; 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [dialogTitle, setDialogTitle] = useState("");
   const [dialogMsg, setDialogMsg] = useState("");
-  //const [user, setUser] = useState(false)
 
   const handleLogin = async (event) => {
     event.preventDefault();

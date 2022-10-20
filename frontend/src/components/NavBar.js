@@ -59,8 +59,6 @@ const NavBar = (props) => {
     setLogoutDialog("Are you sure you want to logout?");
   };
 
-  useEffect(() => {}, []);
-
   return (
     <AppBar position="static" style={{ background: "#667aff" }}>
       <Toolbar>

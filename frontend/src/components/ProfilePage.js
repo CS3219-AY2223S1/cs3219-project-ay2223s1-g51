@@ -17,7 +17,6 @@ import { URL_USER_DELETE_SVC, URL_USER_EDITPASSWORD_SVC } from "../configs";
 import { STATUS_CODE_DATABASE_ERROR, STATUS_CODE_SUCCESS } from "../constants";
 import { useState } from "react";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import NavBar from "./NavBar";
 
 const themeLight = createTheme({
   palette: {

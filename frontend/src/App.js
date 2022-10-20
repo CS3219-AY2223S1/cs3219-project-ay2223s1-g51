@@ -1,21 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import { Box, BottomNavigation, BottomNavigationAction } from "@mui/material";
+import { SnackbarProvider } from "notistack";
+import NavBar from "./components/NavBar";
+import AboutUs from "./components/AboutUs";
 import SignupPage from "./components/SignupPage";
 import Login from "./components/Login";
 import ProfilePage from "./components/ProfilePage";
-import AboutUs from "./components/AboutUs";
-
-import NavBar from "./components/NavBar";
-import Room from "./components/Room";
 import SelectRoom from "./components/SelectRoom";
-import io from "socket.io-client";
+import Room from "./components/Room";
 import Editor from "./components/Editor/RealTimeEditor";
-import { SnackbarProvider } from "notistack";
 import InfoIcon from "@mui/icons-material/Info";
-
+import io from "socket.io-client";
 import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 import "../node_modules/bootstrap/dist/js/bootstrap.bundle";
+
 function App(props) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");

@@ -5,7 +5,6 @@ import { useEffect } from "react";
 import { URL_QUESTION_GETQUESTION_SVC } from "../configs";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import { STATUS_CODE_SUCCESS } from "../constants";
 
 export default function Question(props) {
   const [question, setQuestion] = useState("");
@@ -35,7 +34,6 @@ export default function Question(props) {
     setDesc(questions[questionNum].desc);
     setExamples(questions[questionNum].examples);
     setConstraints(questions[questionNum].constraints);
-    // console.log("here monkey");
   };
 
   useEffect(() => {
@@ -45,7 +43,6 @@ export default function Question(props) {
       };
       const res = getQuestions();
       res.then((obj) => {
-        // console.log(obj.data.resp.questions);
         setDifficulty(obj.data.resp.difficulty);
         handleQuestions(obj.data.resp.questions);
       });
@@ -56,7 +53,6 @@ export default function Question(props) {
 
   useEffect(() => {
     if (questions.length !== 0) {
-      // console.log(questions);
       handleQuestion();
     } else {
       console.log("questions is empty");
@@ -65,7 +61,6 @@ export default function Question(props) {
 
   const increaseCounter = () => {
     if (questionNum < questions.length - 1) {
-      // console.log(questionNum + 1);
       setQuestionNum(questionNum + 1);
     } else {
       console.log("no next question");
@@ -74,7 +69,6 @@ export default function Question(props) {
 
   const decreaseCounter = () => {
     if (questionNum > 0) {
-      // console.log(questionNum - 1);
       setQuestionNum(questionNum - 1);
     } else {
       console.log("no previous question");
