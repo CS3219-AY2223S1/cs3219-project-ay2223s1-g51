@@ -63,6 +63,7 @@ export default function Question(props) {
     if (questionNum < questions.length - 1) {
       setQuestionNum(questionNum + 1);
     } else {
+      setQuestionNum(0);
       console.log("no next question");
     }
   };
@@ -71,6 +72,7 @@ export default function Question(props) {
     if (questionNum > 0) {
       setQuestionNum(questionNum - 1);
     } else {
+      setQuestionNum(questions.length - 1);
       console.log("no previous question");
     }
   };
