@@ -97,7 +97,7 @@ export default function Question(props) {
           overflowY: "scroll",
           display: "flex",
           flexDirection: "column",
-          height: 400,
+          height: "43vh",
         }}
       >
         <Typography variant="h5" textAlign="center">

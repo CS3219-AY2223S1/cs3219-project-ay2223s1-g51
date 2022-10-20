@@ -12,6 +12,7 @@ import { useNavigate } from "react-router-dom";
 import Question from "./Question";
 
 import "react-reflex/styles.css";
+import { margin } from "@mui/system";
 
 export default function Room(props) {
   const { username, socket, setIsDisconnected, roomtype } = props;
@@ -176,9 +177,11 @@ export default function Room(props) {
         <Grid item xs={4} direction="column">
           <Stack>
             <Question roomtype={roomtype}></Question>
-            <Box>
+            <div style={{height: "2vh"}}></div>
+            <Box sx={{ mb: 2, p: 2.5 }}>
               <Messages messages={messages} username={username}></Messages>
               <Input message={message} setMessage={setMessage} sendMessage={sendMessage}></Input>
+              <div style={{height: "vh"}}></div>
             </Box>
           </Stack>
         </Grid>
@@ -200,6 +203,7 @@ export default function Room(props) {
           <EditorBox feature="Stats" value={stats} theme={RoomTheme} fontSize={RoomFontSize} />
         </Grid>
       </Grid>
+      <div style={{height: "7vh"}}></div>
     </Stack>
   );
 }

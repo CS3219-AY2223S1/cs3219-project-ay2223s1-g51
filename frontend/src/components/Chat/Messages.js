@@ -14,7 +14,7 @@ export default function Messages(props) {
         overflowY: "scroll",
         display: "flex",
         flexDirection: "column",
-        height: 250,
+        height: "40vh",        
       }}
     >
       {messages.map((message, i) => (
