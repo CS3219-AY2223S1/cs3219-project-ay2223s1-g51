@@ -1,5 +1,15 @@
-import { AppBar, Toolbar, Typography, Stack, Button } from "@mui/material";
-import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  Stack,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+} from "@mui/material";
 import React, { useEffect, useState } from "react";
 
 const NavBar = (props) => {

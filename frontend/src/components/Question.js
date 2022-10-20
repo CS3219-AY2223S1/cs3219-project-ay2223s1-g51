@@ -1,8 +1,10 @@
 import axios from "axios";
-import { Button, containerClasses } from "@mui/material";
+import { Button, Container, Box, Typography, Stack } from "@mui/material";
 import { useState } from "react";
 import { useEffect } from "react";
 import { URL_QUESTION_GETQUESTION_SVC } from "../configs";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { STATUS_CODE_SUCCESS } from "../constants";
 
 export default function Question(props) {
@@ -24,7 +26,7 @@ export default function Question(props) {
     setDesc(data[questionNum].desc);
     setExamples(data[questionNum].examples);
     setConstraints(data[questionNum].constraints);
-    // console.log("done setting");
+    console.log("done setting");
   };
 
   const handleQuestion = () => {
@@ -53,11 +55,11 @@ export default function Question(props) {
   }, []);
 
   useEffect(() => {
-    if (questions != null) {
-      // console.log(questions[questionNum]);
+    if (questions.length !== 0) {
+      // console.log(questions);
       handleQuestion();
     } else {
-      console.log('questions is empty'); 
+      console.log("questions is empty");
     }
   }, [questionNum]);
 
@@ -80,31 +82,37 @@ export default function Question(props) {
   };
 
   return (
-    <div>
-      <Button onClick={decreaseCounter} variant="contained" style={{ margin: "4px", width: "48%" }}>
-        Prev
-      </Button>
-      <Button onClick={increaseCounter} variant="contained" style={{ margin: "4px", width: "48%" }}>
-        Next
-      </Button>
-      <div
-        className="mr-auto d-flex flex-column border"
-        style={{
-          minWidth: "60vh",
-          width: "100%",
-          height: "65vh",
-          backgroundColor: "white",
-          borderRadius: "20px",
-          overflowY: "scroll"
+    <Container>
+      <Box sx={{ display: "flex", justifyContent: "center" }}>
+        <Button onClick={decreaseCounter} variant="contained" style={{ margin: "4px", width: "48%" }}>
+          <ArrowBackIcon />
+        </Button>
+        <Button onClick={increaseCounter} variant="contained" style={{ margin: "4px", width: "48%" }}>
+          <ArrowForwardIcon />
+        </Button>
+      </Box>
+      <Box
+        sx={{
+          overflow: "hidden",
+          overflowY: "scroll",
+          display: "flex",
+          flexDirection: "column",
+          height: 400,
         }}
       >
-        <h1 className="m-2 text-center">
+        <Typography variant="h5" textAlign="center">
           {difficulty}: {title}
-        </h1>
-        <div className="mt-3 px-4" style={{ whiteSpace: "pre-line"}}>{desc}</div>
-        <div className="mt-3 px-4" style={{ whiteSpace: "pre-line"}}>{examples}</div>
-        <div className="mt-3 px-4" style={{ whiteSpace: "pre-line"}}>{constraints}</div>
-      </div>
-    </div>
+        </Typography>
+        <Typography variant="h6">
+          <pre style={{ whiteSpace: "pre-line" }}>{desc}</pre>
+        </Typography>
+        <Typography variant="h6">
+          <pre style={{ whiteSpace: "pre-line" }}>{examples}</pre>
+        </Typography>
+        <Typography variant="h6">
+          <pre style={{ whiteSpace: "pre-line" }}>{constraints}</pre>
+        </Typography>
+      </Box>
+    </Container>
   );
 }

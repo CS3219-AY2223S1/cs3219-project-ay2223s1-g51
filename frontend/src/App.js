@@ -67,11 +67,19 @@ function App(props) {
     }
   }, [isDisconnected]);
 
+  const bodySize = () => {
+    return screenSize.dynamicHeight * 0.8;
+  };
+
+  const footerSize = () => {
+    return screenSize.dynamicHeight * 0.08;
+  };
+
   return (
     <SnackbarProvider>
       <Box sx={{ display: "flex", flexDirection: "column", flexFlow: "column", height: screenSize.dynamicHeight }}>
         <NavBar username={username} password={password} setUsername={setUsername} setPassword={setPassword}></NavBar>
-        <Box sx={{ display: "flex", flexDirection: "column", padding: "4rem", height: "90%" }}>
+        <Box sx={{ display: "flex", flexDirection: "column", padding: "4rem", height: { bodySize } }}>
           <Router>
             <Routes>
               <Route exact path="/" element={<Navigate replace to="/login" />}></Route>
@@ -112,7 +120,7 @@ function App(props) {
         </Box>
         <AboutUs openAboutUs={openAboutUs} setOpenAboutUs={setOpenAboutUs} />
         <BottomNavigation
-          sx={{ background: "#667aff", height: "8%" }}
+          sx={{ background: "#667aff", height: { footerSize } }}
           showLabels
           value={value}
           onChange={(event, newValue) => {
