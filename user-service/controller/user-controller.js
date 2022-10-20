@@ -4,7 +4,25 @@ import {
     ormLogOutUser as _logOutUser,
     ormDeleteUser as _deleteUser,
     ormEditPassword as _editPassword,
+    ormCheckUserJwt as _checkUserJwt
 } from "../model/user-orm.js";
+
+export async function checkUserJwt(req, res) {
+    try {
+        const resp = await _checkUserJwt();
+        console.log("resp: " + resp)
+        if(resp == "valid") {
+            console.log(`Current user has valid JWT`)
+            return res.status(200).json({message: `Current user has valid JWT`});
+        } else {
+            console.log(resp)
+            return res.status(400).json({message: `Invalid JWT`});
+        }
+    } catch (err) {
+        console.log(err)
+        return res.status(500).json({message: `Database failure when checking JWT of current user!`});
+    } 
+}
 
 export async function createUser(req, res) {
     try {
@@ -60,7 +78,7 @@ export async function logInUser(req, res) {
         
                 if(resp['key'] == "user") {
                     console.log(`Successfully logged into user account ${username}.`)
-                    return res.status(200).json({message: `Logged into user ${username} successfully!`});
+                    return res.status(200).json({ resp });
                 }
 
             } catch {
@@ -76,7 +94,6 @@ export async function logInUser(req, res) {
 }
 
 export async function logOutUser(req, res) {
-
     try {
         const resp = await _logOutUser();
         console.log("resp: " + resp)
@@ -91,7 +108,6 @@ export async function logOutUser(req, res) {
         console.log(err)
         return res.status(500).json({message: `Database failure when logging out!`});
     } 
-
 }
 
 export async function deleteUser(req, res) {

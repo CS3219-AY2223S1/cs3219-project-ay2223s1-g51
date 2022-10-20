@@ -12,6 +12,17 @@ mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true });
 let db = mongoose.connection;
 db.on("error", console.error.bind(console, "MongoDB connection error:"));
 
+export async function checkUserJwt(params) {
+  console.log('1')
+  const token = params.token
+    auth
+    .verifyIdToken(token)
+    .then(() => "valid")
+    .catch((error) => {
+      return error
+    });
+}
+
 export async function createUser(params) {
   const username = params.username;
   const password = params.password;

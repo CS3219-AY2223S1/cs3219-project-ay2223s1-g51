@@ -1,5 +1,17 @@
-import { createUser, logInUser, logOutUser, deleteUser, editPassword, findUser } from './repository.js';
+import { createUser, logInUser, logOutUser, deleteUser, editPassword, findUser, checkUserJwt } from './repository.js';
 import UserModel from "./user-model.js";
+
+export async function ormCheckUserJwt(token) { 
+    try {
+        const token = await checkUserJwt({token})
+        //console.log("token in user-orm: " + token)
+        return token;
+    } catch (err) {
+        console.log(err)
+        console.log('ERROR: Checking the JWT of current user led to an error');
+        throw err
+    }
+}
 
 export async function ormCreateUser(username, password) { 
     try {
@@ -14,8 +26,8 @@ export async function ormCreateUser(username, password) {
 
 export async function ormLogInUser(username, password) { 
     try {
-        const newUser = await logInUser({username, password})
-        return newUser;
+        const user = await logInUser({username, password})
+        return user;
 
     } catch (err) {
         console.log(err)

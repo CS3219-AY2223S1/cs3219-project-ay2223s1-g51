@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import { Box, BottomNavigation, BottomNavigationAction } from "@mui/material";
+
 import SignupPage from "./components/SignupPage";
 import Login from "./components/Login";
 import ProfilePage from "./components/ProfilePage";
@@ -21,6 +22,8 @@ function App(props) {
   const [password, setPassword] = useState("");
   const [roomtype, setRoomType] = useState("");
   const [room, setRoom] = useState("");
+  const [token, setToken] = useState("");
+  const [user, setUser] = useState("");
   const [screenSize, getDimension] = useState({
     dynamicWidth: window.innerWidth,
     dynamicHeight: window.innerHeight,
@@ -75,6 +78,11 @@ function App(props) {
     return screenSize.dynamicHeight * 0.08;
   };
 
+  useEffect(() => {
+    console.log("token has changed")
+    console.log("token: " + token)
+  }, [token]);
+
   return (
     <SnackbarProvider>
       <Box sx={{ display: "flex", flexDirection: "column", flexFlow: "column", height: screenSize.dynamicHeight }}>
@@ -86,7 +94,7 @@ function App(props) {
               <Route
                 path="/login"
                 element={
-                  <Login username={username} password={password} setUsername={setUsername} setPassword={setPassword} />
+                  <Login username={username} password={password} setUsername={setUsername} setPassword={setPassword} token={token} setToken={setToken}/>
                 }
               />
               <Route path="/signup" element={<SignupPage />} />
@@ -96,7 +104,7 @@ function App(props) {
               />
               <Route
                 path="/selectroom"
-                element={<SelectRoom user={username} roomtype={roomtype} setRoomType={setRoomType} socket={socket} />}
+                element={<SelectRoom user={username} roomtype={roomtype} setRoomType={setRoomType} socket={socket} token={token} setToken={setToken} />}
               />
               <Route
                 path="/room/:id"
