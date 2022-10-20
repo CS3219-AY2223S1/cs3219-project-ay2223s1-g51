@@ -20,7 +20,7 @@ import {
 } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import axios from "axios";
-import {URL_USER_FINDUSER_SVC} from "../configs";
+import {URL_USER_LOGINUSER_SVC} from "../configs";
 import {STATUS_CODE_SUCCESS} from "../constants";
 
 function Copyright(props) {
@@ -58,9 +58,11 @@ export default function Login(props) {
 	const [isDialogOpen, setIsDialogOpen] = useState(false)
     const [dialogTitle, setDialogTitle] = useState("")
     const [dialogMsg, setDialogMsg] = useState("")
+	//const [user, setUser] = useState(false)
+
 	const handleLogin = async (event) => {
 		event.preventDefault()
-        const res = await axios.post(URL_USER_FINDUSER_SVC, { username, password })
+        const res = await axios.post(URL_USER_LOGINUSER_SVC, { username, password })
 			.catch((err) => {
 				console.log(err)
 				setErrorDialog('Wrong username or password. Please try again.')
@@ -93,11 +95,8 @@ export default function Login(props) {
 	}
 
 	const passwordHandler = (e) => {
-		var userNamePassword = username + e.target.value
-        var md5Hash = require("md5-hash")
-        var saltedPassword = md5Hash.default(userNamePassword)
-		props.setPassword(saltedPassword)
-		setPassword(saltedPassword)
+		props.setPassword(e.target.value)
+		setPassword(e.target.value)
 	}
 
 	return (
