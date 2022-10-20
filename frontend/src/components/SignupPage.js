@@ -17,7 +17,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles'
 import {useState} from "react";
 import axios from "axios";
 import {URL_USER_SVC} from "../configs";
-import {STATUS_CODE_CONFLICT, STATUS_CODE_CREATED} from "../constants";
+import {STATUS_CODE_CONFLICT, STATUS_CODE_CREATED, STATUS_CODE_FAIL} from "../constants";
 
 const themeLight = createTheme({
     palette: {
@@ -40,6 +40,8 @@ function SignupPage() {
             .catch((err) => {
                 if (err.response.status === STATUS_CODE_CONFLICT) { //duplicate username detected, Error code: 409
                     setErrorDialog("This username already exists");
+                } else if (err.response.status === STATUS_CODE_FAIL) {
+                    setErrorDialog("Username format invalid, please use email format");
                 } else {
                     setErrorDialog('Please try again later')
                 }
@@ -49,13 +51,6 @@ function SignupPage() {
             setIsSignupSuccess(true)
         }
     }
-
-    const passwordHandler = (e) => {
-		var userNamePassword = username + e.target.value
-        var md5Hash = require("md5-hash")
-        var saltedPassword = md5Hash.default(userNamePassword)
-		setPassword(saltedPassword)
-	}
 
     const closeDialog = () => setIsDialogOpen(false)
 
@@ -102,7 +97,7 @@ function SignupPage() {
                             label="Password"
                             variant="standard"
                             type="password"
-                            onChange={passwordHandler}
+                            onChange={(e) => setPassword(e.target.value)}
                             sx={{marginBottom: "2rem"}}
                             />
                         
