@@ -25,6 +25,8 @@ export default function RealTimeEditor(props) {
     setRoomTheme,
     setcodeInRoom,
     setlanguageInRoom,
+    users,
+    setUsers,
   } = props;
 
   const navigate = useNavigate();
@@ -40,7 +42,6 @@ export default function RealTimeEditor(props) {
   const [value, setValue] = useState("");
   const [valid, setValid] = useState(false);
   const [sendInitialData, setSendInitialData] = useState(false);
-  const [users, setUsers] = useState([]);
   const [room, setRoom] = useState("");
 
   const [title, setTitle] = useState("Untitled");
@@ -143,15 +144,6 @@ export default function RealTimeEditor(props) {
         setSendInitialData(true);
       });
 
-      // Triggered if new user joins
-      socket.on("accept-info", (data) => {
-        setTitleInfo(data.title);
-        setLanguage(data.language);
-        setlanguageInRoom(data.language);
-        setValue(data.code);
-        setcodeInRoom(data.code);
-      });
-
       // Update participants
       socket.on("joined-users", (data) => {
         setUsers(data.users);
@@ -198,10 +190,10 @@ export default function RealTimeEditor(props) {
       setIsDisconnected(true);
       navigate("/");
     } else {
-      socket.emit("disconnect");
+      console.log("disconnect");
       socket.disconnect();
       setIsDisconnected(true);
-      navigate("/");
+      navigate("/selectroom");
     }
   };
 
