@@ -1,6 +1,7 @@
 import React, { useState, Component, useEffect } from "react";
 import { Box, Button, Container, Typography, Select, MenuItem, FormControl, InputLabel, Stack } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import NavBar from "./NavBar";
 
 export default function SelectRoom(props) {
   const { user, roomtype, setRoomType, socket } = props;
@@ -24,7 +25,7 @@ export default function SelectRoom(props) {
 
   return (
     <div>
-      <Container component="main">
+      <Container className="mt-5" component="main">
         <Box
           sx={{
             bgcolor: "background.paper",

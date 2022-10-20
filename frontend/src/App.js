@@ -20,6 +20,7 @@ function App(props) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [roomtype, setRoomType] = useState("");
+  const [isLogin, setIsLogin] = useState(false);
   const [room, setRoom] = useState("");
   const [screenSize, getDimension] = useState({
     dynamicWidth: window.innerWidth,
@@ -78,15 +79,15 @@ function App(props) {
   return (
     <SnackbarProvider>
       <Box sx={{ display: "flex", flexDirection: "column", flexFlow: "column", height: screenSize.dynamicHeight }}>
-        <NavBar username={username} password={password} setUsername={setUsername} setPassword={setPassword}></NavBar>
-        <Box sx={{ display: "flex", flexDirection: "column", padding: "4rem", height: { bodySize } }}>
+        <Box sx={{ display: "flex", flexDirection: "column", height: { bodySize } }}>
           <Router>
+            <NavBar isLogin={isLogin} setIsLogin={isLogin}></NavBar>
             <Routes>
               <Route exact path="/" element={<Navigate replace to="/login" />}></Route>
               <Route
                 path="/login"
                 element={
-                  <Login username={username} password={password} setUsername={setUsername} setPassword={setPassword} />
+                  <Login username={username} password={password} setUsername={setUsername} setPassword={setPassword} setIsLogin={setIsLogin} />
                 }
               />
               <Route path="/signup" element={<SignupPage />} />
@@ -120,7 +121,7 @@ function App(props) {
         </Box>
         <AboutUs openAboutUs={openAboutUs} setOpenAboutUs={setOpenAboutUs} />
         <BottomNavigation
-          sx={{ background: "#667aff", height: { footerSize } }}
+          sx={{ background: "#667aff", height: { footerSize }, width:"100%", bottom: "0", position:"fixed" }}
           showLabels
           value={value}
           onChange={(event, newValue) => {
@@ -130,7 +131,7 @@ function App(props) {
             }
           }}
         >
-          <BottomNavigationAction label="AboutUs" icon={<InfoIcon />} value="aboutus" />
+          <BottomNavigationAction style={{color:"white"}} label="AboutUs" icon={<InfoIcon />} value="aboutus" />
         </BottomNavigation>
       </Box>
     </SnackbarProvider>
