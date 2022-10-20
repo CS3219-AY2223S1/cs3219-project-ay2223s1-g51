@@ -5,7 +5,6 @@ export async function getQuestions(req, res) {
     const roomtype = req.params.difficulty;
     if (roomtype) {
       const resp = await _getQuestions(roomtype);
-
       if (resp == null) {
         console.log("res is null");
         return res.status(404).json({ resp });
