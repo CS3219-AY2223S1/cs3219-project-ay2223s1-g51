@@ -221,6 +221,13 @@ a {
   animation: spin-anim 1.2s linear infinite;
 }
 
+.background-img {
+  position: sticky;
+  background: url("./images/background.gif");
+  background-size: contain;
+  height: 100vh;
+}
+
 @keyframes spin-anim {
   0% {
     transform: rotate(0deg);

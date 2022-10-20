@@ -91,6 +91,8 @@ export default function Login(props) {
   };
 
   return (
+    <div className="background-img">
+
       <ThemeProvider theme={themeLight}>
         <Container component="main" maxWidth="xs">
           <CssBaseline />
@@ -99,6 +101,10 @@ export default function Login(props) {
               marginTop: 8,
               display: "flex",
               flexDirection: "column",
+              bgcolor: "background.paper",
+              boxShadow: 1,
+              borderRadius: 2,
+              p: 2,
               alignItems: "center",
             }}
           >
@@ -157,8 +163,9 @@ export default function Login(props) {
             </DialogActions>
           </Dialog>
 
-          <Copyright sx={{ mt: 8, mb: 4 }} />
+          {/* <Copyright sx={{ mt: 8, mb: 4 }} /> */}
         </Container>
       </ThemeProvider>
+    </div>
   );
 }
