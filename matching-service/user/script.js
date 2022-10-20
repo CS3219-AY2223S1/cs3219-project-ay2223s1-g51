@@ -18,11 +18,9 @@ socket.on("roomUsers", ({ room, users }) => {
   outputRoomName(room);
   outputUsers(users);
   setTimeout(() => {
-    if (userList.childElementCount < 2) {
-      const leaveRoom = confirm("Sorry! Connection timed out. Leave the chatroom?");
-      if (leaveRoom) {
-        window.location = "../index.html";
-      }
+    const leaveRoom = confirm("Sorry! Connection timed out. Leave the chatroom?");
+    if (leaveRoom) {
+      window.location = "../index.html";
     }
   }, 30000);
 });
