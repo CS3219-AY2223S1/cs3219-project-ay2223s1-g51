@@ -1,8 +1,6 @@
 import React from "react";
-
-import "./css/message.css";
-
 import ReactEmoji from "react-emoji";
+import "./css/message.css";
 
 export default function Message(props) {
   const {
