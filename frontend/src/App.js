@@ -7,6 +7,7 @@ import AboutUs from "./components/AboutUs";
 import SignupPage from "./components/SignupPage";
 import Login from "./components/Login";
 import ProfilePage from "./components/ProfilePage";
+import HistoryPage from "./components/HistoryPage";
 import SelectRoom from "./components/SelectRoom";
 import Room from "./components/Room";
 import Editor from "./components/Editor/RealTimeEditor";
@@ -93,6 +94,10 @@ function App(props) {
               <Route
                 path="/profile"
                 element={<ProfilePage username={username} password={password} setPassword={setPassword} />}
+              />
+              <Route
+                path="/history"
+                element={<HistoryPage username={username} password={password} setPassword={setPassword} />}
               />
               <Route
                 path="/selectroom"
