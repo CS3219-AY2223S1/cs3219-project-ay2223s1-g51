@@ -3,7 +3,7 @@ import { Box, Button, Container, Typography, Select, MenuItem, FormControl, Inpu
 import { useNavigate } from "react-router-dom";
 
 export default function SelectRoom(props) {
-  const { user, roomtype, setRoomType, socket } = props;
+  const { user, roomtype, setRoomType, socket, setShowFooter } = props;
   const navigate = useNavigate();
 
   const handleChange = (event) => {
@@ -19,6 +19,7 @@ export default function SelectRoom(props) {
     const room = roomtype;
     const username = user;
     socket.emit("join-room", { username, room });
+    setShowFooter(false);
     navigate(`/room/${room}`);
   };
 
@@ -65,7 +66,7 @@ export default function SelectRoom(props) {
           </Stack>
         </Box>
         <Box>
-          <div style={{ height: "51vh"}}></div>
+          <div style={{ height: "51vh" }}></div>
         </Box>
       </Container>
     </div>

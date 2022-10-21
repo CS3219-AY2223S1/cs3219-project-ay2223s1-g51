@@ -21,13 +21,14 @@ function App(props) {
   const [password, setPassword] = useState("");
   const [roomtype, setRoomType] = useState("");
   const [isLogin, setIsLogin] = useState(false);
+  const [showFooter, setShowFooter] = useState(true);
   const [room, setRoom] = useState("");
+
   const [screenSize, getDimension] = useState({
     dynamicWidth: window.innerWidth,
     dynamicHeight: window.innerHeight,
   });
   const setDimension = () => {
-    console.log(window.innerHeight);
     getDimension({
       dynamicWidth: window.innerWidth,
       dynamicHeight: window.innerHeight,
@@ -87,7 +88,13 @@ function App(props) {
               <Route
                 path="/login"
                 element={
-                  <Login username={username} password={password} setUsername={setUsername} setPassword={setPassword} setIsLogin={setIsLogin} />
+                  <Login
+                    username={username}
+                    password={password}
+                    setUsername={setUsername}
+                    setPassword={setPassword}
+                    setIsLogin={setIsLogin}
+                  />
                 }
               />
               <Route path="/signup" element={<SignupPage />} />
@@ -101,7 +108,15 @@ function App(props) {
               />
               <Route
                 path="/selectroom"
-                element={<SelectRoom user={username} roomtype={roomtype} setRoomType={setRoomType} socket={socket} />}
+                element={
+                  <SelectRoom
+                    user={username}
+                    roomtype={roomtype}
+                    setRoomType={setRoomType}
+                    socket={socket}
+                    setShowFooter={setShowFooter}
+                  />
+                }
               />
               <Route
                 path="/room/:id"
@@ -124,19 +139,21 @@ function App(props) {
           </Router>
         </Box>
         <AboutUs openAboutUs={openAboutUs} setOpenAboutUs={setOpenAboutUs} />
-        <BottomNavigation
-          sx={{ background: "#667aff", height: { footerSize }, width:"100%", bottom: "0" }}
-          showLabels
-          value={value}
-          onChange={(event, newValue) => {
-            if (newValue === "aboutus") {
-              setValue(newValue);
-              setOpenAboutUs(true);
-            }
-          }}
-        >
-          <BottomNavigationAction style={{color:"white"}} label="AboutUs" icon={<InfoIcon />} value="aboutus" />
-        </BottomNavigation>
+        {showFooter && (
+          <BottomNavigation
+            sx={{ background: "#667aff", height: { footerSize }, width: "100%", bottom: "0" }}
+            showLabels
+            value={value}
+            onChange={(event, newValue) => {
+              if (newValue === "aboutus") {
+                setValue(newValue);
+                setOpenAboutUs(true);
+              }
+            }}
+          >
+            <BottomNavigationAction style={{ color: "white" }} label="AboutUs" icon={<InfoIcon />} value="aboutus" />
+          </BottomNavigation>
+        )}
       </Box>
     </SnackbarProvider>
   );
