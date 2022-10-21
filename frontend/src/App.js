@@ -56,11 +56,9 @@ function App(props) {
 
   useEffect(() => {
     if (isDisconnected === true) {
-      const s = io("http://localhost:5000");
+      const s = io("http://localhost:8000");
       console.log(s);
       setSocket(s);
-      console.log("USEEFFECT");
-      window.location.reload();
       setIsDisconnected(false);
 
       return () => {
