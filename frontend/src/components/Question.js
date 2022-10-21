@@ -25,7 +25,6 @@ export default function Question(props) {
     setDesc(data[questionNum].desc);
     setExamples(data[questionNum].examples);
     setConstraints(data[questionNum].constraints);
-    console.log("done setting");
   };
 
   const handleQuestion = () => {

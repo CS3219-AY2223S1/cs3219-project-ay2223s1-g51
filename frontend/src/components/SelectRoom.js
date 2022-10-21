@@ -1,26 +1,35 @@
-import React from "react";
+import React, { useState } from "react";
 import { Box, Button, Container, Typography, Select, MenuItem, FormControl, InputLabel, Stack } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { useSnackbar } from "notistack";
 
 export default function SelectRoom(props) {
   const { user, roomtype, setRoomType, socket, setShowFooter } = props;
   const navigate = useNavigate();
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+  const [selection, setSelection] = useState("");
 
   const handleChange = (event) => {
     event.preventDefault();
-    setRoomType(event.target.value);
+    setSelection(event.target.value);
 
     // console.log(event);
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    // console.log(roomtype);
-    const room = roomtype;
-    const username = user;
-    socket.emit("join-room", { username, room });
-    setShowFooter(false);
-    navigate(`/room/${room}`);
+    if (selection) {
+      setRoomType(selection);
+      const room = selection;
+      const username = user;
+      socket.emit("join-room", { username, room });
+      setShowFooter(false);
+      navigate(`/room/${room}`);
+    } else {
+      enqueueSnackbar("Please select a room!", {
+        variant: "warning",
+      });
+    }
   };
 
   return (
@@ -46,7 +55,7 @@ export default function SelectRoom(props) {
             <Container>
               <FormControl fullWidth>
                 <InputLabel id="room-id">Room</InputLabel>
-                <Select labelId="room-id" id="roomId" value={roomtype} label="room-id" onChange={handleChange}>
+                <Select labelId="room-id" id="roomId" value={selection} label="room-id" onChange={handleChange}>
                   <MenuItem value="Easy"> Easy </MenuItem>
                   <MenuItem value="Medium">Medium</MenuItem>
                   <MenuItem value="Hard">Hard</MenuItem>

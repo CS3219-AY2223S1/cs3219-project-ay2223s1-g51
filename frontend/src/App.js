@@ -57,7 +57,7 @@ function App(props) {
   useEffect(() => {
     if (isDisconnected === true) {
       const s = io("http://localhost:8000");
-      console.log(s);
+      console.log(`new socket: ${s}`);
       setSocket(s);
       setIsDisconnected(false);
 

@@ -35,9 +35,9 @@ function ProfilePage(props) {
   const [isChangePasswordClicked, setIsChangePasswordClicked] = useState(false);
   const [changedPassword, setChangedPassword] = useState("");
   const [deleteAccountPassword, setDeleteAccountPassword] = useState("");
-  var oldPassword;
-  var newPassword;
-  var reEnterNewPassword;
+  let oldPassword;
+  let newPassword;
+  let reEnterNewPassword;
 
   //hardcoded for now, need to change to dynamic later
 
@@ -51,7 +51,7 @@ function ProfilePage(props) {
   };
 
   const confirmDelete = async () => {
-    var saltedPassword = saltPassword2(deleteAccountPassword);
+    let saltedPassword = saltPassword2(deleteAccountPassword);
     if (deleteAccountPassword && props.password === saltedPassword) {
       const res = await axios.delete(URL_USER_DELETE_SVC + props.username).catch((err) => {
         if (err.response.status === STATUS_CODE_DATABASE_ERROR) {
@@ -105,16 +105,16 @@ function ProfilePage(props) {
   };
 
   const saltPassword = (e) => {
-    var userNamePassword = props.username + e.target.value;
-    var md5Hash = require("md5-hash");
-    var saltedPassword = md5Hash.default(userNamePassword);
+    let userNamePassword = props.username + e.target.value;
+    let md5Hash = require("md5-hash");
+    let saltedPassword = md5Hash.default(userNamePassword);
     return saltedPassword;
   };
 
   const saltPassword2 = (e) => {
-    var userNamePassword = props.username + e;
-    var md5Hash = require("md5-hash");
-    var saltedPassword = md5Hash.default(userNamePassword);
+    let userNamePassword = props.username + e;
+    let md5Hash = require("md5-hash");
+    let saltedPassword = md5Hash.default(userNamePassword);
     return saltedPassword;
   };
 
