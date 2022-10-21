@@ -2,9 +2,9 @@ import React, { useRef, useState, useEffect } from "react";
 import Editor from "@monaco-editor/react";
 import { IconContext } from "react-icons";
 import { BrowserView, MobileView } from "react-device-detect";
-import { useNavigate, useParams, NavLink } from "react-router-dom";
+import { useNavigate, NavLink } from "react-router-dom";
 import { useSnackbar } from "notistack";
-import { AppBar, IconButton } from "@material-ui/core";
+import { IconButton } from "@material-ui/core";
 import { RiCheckFill } from "react-icons/ri";
 import GetAppRoundedIcon from "@material-ui/icons/GetAppRounded";
 import PublishRoundedIcon from "@material-ui/icons/PublishRounded";
@@ -25,6 +25,8 @@ export default function RealTimeEditor(props) {
     setRoomTheme,
     setcodeInRoom,
     setlanguageInRoom,
+    users,
+    setUsers,
   } = props;
 
   const navigate = useNavigate();
@@ -40,7 +42,6 @@ export default function RealTimeEditor(props) {
   const [value, setValue] = useState("");
   const [valid, setValid] = useState(false);
   const [sendInitialData, setSendInitialData] = useState(false);
-  const [users, setUsers] = useState([]);
   const [room, setRoom] = useState("");
 
   const [title, setTitle] = useState("Untitled");
@@ -143,15 +144,6 @@ export default function RealTimeEditor(props) {
         setSendInitialData(true);
       });
 
-      // Triggered if new user joins
-      socket.on("accept-info", (data) => {
-        setTitleInfo(data.title);
-        setLanguage(data.language);
-        setlanguageInRoom(data.language);
-        setValue(data.code);
-        setcodeInRoom(data.code);
-      });
-
       // Update participants
       socket.on("joined-users", (data) => {
         setUsers(data.users);
@@ -198,10 +190,10 @@ export default function RealTimeEditor(props) {
       setIsDisconnected(true);
       navigate("/");
     } else {
-      socket.emit("disconnect");
+      console.log("disconnect");
       socket.disconnect();
       setIsDisconnected(true);
-      navigate("/");
+      navigate("/selectroom");
     }
   };
 
@@ -238,7 +230,7 @@ export default function RealTimeEditor(props) {
     <>
       <BrowserView className="w-100">
         <nav className="navbar navbar-expand-lg navbar-light bg-white shadow mb-1 py-0">
-          <NavLink className="navbar-brand" to="/" onClick={leaveRoom}>
+          <NavLink className="navbar-brand m-2" to="/" onClick={leaveRoom}>
             PeerPrep
           </NavLink>
           <button
@@ -271,18 +263,18 @@ export default function RealTimeEditor(props) {
           </form>
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
             <ul className="navbar-nav ml-auto">
-              <li className="nav-item">
+              <li className="nav-item m-2">
                 <IconButton color="primary" title="Run code" onClick={runCode}>
                   <PlayArrowRoundedIcon />
                 </IconButton>
               </li>
 
-              <li className="nav-item">
+              <li className="nav-item m-2">
                 <IconButton color="primary" title="Download the code" onClick={downloadCode}>
                   <GetAppRoundedIcon />
                 </IconButton>
               </li>
-              <li className="nav-item">
+              <li className="nav-item m-2">
                 <IconButton color="primary" title="Upload the code" onClick={handleUpload}>
                   <PublishRoundedIcon />
                 </IconButton>
@@ -290,7 +282,7 @@ export default function RealTimeEditor(props) {
                 <input type="file" ref={hiddenFileInput} onChange={(e) => showFile(e)} style={{ display: "none" }} />
               </li>
 
-              <li className="nav-item">
+              <li className="nav-item m-2">
                 {theme === "vs-dark" ? (
                   <IconButton color="primary" onClick={toggleTheme} title="Change to Light theme">
                     <Brightness7RoundedIcon />
@@ -302,7 +294,7 @@ export default function RealTimeEditor(props) {
                 )}
               </li>
 
-              <li className="nav-item">
+              <li className="nav-item m-2">
                 <IconButton color="primary" onClick={copyRoomCode} title="Share the room code">
                   <ShareRoundedIcon />
                 </IconButton>
@@ -311,19 +303,19 @@ export default function RealTimeEditor(props) {
 
               <li className="nav-item">
                 <span className="nav-link mt-1">Participants:</span>
-                <ul id="users">
+                <div id="users">
                   {users.map((user) => (
                     <div className="row">
                       <li key={user.id}>{user.username}</li>
                     </div>
                   ))}
-                </ul>
+                </div>
               </li>
-              <li className="nav-item">
+              <li className="nav-item mt-1">
                 <span className="nav-link mt-1">Room: {room}</span>
               </li>
 
-              <li className="nav-item mr-2">
+              <li className="nav-item m-3">
                 <select className="custom-select mt-1" title="change font size" onChange={changeFontSize}>
                   <option value="0">10px</option>
                   <option value="1">12px</option>
@@ -341,7 +333,7 @@ export default function RealTimeEditor(props) {
                 </select>
               </li>
 
-              <li className="nav-item">
+              <li className="nav-item mt-3">
                 <select className="custom-select mt-1" title="Select Language" onChange={changeLanguage}>
                   <option value="0">C++</option>
                   <option value="1">Python</option>
@@ -352,7 +344,7 @@ export default function RealTimeEditor(props) {
                 </select>
               </li>
 
-              <li className="nav-item">
+              <li className="nav-item mt-2">
                 <IconButton style={{ color: "#dc3545" }} onClick={leaveRoom} title="Leave room">
                   <ExitToAppRoundedIcon />
                 </IconButton>
@@ -363,7 +355,7 @@ export default function RealTimeEditor(props) {
 
         <div className="d-flex">
           <Editor
-            height="65vh"
+            height="90vh"
             width="100%"
             theme={theme}
             language={language}

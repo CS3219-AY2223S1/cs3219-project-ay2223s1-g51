@@ -6,11 +6,9 @@ import InputBox from "./Editor/Input";
 import { useSnackbar } from "notistack";
 import Messages from "./Chat/Messages";
 import Input from "./Chat/Input";
-import { Grid, Box, Stack, Container } from "@mui/material";
+import { Grid, Box, Stack } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-
 import Question from "./Question";
-
 import "react-reflex/styles.css";
 
 export default function Room(props) {
@@ -40,6 +38,7 @@ export default function Room(props) {
   const [RoomFontSize, setRoomFontSize] = useState("");
   const [RoomTheme, setRoomTheme] = useState("vs-dark");
   const [isError, setisError] = useState(false);
+  const [users, setUsers] = useState([]);
 
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
@@ -48,7 +47,6 @@ export default function Room(props) {
 
   const runCode = async () => {
     const script = codeInRoom;
-    // console.log("script:" + script);
     // console.log("language in room-->" + languageInRoom);
     const language = getLanguage[languageInRoom];
     const versionIndex = getLanguageVersion[language];
@@ -99,6 +97,19 @@ export default function Room(props) {
       });
     }
   };
+
+  const handleEmptyRoom = () => {
+    if (users.length == 1) {
+      console.log("timed out!");
+      navigate("/selectroom");
+    }
+  };
+
+  useEffect(() => {
+    if (users.length == 1) {
+      setTimeout(handleEmptyRoom, 30000);
+    }
+  }, [users]);
 
   useEffect(() => {
     socket.on("receive-message", (message) => {
@@ -169,6 +180,8 @@ export default function Room(props) {
             setRoomTheme={setRoomTheme}
             setRoomFontSize={setRoomFontSize}
             runCode={runCode}
+            users={users}
+            setUsers={setUsers}
             setcodeInRoom={setcodeInRoom}
             setlanguageInRoom={setlanguageInRoom}
           />
@@ -176,9 +189,11 @@ export default function Room(props) {
         <Grid item xs={4} direction="column">
           <Stack>
             <Question roomtype={roomtype}></Question>
-            <Box>
+            <div style={{ height: "2vh" }}></div>
+            <Box sx={{ mb: 2, p: 2.5 }}>
               <Messages messages={messages} username={username}></Messages>
               <Input message={message} setMessage={setMessage} sendMessage={sendMessage}></Input>
+              <div style={{ height: "vh" }}></div>
             </Box>
           </Stack>
         </Grid>
@@ -200,6 +215,7 @@ export default function Room(props) {
           <EditorBox feature="Stats" value={stats} theme={RoomTheme} fontSize={RoomFontSize} />
         </Grid>
       </Grid>
+      <div style={{ height: "7vh" }}></div>
     </Stack>
   );
 }

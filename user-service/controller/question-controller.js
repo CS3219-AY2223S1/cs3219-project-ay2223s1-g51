@@ -10,7 +10,7 @@ export async function getQuestions(req, res) {
         return res.status(404).json({ resp });
       } else if (resp) {
         console.log("success");
-        console.log(resp.questions);
+        // console.log(resp.questions);
         return res.status(200).json({ resp });
       }
     } else {

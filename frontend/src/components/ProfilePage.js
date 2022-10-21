@@ -161,7 +161,7 @@ function ProfilePage(props) {
   return (
     <div>
       <ThemeProvider theme={themeLight}>
-        <Container component="main" maxWidth="xs">
+        <Container className="mt-5" component="main" maxWidth="xs">
           <CssBaseline />
           <Box
             sx={{
