@@ -11,7 +11,7 @@ import {
   import axios from "axios";
   import { URL_USER_DELETE_SVC, URL_USER_EDITPASSWORD_SVC } from "../configs";
   import { STATUS_CODE_DATABASE_ERROR, STATUS_CODE_SUCCESS } from "../constants";
-  import { useState } from "react";
+  import { useState, useEffect } from "react";
   import { createTheme, ThemeProvider } from "@mui/material/styles";
   import HistoryCard from "./HistoryCard";
   
@@ -25,8 +25,24 @@ import {
   
   function HistoryPage(props) {
     const [username, setUsername] = useState("");
+    const [history, setHistory] = useState();
 
-  
+    useEffect(() => {
+      try {
+        const getHistory = async () => {
+          // call api to get history
+          // return await axios.get(URL_QUESTION_GETQUESTION_SVC + roomtype);
+        };
+        const res = getHistory();
+        res.then((obj) => {
+          setHistory(obj.data.resp.difficulty);
+          // then pass history into each History Card below
+        });
+      } catch (err) {
+        console.log(err);
+      }
+    }, []);
+    
     return (
       <div>
         <ThemeProvider theme={themeLight}>
