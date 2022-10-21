@@ -39,6 +39,8 @@ export default function Room(props) {
   const [RoomTheme, setRoomTheme] = useState("vs-dark");
   const [isError, setisError] = useState(false);
   const [users, setUsers] = useState([]);
+  const [room, setRoom] = useState("");
+  const [timeoutId, setTimeoutId] = useState(-1);
 
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
@@ -99,15 +101,22 @@ export default function Room(props) {
   };
 
   const handleEmptyRoom = () => {
-    if (users.length == 1) {
-      console.log("timed out!");
-      navigate("/selectroom");
-    }
+    enqueueSnackbar("timed out!", {
+      variant: "warning",
+    });
+    socket.disconnect();
+    setIsDisconnected(true);
+    navigate("/selectroom");
   };
 
   useEffect(() => {
     if (users.length == 1) {
-      setTimeout(handleEmptyRoom, 30000);
+      const id = setTimeout(handleEmptyRoom, 30000);
+      setTimeoutId(id);
+    }
+    if (users.length == 2) {
+      clearTimeout(timeoutId);
+      setTimeoutId(-1);
     }
   }, [users]);
 
@@ -127,6 +136,13 @@ export default function Room(props) {
     socket.on("input-update", (input) => {
       // console.log("received input update!");
       setInput(input);
+    });
+
+    // Update participants
+    socket.on("joined-users", (data) => {
+      console.log(data.users);
+      setUsers(data.users);
+      setRoom(data.room);
     });
   }, []);
 
@@ -181,7 +197,7 @@ export default function Room(props) {
             setRoomFontSize={setRoomFontSize}
             runCode={runCode}
             users={users}
-            setUsers={setUsers}
+            room={room}
             setcodeInRoom={setcodeInRoom}
             setlanguageInRoom={setlanguageInRoom}
           />

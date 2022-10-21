@@ -4,8 +4,16 @@ import { createServer } from "http";
 import { Server } from "socket.io";
 import path from "path";
 import { formatMessage } from "./utils/message.js";
-import { userLeave, getRoomUsers, userJoin, getCurrentUser } from "./utils/users.js";
-import { leaveRoom, locateRoom } from "./utils/rooms.js";
+import {
+  leaveRoom,
+  locateRoom,
+  userLeave,
+  getRoomUsers,
+  userJoin,
+  getCurrentUserById,
+  getCurrentUserByName,
+  updateUserId,
+} from "./utils/rooms.js";
 import axios from "axios";
 
 import "dotenv/config";
@@ -37,12 +45,19 @@ io.on("connection", (socket) => {
 
   // Join a room with username and specified room
   socket.on("join-room", ({ username, room }) => {
-    // Find an empty/currently occupied room for user
-    var assignedRoom = locateRoom(room);
-    const user = userJoin(socket.id, username, assignedRoom);
-    // console.log(user);
+    // Check whether current user in any room
+    let user = getCurrentUserByName(username);
+    let assignedRoom = "";
+    if (user) {
+      assignedRoom = user.room;
+      updateUserId(username, socket.id);
+    } else {
+      // Find an empty/currently occupied room for user
+      assignedRoom = locateRoom(room);
+      user = userJoin(socket.id, username, assignedRoom);
+    }
     socket.join(user.room);
-    socket.room = user.room;
+    socket.room = assignedRoom;
 
     // Welcome current user
     socket.emit("receive-message", formatMessage(username, "Welcome to PeerPrep Chat App"));
@@ -56,7 +71,7 @@ io.on("connection", (socket) => {
 
   // Listen for chat messages
   socket.on("sendMessage", (msg) => {
-    const user = getCurrentUser(socket.id);
+    const user = getCurrentUserById(socket.id);
     io.to(user.room).emit("receive-message", formatMessage(user.username, msg));
   });
 
@@ -91,7 +106,7 @@ io.on("connection", (socket) => {
     console.log("user left: " + socket.id);
     if (user) {
       io.to(user.room).emit("message", formatMessage(botName, `${user.username} has left the chat`));
-      leaveRoom(user.room);
+      leaveRoom(user.username, user.room);
       // Send users and room info
       io.to(user.room).emit("joined-users", { room: user.room, users: getRoomUsers(user.room) });
     }

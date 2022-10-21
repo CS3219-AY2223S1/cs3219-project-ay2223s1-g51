@@ -19,6 +19,7 @@ export default function RealTimeEditor(props) {
   const {
     socket,
     username,
+    room,
     runCode,
     setRoomFontSize,
     setIsDisconnected,
@@ -26,7 +27,6 @@ export default function RealTimeEditor(props) {
     setcodeInRoom,
     setlanguageInRoom,
     users,
-    setUsers,
   } = props;
 
   const navigate = useNavigate();
@@ -42,7 +42,6 @@ export default function RealTimeEditor(props) {
   const [value, setValue] = useState("");
   const [valid, setValid] = useState(false);
   const [sendInitialData, setSendInitialData] = useState(false);
-  const [room, setRoom] = useState("");
 
   const [title, setTitle] = useState("Untitled");
   const [titleInfo, setTitleInfo] = useState("Untitled");
@@ -142,12 +141,6 @@ export default function RealTimeEditor(props) {
 
       socket.on("request-info", (data) => {
         setSendInitialData(true);
-      });
-
-      // Update participants
-      socket.on("joined-users", (data) => {
-        setUsers(data.users);
-        setRoom(data.room);
       });
     }
   }, []);
