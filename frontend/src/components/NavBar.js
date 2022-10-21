@@ -55,6 +55,10 @@ const NavBar = (props) => {
     navigate("/profile", { replace: true });
   };
 
+  const historyHandler = () => {
+    navigate("/history", { replace: true });
+  };
+
   const logoutHandler = () => {
     setLogoutDialog("Are you sure you want to logout?");
   };
@@ -72,6 +76,9 @@ const NavBar = (props) => {
               </Button>
               <Button color="inherit" onClick={profileHandler}>
                 Profile
+              </Button>
+              <Button color="inherit" onClick={historyHandler}>
+                History
               </Button>
               <Button color="inherit" onClick={logoutHandler}>
                 Logout

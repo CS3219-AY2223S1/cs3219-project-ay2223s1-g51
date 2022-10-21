@@ -7,6 +7,7 @@ import AboutUs from "./components/AboutUs";
 import SignupPage from "./components/SignupPage";
 import Login from "./components/Login";
 import ProfilePage from "./components/ProfilePage";
+import HistoryPage from "./components/HistoryPage";
 import SelectRoom from "./components/SelectRoom";
 import Room from "./components/Room";
 import Editor from "./components/Editor/RealTimeEditor";
@@ -95,6 +96,10 @@ function App(props) {
                 element={<ProfilePage username={username} password={password} setPassword={setPassword} />}
               />
               <Route
+                path="/history"
+                element={<HistoryPage username={username} password={password} setPassword={setPassword} />}
+              />
+              <Route
                 path="/selectroom"
                 element={<SelectRoom user={username} roomtype={roomtype} setRoomType={setRoomType} socket={socket} />}
               />
@@ -120,7 +125,7 @@ function App(props) {
         </Box>
         <AboutUs openAboutUs={openAboutUs} setOpenAboutUs={setOpenAboutUs} />
         <BottomNavigation
-          sx={{ background: "#667aff", height: { footerSize }, width:"100%", bottom: "0", position:"fixed" }}
+          sx={{ background: "#667aff", height: { footerSize }, width:"100%", bottom: "0" }}
           showLabels
           value={value}
           onChange={(event, newValue) => {

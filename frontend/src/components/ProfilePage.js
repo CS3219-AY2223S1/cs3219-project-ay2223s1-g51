@@ -254,6 +254,9 @@ function ProfilePage(props) {
               </Dialog>
             </Stack>
           </Box>
+          <Box>
+            <div style={{ height: "51vh"}}></div>
+          </Box>
         </Container>
       </ThemeProvider>
     </div>

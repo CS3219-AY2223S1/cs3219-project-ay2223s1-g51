@@ -64,6 +64,9 @@ export default function SelectRoom(props) {
             </Box>
           </Stack>
         </Box>
+        <Box>
+          <div style={{ height: "51vh"}}></div>
+        </Box>
       </Container>
     </div>
   );
