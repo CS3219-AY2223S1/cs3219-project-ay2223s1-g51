@@ -13,7 +13,7 @@ import {
   Stack,
 } from "@mui/material";
 import axios from "axios";
-import { URL_USER_DELETE_SVC, URL_USER_EDITPASSWORD_SVC } from "../configs";
+import { URL_USER_DELETE_SVC, URL_USER_EDITPASSWORD_SVC } from "../configs/user-service";
 import { STATUS_CODE_DATABASE_ERROR, STATUS_CODE_SUCCESS } from "../constants";
 import { useState } from "react";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
@@ -52,7 +52,7 @@ function ProfilePage(props) {
 
   const confirmDelete = async () => {
     var saltedPassword = saltPassword2(deleteAccountPassword);
-    if (deleteAccountPassword && props.password == saltedPassword) {
+    if (deleteAccountPassword && props.password === saltedPassword) {
       const res = await axios.delete(URL_USER_DELETE_SVC + props.username).catch((err) => {
         if (err.response.status === STATUS_CODE_DATABASE_ERROR) {
           setErrorDialog("Server error, Please try again later.");
@@ -255,7 +255,7 @@ function ProfilePage(props) {
             </Stack>
           </Box>
           <Box>
-            <div style={{ height: "51vh"}}></div>
+            <div style={{ height: "51vh" }}></div>
           </Box>
         </Container>
       </ThemeProvider>

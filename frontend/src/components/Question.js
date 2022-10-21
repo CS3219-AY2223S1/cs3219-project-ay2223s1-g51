@@ -2,7 +2,7 @@ import axios from "axios";
 import { Button, Container, Box, Typography, Stack } from "@mui/material";
 import { useState } from "react";
 import { useEffect } from "react";
-import { URL_QUESTION_GETQUESTION_SVC } from "../configs";
+import { URL_QUESTION_GETQUESTION_SVC } from "../configs/question-service";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 

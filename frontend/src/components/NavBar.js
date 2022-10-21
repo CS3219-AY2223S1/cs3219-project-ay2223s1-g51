@@ -10,10 +10,10 @@ import {
   DialogContentText,
   DialogTitle,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { URL_USER_LOGOUTUSER_SVC } from "../configs";
+import { URL_USER_LOGOUTUSER_SVC } from "../configs/user-service";
 import { STATUS_CODE_SUCCESS } from "../constants";
 
 const NavBar = (props) => {
@@ -21,7 +21,7 @@ const NavBar = (props) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [dialogTitle, setDialogTitle] = useState("");
   const [dialogMsg, setDialogMsg] = useState("");
-  const {isLogin, setIsLogin} = props;
+  const { isLogin, setIsLogin } = props;
 
   const closeDialog = () => setIsDialogOpen(false);
 
@@ -50,7 +50,7 @@ const NavBar = (props) => {
   const homeHandler = () => {
     navigate("/selectroom", { replace: true });
   };
-  
+
   const profileHandler = () => {
     navigate("/profile", { replace: true });
   };
@@ -71,18 +71,18 @@ const NavBar = (props) => {
         </Typography>
         {isLogin && (
           <Stack direction="row" spacing={2}>
-              <Button color="inherit" onClick={homeHandler}>
-                Home
-              </Button>
-              <Button color="inherit" onClick={profileHandler}>
-                Profile
-              </Button>
-              <Button color="inherit" onClick={historyHandler}>
-                History
-              </Button>
-              <Button color="inherit" onClick={logoutHandler}>
-                Logout
-              </Button>
+            <Button color="inherit" onClick={homeHandler}>
+              Home
+            </Button>
+            <Button color="inherit" onClick={profileHandler}>
+              Profile
+            </Button>
+            <Button color="inherit" onClick={historyHandler}>
+              History
+            </Button>
+            <Button color="inherit" onClick={logoutHandler}>
+              Logout
+            </Button>
           </Stack>
         )}
       </Toolbar>

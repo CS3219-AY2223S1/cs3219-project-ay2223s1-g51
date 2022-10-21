@@ -2,7 +2,6 @@ import express from "express";
 import cors from "cors";
 import { createServer } from "http";
 import { Server } from "socket.io";
-import path from "path";
 import { formatMessage } from "./utils/message.js";
 import {
   leaveRoom,
@@ -13,26 +12,53 @@ import {
   getCurrentUserById,
   getCurrentUserByName,
   updateUserId,
-} from "./utils/rooms.js";
+} from "./controller/rooms.js";
 import axios from "axios";
 
 import "dotenv/config";
 
 const PORT = process.env.PORT || 8000;
-
-const __dirname = path.resolve(path.dirname(""));
+const botName = "Admin";
 const app = express();
 const httpServer = createServer(app);
-
-// Set static folder
-app.use(express.static(path.join(__dirname, "user")));
-const botName = "Admin";
-
 const io = new Server(httpServer, {
   cors: {
     origin: "http://localhost:3000",
     methods: ["GET", "POST"],
   },
+});
+const router = express.Router();
+
+router.post("/execute", async (req, res) => {
+  console.log(req.body);
+  const { script, language, stdin, versionIndex } = req.body;
+
+  const response = await axios({
+    method: "POST",
+    url: process.env.JDOODLE_URL,
+    data: {
+      script: script,
+      stdin: stdin,
+      language: language,
+      versionIndex: versionIndex,
+      clientId: process.env.JDOODLE_CLIENT_ID,
+      clientSecret: process.env.JDOODLE_CLIENT_SECRET,
+    },
+    responseType: "json",
+  });
+
+  console.log("RESPONSE from jdoodle--->" + response.data);
+  res.json(response.data);
+});
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(cors()); // config cors so that front-end can use
+app.options("*", cors());
+
+app.use("/api/matching", router);
+
+httpServer.listen(PORT, () => {
+  console.log("listening on *:8000");
 });
 
 io.on("connection", (socket) => {
@@ -111,34 +137,4 @@ io.on("connection", (socket) => {
       io.to(user.room).emit("joined-users", { room: user.room, users: getRoomUsers(user.room) });
     }
   });
-});
-
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
-app.use(cors()); // config cors so that front-end can use
-app.options("*", cors());
-
-app.post("/execute", async (req, res) => {
-  console.log(req.body);
-  const { script, language, stdin, versionIndex } = req.body;
-
-  const response = await axios({
-    method: "POST",
-    url: process.env.JDOODLE_URL,
-    data: {
-      script: script,
-      stdin: stdin,
-      language: language,
-      versionIndex: versionIndex,
-      clientId: process.env.JDOODLE_CLIENT_ID,
-      clientSecret: process.env.JDOODLE_CLIENT_SECRET,
-    },
-    responseType: "json",
-  });
-
-  console.log("RESPONSE from jdoodle--->" + response.data);
-  res.json(response.data);
-});
-httpServer.listen(PORT, () => {
-  console.log("listening on *:8000");
 });
