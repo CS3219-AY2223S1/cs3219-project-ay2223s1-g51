@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-var Schema = mongoose.Schema;
+const Schema = mongoose.Schema;
 let RoomModelSchema = new Schema({
   roomtype: {
     type: String,
@@ -13,6 +13,10 @@ let RoomModelSchema = new Schema({
   },
   count: {
     type: Number,
+    required: true,
+  },
+  users: {
+    type: Array,
     required: true,
   },
 });

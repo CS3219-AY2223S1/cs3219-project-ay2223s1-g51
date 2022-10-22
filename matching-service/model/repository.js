@@ -15,16 +15,59 @@ export async function findRoom(roomname) {
   return db.collection("roommodels").findOne({ roomname: roomname });
 }
 
+export async function getUsers(userList) {
+  let myquery = { count: { $gt: 0 } };
+  //create a promise object which resolves to either an error or a user object from the DB
+  await db
+    .collection("roommodels")
+    .find(myquery)
+    .forEach(function (data) {
+      const currRoomUsers = data.users;
+      for (const user of currRoomUsers) {
+        userList.push({ username: user, room: data.roomname, id: "" });
+      }
+    });
+  return userList;
+}
+
 export async function deleteRoom(roomname) {
-  var myquery = { roomname: { $eq: roomname } };
+  let myquery = { roomname: { $eq: roomname } };
   db.collection("roommodels").deleteOne(myquery, function (err, obj) {
     if (err) throw err;
   });
 }
 
 export async function updateRoomCount(roomname, newCount) {
-  var myquery = { roomname: { $eq: roomname } };
-  var newvalues = { $set: { count: newCount } };
+  let myquery = { roomname: { $eq: roomname } };
+  let newvalues = { $set: { count: newCount } };
+  // console.log("query: ", myquery);
+  // console.log("value: ", newvalues);
+  db.collection("roommodels").updateOne(myquery, newvalues, function (err, obj) {
+    if (err) throw err;
+  });
+}
+
+export async function removeRoomUser(roomname, username) {
+  const data = await db.collection("roommodels").findOne({ roomname: roomname });
+  const newUsers = data.users.filter((user) => user !== username);
+  const newCount = data.count - 1;
+
+  let myquery = { roomname: { $eq: roomname } };
+  let newvalues = { $set: { count: newCount, users: newUsers } };
+  // console.log("query: ", myquery);
+  // console.log("value: ", newvalues);
+  db.collection("roommodels").updateOne(myquery, newvalues, function (err, obj) {
+    if (err) throw err;
+  });
+}
+
+export async function addRoomUser(roomname, username) {
+  const data = await db.collection("roommodels").findOne({ roomname: roomname });
+  const newUsers = data.users.filter((user) => user !== username);
+  const newCount = data.count + 1;
+
+  let myquery = { roomname: { $eq: roomname } };
+  let newvalues = { $set: { count: newCount, users: newUsers } };
   // console.log("query: ", myquery);
   // console.log("value: ", newvalues);
   db.collection("roommodels").updateOne(myquery, newvalues, function (err, obj) {

@@ -1,4 +1,14 @@
-import { deleteRoom, findRoom, getWaitingRooms, updateRoomCount, getEmptyRooms, getRoomCount } from "./repository.js";
+import {
+  deleteRoom,
+  findRoom,
+  getWaitingRooms,
+  updateRoomCount,
+  removeRoomUser,
+  addRoomUser,
+  getEmptyRooms,
+  getRoomCount,
+  getUsers,
+} from "./repository.js";
 import RoomModel from "./room-model.js";
 
 export async function ormFindRoom(roomname) {
@@ -20,8 +30,8 @@ export async function ormFindRoom(roomname) {
 }
 //need to separate orm functions from repository to decouple business logic from persistence
 export function ormCreateRoom(roomname) {
-  var roomType = roomname.split("-")[0];
-  var roomMod = new RoomModel({ roomtype: roomType, roomname: roomname, count: "1" }); //Create new user
+  let roomType = roomname.split("-")[0];
+  let roomMod = new RoomModel({ roomtype: roomType, roomname: roomname, count: 0, users: [] }); //Create new user
   roomMod.save();
 }
 
@@ -41,6 +51,30 @@ export async function ormUpdateRoomCount(roomname, count) {
   try {
     await updateRoomCount(roomname, count);
     console.log("SUCCESS: Updated Room Count");
+
+    return true;
+  } catch (err) {
+    console.log("ERROR: Could not update room count!");
+    return { err };
+  }
+}
+
+export async function ormRemoveRoomUser(roomname, username) {
+  try {
+    await removeRoomUser(roomname, username);
+    console.log(`SUCCESS: Updated Room Details for ${username} in ${roomname}`);
+
+    return true;
+  } catch (err) {
+    console.log("ERROR: Could not update room count!");
+    return { err };
+  }
+}
+
+export async function ormAddRoomUser(roomname, username) {
+  try {
+    await addRoomUser(roomname, username);
+    console.log(`SUCCESS: Updated Room Details for ${username} in ${roomname}`);
 
     return true;
   } catch (err) {
@@ -73,6 +107,15 @@ export async function ormGetEmptyRooms(emptyRooms) {
   try {
     const rooms = await getEmptyRooms(emptyRooms);
     return rooms;
+  } catch (err) {
+    return { err };
+  }
+}
+
+export async function ormGetUsers(users) {
+  try {
+    const userList = await getUsers(users);
+    return userList;
   } catch (err) {
     return { err };
   }

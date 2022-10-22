@@ -19,7 +19,7 @@ import {
 } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import axios from "axios";
-import { URL_USER_LOGINUSER_SVC } from "../configs";
+import { URL_USER_LOGINUSER_SVC } from "../configs/user-service";
 import { STATUS_CODE_SUCCESS } from "../constants";
 
 function Copyright(props) {
@@ -45,7 +45,7 @@ const themeLight = createTheme({
 
 export default function Login(props) {
   const navigate = useNavigate();
-  const {username, password, setUsername, setPassword, setIsLogin} = props; 
+  const { username, password, setUsername, setPassword, setIsLogin } = props;
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [dialogTitle, setDialogTitle] = useState("");
   const [dialogMsg, setDialogMsg] = useState("");
@@ -92,7 +92,6 @@ export default function Login(props) {
 
   return (
     <div className="background-img">
-
       <ThemeProvider theme={themeLight}>
         <Container component="main" maxWidth="xs">
           <CssBaseline />
