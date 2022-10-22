@@ -4,29 +4,34 @@ const Schema = mongoose.Schema;
 let HistoryModelSchema = new Schema({
   username: {
     type: String,
-    required: true,
+    unique: false
   },
   buddy: {
     type: String,
+    unique: false
   },
   code: {
     type: String,
-    required: true,
+    unique: false
   },
   progress: {
     type: String,
+    unique: false,
     required: true,
   },
   question: {
     type: String,
+    unique: false,
     required: true,
   },
   difficulty: {
     type: String,
+    unique: false,
     required: true,
   },
   date: {
     type: String,
+    unique: false,
     required: true,
   },
 });

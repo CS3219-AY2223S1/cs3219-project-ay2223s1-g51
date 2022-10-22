@@ -139,7 +139,7 @@ function App(props) {
         <AboutUs openAboutUs={openAboutUs} setOpenAboutUs={setOpenAboutUs} />
         {showFooter && (
           <BottomNavigation
-            sx={{ background: "#667aff", height: { footerSize }, width: "100%", bottom: "0" }}
+            sx={{ background: "#667aff", height: { footerSize }, width: "100%", bottom: "0", position: "fixed" }}
             showLabels
             value={value}
             onChange={(event, newValue) => {

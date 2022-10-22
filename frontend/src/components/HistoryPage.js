@@ -1,9 +1,14 @@
-import { Box, Button, Container, CssBaseline, Grid, TextField, Typography, Stack } from "@mui/material";
 import axios from "axios";
 import { useState, useEffect } from "react";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import HistoryCard from "./HistoryCard";
 import { URL_GETHISTORY_SVC } from "../configs/history-service";
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
 
 const themeLight = createTheme({
   palette: {
@@ -27,7 +32,6 @@ function HistoryPage(props) {
       res.then((obj) => {
         console.log(obj.data.resp);
         setHistory(obj.data.resp);
-        // then pass history into each History Card below
       });
     } catch (err) {
       console.log(err);
@@ -37,23 +41,50 @@ function HistoryPage(props) {
   return (
     <div>
       <ThemeProvider theme={themeLight}>
-        <Grid container spacing={10} alignItems="center" justifyContent="center" style={{ minHeight: "90vh" }}>
-          <Grid item xs={10}></Grid>
-          <Grid item xs={10}>
-            <Typography component="h1" variant="h5">
-              Practice History
-            </Typography>
-          </Grid>
-          {history.map((item) => (
-            <HistoryCard
-              username={item.username}
-              buddy={item.buddy}
-              question={item.question}
-              progress={item.progress}
-              date={item.date}
-            ></HistoryCard>
-          ))}
-        </Grid>
+        <div className={"m-5"}>
+          <h2>History</h2>
+          <TableContainer component={Paper}>
+            <Table sx={{ minWidth: 650 }} aria-label="simple table">
+              <TableHead style={{backgroundColor:'#667aff', color: 'white'}}>
+                <TableRow>
+                  <TableCell align="left" style={{color: 'white'}}><h5>Username</h5></TableCell>
+                  <TableCell align="left" style={{color: 'white'}}><h5>Buddy</h5></TableCell>
+                  <TableCell align="left" style={{color: 'white'}}><h5>Question</h5></TableCell>
+                  <TableCell align="left" style={{color: 'white'}}><h5>Progress</h5></TableCell>
+                  <TableCell align="left" style={{color: 'white'}}><h5>Date</h5></TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {history.length == 0 && <TableRow
+                    key="no-history-found"
+                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                  >
+                    <TableCell component="th" scope="row">
+                      No history found
+                    </TableCell>
+                    <TableCell align="left">No history found</TableCell>
+                    <TableCell align="left">No history found</TableCell>
+                    <TableCell align="left">No history found</TableCell>
+                    <TableCell align="left">No history found</TableCell>
+                  </TableRow>}
+                {history.map((row) => (
+                  <TableRow
+                    key={row.name}
+                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                  >
+                    <TableCell component="th" scope="row">
+                      {row.username}
+                    </TableCell>
+                    <TableCell align="left">{row.buddy ? row.buddy : "None"} {' '}</TableCell>
+                    <TableCell align="left">{row.question}</TableCell>
+                    <TableCell align="left">{row.progress}</TableCell>
+                    <TableCell align="left">{row.date}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </div>
       </ThemeProvider>
     </div>
   );
