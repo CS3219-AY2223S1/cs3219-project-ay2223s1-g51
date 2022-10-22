@@ -45,13 +45,13 @@ function HistoryPage(props) {
           <h2>History</h2>
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
-              <TableHead>
+              <TableHead style={{backgroundColor:'#667aff', color: 'white'}}>
                 <TableRow>
-                  <TableCell><h5>Username</h5></TableCell>
-                  <TableCell align="left"><h5>Buddy</h5></TableCell>
-                  <TableCell align="left"><h5>Question</h5></TableCell>
-                  <TableCell align="left"><h5>Progress</h5></TableCell>
-                  <TableCell align="left"><h5>Date</h5></TableCell>
+                  <TableCell align="left" style={{color: 'white'}}><h5>Username</h5></TableCell>
+                  <TableCell align="left" style={{color: 'white'}}><h5>Buddy</h5></TableCell>
+                  <TableCell align="left" style={{color: 'white'}}><h5>Question</h5></TableCell>
+                  <TableCell align="left" style={{color: 'white'}}><h5>Progress</h5></TableCell>
+                  <TableCell align="left" style={{color: 'white'}}><h5>Date</h5></TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
