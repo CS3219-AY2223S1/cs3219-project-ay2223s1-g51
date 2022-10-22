@@ -10,6 +10,12 @@ let db = mongoose.connection;
 db.on("error", console.error.bind(console, "MongoDB connection error:"));
 
 export async function getHistory(username) {
-  // console.log(">" + roomtype);
-  return db.collection("historymodels").find({ username: username });
+  const result = [];
+  await db
+    .collection("historymodels")
+    .find({ username: username })
+    .forEach((history) => {
+      result.push(history);
+    });
+  return result;
 }

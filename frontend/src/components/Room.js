@@ -190,6 +190,7 @@ export default function Room(props) {
             setcodeInRoom={setcodeInRoom}
             setlanguageInRoom={setlanguageInRoom}
             question={question}
+            roomtype={roomtype}
           />
         </Grid>
         <Grid item xs={4} direction="column">

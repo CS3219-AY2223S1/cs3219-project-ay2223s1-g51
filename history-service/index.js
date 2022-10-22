@@ -15,7 +15,7 @@ import { getHistory, postHistory } from "./controller/history-controller.js";
 const router = express.Router();
 
 // Controller will contain all the User-defined Routes
-router.get("/gethistory/:id", getHistory);
+router.get("/gethistory/:username", getHistory);
 router.post("/posthistory", postHistory);
 
 app.use("/api/history", router).all((_, res) => {

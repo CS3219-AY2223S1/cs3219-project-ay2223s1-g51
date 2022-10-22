@@ -10,6 +10,5 @@ let db = mongoose.connection;
 db.on("error", console.error.bind(console, "MongoDB connection error:"));
 
 export async function getQuestions(roomtype) {
-  // console.log(">" + roomtype);
   return db.collection("questionmodels").findOne({ difficulty: roomtype });
 }

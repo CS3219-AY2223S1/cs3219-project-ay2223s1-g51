@@ -1,10 +1,9 @@
 import { Box, Button, Container, CssBaseline, Grid, TextField, Typography, Stack } from "@mui/material";
 import axios from "axios";
-import { URL_USER_DELETE_SVC, URL_USER_EDITPASSWORD_SVC } from "../configs/user-service";
-import { STATUS_CODE_DATABASE_ERROR, STATUS_CODE_SUCCESS } from "../constants";
 import { useState, useEffect } from "react";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import HistoryCard from "./HistoryCard";
+import { URL_GETHISTORY_SVC } from "../configs/history-service";
 
 const themeLight = createTheme({
   palette: {
@@ -15,18 +14,19 @@ const themeLight = createTheme({
 });
 
 function HistoryPage(props) {
-  const [username, setUsername] = useState("");
-  const [history, setHistory] = useState();
+  const [history, setHistory] = useState([]);
+  const { username } = props;
 
   useEffect(() => {
     try {
       const getHistory = async () => {
-        // call api to get history
-        // return await axios.get(URL_QUESTION_GETQUESTION_SVC + roomtype);
+        console.log(URL_GETHISTORY_SVC + username);
+        return await axios.get(URL_GETHISTORY_SVC + username);
       };
       const res = getHistory();
       res.then((obj) => {
-        setHistory(obj.data.resp.difficulty);
+        console.log(obj.data.resp);
+        setHistory(obj.data.resp);
         // then pass history into each History Card below
       });
     } catch (err) {
@@ -44,9 +44,15 @@ function HistoryPage(props) {
               Practice History
             </Typography>
           </Grid>
-          <HistoryCard></HistoryCard>
-          <HistoryCard></HistoryCard>
-          <HistoryCard></HistoryCard>
+          {history.map((item) => (
+            <HistoryCard
+              username={item.username}
+              buddy={item.buddy}
+              question={item.question}
+              progress={item.progress}
+              date={item.date}
+            ></HistoryCard>
+          ))}
         </Grid>
       </ThemeProvider>
     </div>

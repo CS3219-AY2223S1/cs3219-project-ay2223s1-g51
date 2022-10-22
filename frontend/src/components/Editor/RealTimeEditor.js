@@ -44,6 +44,7 @@ export default function RealTimeEditor(props) {
     setlanguageInRoom,
     users,
     question,
+    roomtype,
   } = props;
 
   const navigate = useNavigate();
@@ -216,12 +217,15 @@ export default function RealTimeEditor(props) {
     console.log("current code:" + editorCode);
     const buddy = users.find((user) => user.username !== username);
     const buddyName = buddy ? buddy.username : "";
+    const date = new Date().toLocaleDateString();
     const history = {
       question: question.title,
       code: editorCode,
       username: username,
       progress: progress,
       buddy: buddyName,
+      difficulty: roomtype,
+      date: date,
     };
 
     console.log(history);
