@@ -354,7 +354,7 @@ export default function RealTimeEditor(props) {
                 <Typography color="black">Participants:</Typography>
                 <Box display="flex">
                   {users.map((user) => (
-                    <Typography>{user.username}</Typography>
+                    <Typography color="black">{user.username}</Typography>
                   ))}
                 </Box>
               </Box>
