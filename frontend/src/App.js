@@ -78,7 +78,7 @@ function App(props) {
   return (
     <SnackbarProvider>
       <Box sx={{ display: "flex", flexDirection: "column", flexFlow: "column", height: screenSize.dynamicHeight }}>
-        <Box sx={{ display: "flex", flexDirection: "column", height: { bodySize } }}>
+        <Box sx={{ display: "flex", flexDirection: "column" }}>
           <Router>
             <NavBar isLogin={isLogin} setIsLogin={isLogin}></NavBar>
             <Routes>

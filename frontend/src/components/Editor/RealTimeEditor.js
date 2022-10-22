@@ -19,6 +19,12 @@ import {
   InputLabel,
   Select,
   MenuItem,
+  Box,
+  AppBar,
+  Toolbar,
+  Container,
+  Typography,
+  Grid,
 } from "@mui/material";
 
 import GetAppRoundedIcon from "@material-ui/icons/GetAppRounded";
@@ -51,7 +57,7 @@ export default function RealTimeEditor(props) {
 
   const [theme, setTheme] = useState("vs-dark");
 
-  const [language, setLanguage] = useState("cpp");
+  const [language, setLanguage] = useState(0);
   // Check if editor is ready
   const [isEditorReady, setIsEditorReady] = useState(false);
   // Send chunks of code on change
@@ -64,7 +70,7 @@ export default function RealTimeEditor(props) {
   const [titleChange, setTitleChange] = useState(false);
   const [fileExtensionValue, setfileExtensionValue] = useState(0);
 
-  const [fontsize, setFontsize] = useState("16px");
+  const [fontsize, setFontsize] = useState(3);
 
   // Save function
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -268,126 +274,104 @@ export default function RealTimeEditor(props) {
   };
 
   return (
-    <div>
-      <nav className="navbar navbar-expand-lg navbar-light bg-white shadow mb-1 py-0">
-        <button
-          className="navbar-toggler"
-          type="button"
-          data-toggle="collapse"
-          data-target="#navbarSupportedContent"
-          aria-controls="navbarSupportedContent"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span className="navbar-toggler-icon"></span>
-        </button>
-        <form class="d-flex">
-          <input
-            class="form-control me-2"
-            type="text"
-            placeholder="Enter file name here"
-            aria-label="Search"
-            value={titleInfo}
-            onChange={titleUpdating}
-          />
-          {titleChange === true && (
-            <button className="btn ml-2 btn-outline-success">
-              <IconContext.Provider value={{ size: "1.4em" }}>
-                <RiCheckFill className="checkIcon" onClick={titleUpdated} disabled={!isEditorReady}></RiCheckFill>
-              </IconContext.Provider>
-            </button>
-          )}
-        </form>
-        <div className="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul className="navbar-nav ml-auto">
-            <li className="nav-item m-2">
-              <IconButton color="primary" title="Run code" onClick={runCode}>
-                <PlayArrowRoundedIcon />
-              </IconButton>
-            </li>
-
-            <li className="nav-item m-2">
-              <IconButton color="primary" title="Download the code" onClick={downloadCode}>
-                <GetAppRoundedIcon />
-              </IconButton>
-            </li>
-            <li className="nav-item m-2">
-              <IconButton color="primary" title="Upload the code" onClick={handleUpload}>
-                <PublishRoundedIcon />
-              </IconButton>
-              {/* <input type="file" onChange={(e) => showFile(e)}></input> */}
-              <input type="file" ref={hiddenFileInput} onChange={(e) => showFile(e)} style={{ display: "none" }} />
-            </li>
-
-            <li className="nav-item m-2">
-              {theme === "vs-dark" ? (
-                <IconButton color="primary" onClick={toggleTheme} title="Change to Light theme">
-                  <Brightness7RoundedIcon />
+    <Box sx={{ flexGrow: 1 }}>
+      <AppBar position="static" sx={{ backgroundColor: "background.paper" }}>
+        <Toolbar>
+          <Grid container direction="row" spacing={1}>
+            <Grid item xs={6}>
+              <Box display="flex" flexDirection="row" alignContent="space-between" alignItems="center">
+                <IconButton color="primary" title="Run code" onClick={runCode}>
+                  <PlayArrowRoundedIcon />
                 </IconButton>
-              ) : (
-                <IconButton color="primary" onClick={toggleTheme} title="Change to Dark theme">
-                  <Brightness4RoundedIcon />
+
+                <IconButton color="primary" title="Download the code" onClick={downloadCode}>
+                  <GetAppRoundedIcon />
                 </IconButton>
-              )}
-            </li>
+                <IconButton color="primary" title="Upload the code" onClick={handleUpload}>
+                  <PublishRoundedIcon />
+                </IconButton>
+                {/* <input type="file" onChange={(e) => showFile(e)}></input> */}
+                <input type="file" ref={hiddenFileInput} onChange={(e) => showFile(e)} style={{ display: "none" }} />
 
-            <li className="nav-item">
-              <span className="nav-link mt-1">Participants:</span>
-              <div id="users">
-                {users.map((user) => (
-                  <div className="row">
-                    <li key={user.id}>{user.username}</li>
-                  </div>
-                ))}
-              </div>
-            </li>
-            <li className="nav-item mt-1">
-              <span className="nav-link mt-1">Room: {room}</span>
-            </li>
+                {theme === "vs-dark" ? (
+                  <IconButton color="primary" onClick={toggleTheme} title="Change to Light theme">
+                    <Brightness7RoundedIcon />
+                  </IconButton>
+                ) : (
+                  <IconButton color="primary" onClick={toggleTheme} title="Change to Dark theme">
+                    <Brightness4RoundedIcon />
+                  </IconButton>
+                )}
 
-            <li className="nav-item m-3">
-              <select className="custom-select mt-1" title="change font size" onChange={changeFontSize}>
-                <option value="0">10px</option>
-                <option value="1">12px</option>
-                <option value="2">14px</option>
-                <option value="3" selected>
-                  16px
-                </option>
-                <option value="4">18px</option>
-                <option value="5">20px</option>
-                <option value="6">22px</option>
-                <option value="7">24px</option>
-                <option value="8">26px</option>
-                <option value="9">28px</option>
-                <option value="10">30px</option>
-              </select>
-            </li>
+                <FormControl fullWidth>
+                  <InputLabel id="select-fontsize-label">Fontsize</InputLabel>
+                  <Select
+                    labelId="select-fontsize-label"
+                    id="select-fontsize"
+                    value={fontsize}
+                    label="Select Fontsize"
+                    onChange={(e) => {
+                      setFontsize(e.target.value);
+                    }}
+                  >
+                    <MenuItem value={0}>10px</MenuItem>
+                    <MenuItem value={1}>12px</MenuItem>
+                    <MenuItem value={2}>14px</MenuItem>
+                    <MenuItem value={3}>16px</MenuItem>
+                    <MenuItem value={4}>18px</MenuItem>
+                    <MenuItem value={5}>20px</MenuItem>
+                    <MenuItem value={6}>22px</MenuItem>
+                    <MenuItem value={7}>24px</MenuItem>
+                    <MenuItem value={8}>26px</MenuItem>
+                    <MenuItem value={9}>28px</MenuItem>
+                    <MenuItem value={10}>30px</MenuItem>
+                  </Select>
+                </FormControl>
 
-            <li className="nav-item mt-3">
-              <select className="custom-select mt-1" title="Select Language" onChange={changeLanguage}>
-                <option value="0">C++</option>
-                <option value="1">Python</option>
-                <option value="2">Javascript</option>
-                <option value="3">C</option>
-                <option value="4">Java</option>
-                <option value="5">Go</option>
-              </select>
-            </li>
-
-            <li className="nav-item mt-3">
-              <Button variant="outlined" onClick={toggleSave}>
-                Outlined
-              </Button>
-            </li>
-
-            <li className="nav-item mt-2">
-              <IconButton style={{ color: "#dc3545" }} onClick={leaveRoom} title="Leave room">
-                <ExitToAppRoundedIcon />
-              </IconButton>
-            </li>
-          </ul>
-        </div>
-      </nav>
+                <FormControl fullWidth>
+                  <InputLabel id="select-language-label">Language</InputLabel>
+                  <Select
+                    labelId="select-language-label"
+                    id="select-language"
+                    value={language}
+                    label="Select Language"
+                    onChange={(e) => {
+                      setLanguage(e.target.value);
+                    }}
+                  >
+                    <MenuItem value={0}>C++</MenuItem>
+                    <MenuItem value={1}>Python</MenuItem>
+                    <MenuItem value={2}>Javascript</MenuItem>
+                    <MenuItem value={3}>C</MenuItem>
+                    <MenuItem value={4}>Java</MenuItem>
+                    <MenuItem value={5}>Go</MenuItem>
+                  </Select>
+                </FormControl>
+              </Box>
+            </Grid>
+            <Grid item xs={4}>
+              <Box>
+                <Typography color="black">Participants:</Typography>
+                <Box display="flex">
+                  {users.map((user) => (
+                    <Typography>{user.username}</Typography>
+                  ))}
+                </Box>
+              </Box>
+            </Grid>
+            <Grid item xs={2}>
+              <Box justifyContent="flex-end" display="flex">
+                <Button variant="outlined" onClick={toggleSave}>
+                  Save Progress
+                </Button>
+                <IconButton style={{ color: "#dc3545" }} onClick={leaveRoom} title="Leave room">
+                  <ExitToAppRoundedIcon />
+                </IconButton>
+              </Box>
+            </Grid>
+          </Grid>
+        </Toolbar>
+      </AppBar>
       <Dialog open={isDialogOpen} onClose={closeDialog}>
         <DialogTitle>Saving current progress...</DialogTitle>
         <DialogContent>
@@ -418,14 +402,14 @@ export default function RealTimeEditor(props) {
           height="90vh"
           width="100%"
           theme={theme}
-          language={language}
+          language={languages[language]}
           value={value}
           editorDidMount={handleEditorDidMount}
           onChange={handleEditorChange}
           loading={"Loading..."}
-          options={{ fontSize: fontsize }}
+          options={{ fontSize: fontSizes[fontsize] }}
         />
       </div>
-    </div>
+    </Box>
   );
 }
