@@ -2,16 +2,6 @@ import "dotenv/config";
 import { auth } from "../firebase-config.js";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth";
 
-//Set up mongoose connection
-import mongoose from "mongoose";
-
-let mongoDB = process.env.ENV == "PROD" ? process.env.DB_CLOUD_URI : process.env.DB_LOCAL_URI;
-
-mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true });
-
-let db = mongoose.connection;
-db.on("error", console.error.bind(console, "MongoDB connection error:"));
-
 export async function createUser(params) {
   const username = params.username;
   const password = params.password;
@@ -29,7 +19,6 @@ export async function createUser(params) {
 export async function logInUser(params) {
   const username = params.username;
   const password = params.password;
-  console.log(password);
 
   return signInWithEmailAndPassword(auth, username, password)
     .then((userCredential) => {
@@ -77,9 +66,4 @@ export async function editPassword(username, password) {
   db.collection("usermodels").updateOne(myquery, newvalues, function (err, obj) {
     if (err) throw err;
   });
-}
-
-export async function getQuestions(roomtype) {
-  // console.log(">" + roomtype);
-  return db.collection("questionmodels").findOne({ difficulty: roomtype });
 }

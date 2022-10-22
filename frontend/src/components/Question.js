@@ -2,12 +2,11 @@ import axios from "axios";
 import { Button, Container, Box, Typography, Stack } from "@mui/material";
 import { useState } from "react";
 import { useEffect } from "react";
-import { URL_QUESTION_GETQUESTION_SVC } from "../configs";
+import { URL_QUESTION_GETQUESTION_SVC } from "../configs/question-service";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 
 export default function Question(props) {
-  const [question, setQuestion] = useState("");
   const [questions, setQuestions] = useState([]);
   const [difficulty, setDifficulty] = useState("");
   const [title, setTitle] = useState("");
@@ -15,7 +14,7 @@ export default function Question(props) {
   const [examples, setExamples] = useState("");
   const [constraints, setConstraints] = useState("");
   const [questionNum, setQuestionNum] = useState(0);
-  const { roomtype } = props;
+  const { roomtype, setQuestion } = props;
 
   const handleQuestions = (data) => {
     setQuestions(data);
@@ -25,7 +24,6 @@ export default function Question(props) {
     setDesc(data[questionNum].desc);
     setExamples(data[questionNum].examples);
     setConstraints(data[questionNum].constraints);
-    console.log("done setting");
   };
 
   const handleQuestion = () => {
