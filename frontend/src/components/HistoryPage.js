@@ -47,11 +47,11 @@ function HistoryPage(props) {
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
               <TableHead>
                 <TableRow>
-                  <TableCell>Username</TableCell>
-                  <TableCell align="left">Buddy</TableCell>
-                  <TableCell align="left">Question</TableCell>
-                  <TableCell align="left">Progress</TableCell>
-                  <TableCell align="left">Date</TableCell>
+                  <TableCell><h5>Username</h5></TableCell>
+                  <TableCell align="left"><h5>Buddy</h5></TableCell>
+                  <TableCell align="left"><h5>Question</h5></TableCell>
+                  <TableCell align="left"><h5>Progress</h5></TableCell>
+                  <TableCell align="left"><h5>Date</h5></TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
