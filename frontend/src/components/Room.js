@@ -30,7 +30,7 @@ export default function Room(props) {
     javascript: "nodejs",
   };
   const navigate = useNavigate();
-
+  const [question, setQuestion] = useState("");
   const [input, setInput] = useState("");
   const [languageInRoom, setlanguageInRoom] = useState("cpp");
   const [output, setOutput] = useState("");
@@ -96,9 +96,9 @@ export default function Room(props) {
     enqueueSnackbar("timed out!", {
       variant: "warning",
     });
-    socket.disconnect();
-    setIsDisconnected(true);
-    navigate("/selectroom");
+    // socket.disconnect();
+    // setIsDisconnected(true);
+    // navigate("/selectroom");
   };
 
   useEffect(() => {
@@ -189,11 +189,12 @@ export default function Room(props) {
             room={room}
             setcodeInRoom={setcodeInRoom}
             setlanguageInRoom={setlanguageInRoom}
+            question={question}
           />
         </Grid>
         <Grid item xs={4} direction="column">
           <Stack>
-            <Question roomtype={roomtype}></Question>
+            <Question roomtype={roomtype} setQuestion={setQuestion}></Question>
             <div style={{ height: "2vh" }}></div>
             <Box sx={{ mb: 2, p: 2.5 }}>
               <Messages messages={messages} username={username}></Messages>

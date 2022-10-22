@@ -1,0 +1,25 @@
+services:
+  frontend:
+    image: awesome/webapp
+    ports:
+      - "3000:3000"
+
+  history-service:
+    image: awesome/database
+    ports:
+      - "8000:8000"
+
+  matching-service:
+    image: awesome/database
+    ports:
+      - "8001:8001"
+
+  question-service:
+    image: awesome/database
+    ports:
+      - "8002:8002"
+
+  user-service:
+    image: awesome/database
+    ports:
+      - "8003:8003"

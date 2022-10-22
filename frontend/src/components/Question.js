@@ -7,7 +7,6 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 
 export default function Question(props) {
-  const [question, setQuestion] = useState("");
   const [questions, setQuestions] = useState([]);
   const [difficulty, setDifficulty] = useState("");
   const [title, setTitle] = useState("");
@@ -15,7 +14,7 @@ export default function Question(props) {
   const [examples, setExamples] = useState("");
   const [constraints, setConstraints] = useState("");
   const [questionNum, setQuestionNum] = useState(0);
-  const { roomtype } = props;
+  const { roomtype, setQuestion } = props;
 
   const handleQuestions = (data) => {
     setQuestions(data);
