@@ -27,7 +27,8 @@ const themeLight = createTheme({
 });
 
 function ProfilePage(props) {
-  const [username, setUsername] = useState("");
+  const { username, password, user, setPassword } = props;
+  // const [username, setUsername] = useState("");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [dialogTitle, setDialogTitle] = useState("");
   const [dialogMsg, setDialogMsg] = useState("");
@@ -35,9 +36,9 @@ function ProfilePage(props) {
   const [isChangePasswordClicked, setIsChangePasswordClicked] = useState(false);
   const [changedPassword, setChangedPassword] = useState("");
   const [deleteAccountPassword, setDeleteAccountPassword] = useState("");
-  var oldPassword;
-  var newPassword;
-  var reEnterNewPassword;
+  const [oldPassword, setOldPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [reEnterPassword, setReEnterPassword] = useState("");
 
   //hardcoded for now, need to change to dynamic later
 
@@ -78,11 +79,11 @@ function ProfilePage(props) {
 
   //hardcoded for now, need to change to dynamic later
   const handleChangePassword = async () => {
-    if (newPassword && reEnterNewPassword && newPassword === reEnterNewPassword && oldPassword === props.password) {
+    if (newPassword && reEnterPassword && newPassword === reEnterPassword) {
       const res = await axios
         .put(URL_USER_EDITPASSWORD_SVC, {
-          username: props.username,
-          password: changedPassword,
+          oldPassword: oldPassword,
+          newPassword: newPassword,
         })
         .catch((err) => {
           if (err.response.status === STATUS_CODE_DATABASE_ERROR) {
@@ -118,19 +119,11 @@ function ProfilePage(props) {
     return saltedPassword;
   };
 
-  const oldPasswordHandler = (e) => {
-    oldPassword = saltPassword(e);
-  };
+  const oldPasswordHandler = (e) => setOldPassword(e.target.value);
 
-  const passwordHandler = (e) => {
-    newPassword = saltPassword(e);
-    setChangedPassword(newPassword);
-  };
+  const passwordHandler = (e) => setNewPassword(e.target.value);
 
-  const reEnterPasswordHandler = (e) => {
-    reEnterNewPassword = saltPassword(e);
-    setChangedPassword(reEnterNewPassword);
-  };
+  const reEnterPasswordHandler = (e) => setReEnterPassword(e.target.value);
 
   const deleteAccountPasswordHandler = (e) => {
     setDeleteAccountPassword(e.target.value);

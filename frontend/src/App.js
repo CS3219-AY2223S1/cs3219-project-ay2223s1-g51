@@ -79,8 +79,8 @@ function App(props) {
   };
 
   useEffect(() => {
-    console.log("token has changed")
-    console.log("token: " + token)
+    console.log("token has changed");
+    console.log("token: " + token);
   }, [token]);
 
   return (
@@ -94,17 +94,33 @@ function App(props) {
               <Route
                 path="/login"
                 element={
-                  <Login username={username} password={password} setUsername={setUsername} setPassword={setPassword} token={token} setToken={setToken}/>
+                  <Login
+                    username={username}
+                    password={password}
+                    setUsername={setUsername}
+                    setPassword={setPassword}
+                    token={token}
+                    setToken={setToken}
+                  />
                 }
               />
               <Route path="/signup" element={<SignupPage />} />
               <Route
                 path="/profile"
-                element={<ProfilePage username={username} password={password} setPassword={setPassword} />}
+                element={<ProfilePage username={username} password={password} user={user} setPassword={setPassword} />}
               />
               <Route
                 path="/selectroom"
-                element={<SelectRoom user={username} roomtype={roomtype} setRoomType={setRoomType} socket={socket} token={token} setToken={setToken} />}
+                element={
+                  <SelectRoom
+                    user={username}
+                    roomtype={roomtype}
+                    setRoomType={setRoomType}
+                    socket={socket}
+                    token={token}
+                    setToken={setToken}
+                  />
+                }
               />
               <Route
                 path="/room/:id"

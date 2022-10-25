@@ -1,6 +1,12 @@
 import "dotenv/config";
 import { auth } from "../firebase-config.js";
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  signOut,
+  updatePassword,
+  EmailAuthProvider,
+} from "firebase/auth";
 
 //Set up mongoose connection
 import mongoose from "mongoose";
@@ -12,16 +18,15 @@ mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true });
 let db = mongoose.connection;
 db.on("error", console.error.bind(console, "MongoDB connection error:"));
 
-export async function checkUserJwt(params) {
-  console.log('1')
-  const token = params.token
-    auth
-    .verifyIdToken(token)
-    .then(() => "valid")
-    .catch((error) => {
-      return error
-    });
-}
+// export async function checkUserJwt(params) {
+//     console.log("1");
+//     const token = params.token;
+//     auth.verifyIdToken(token)
+//         .then(() => "valid")
+//         .catch((error) => {
+//             return error;
+//         });
+// }
 
 export async function createUser(params) {
   const username = params.username;
@@ -82,13 +87,25 @@ export async function deleteUser(username) {
   });
 }
 
-export async function editPassword(username, password) {
-  var myquery = { username: { $eq: username } };
-  var newvalues = { $set: { password: password } };
-  db.collection("usermodels").updateOne(myquery, newvalues, function (err, obj) {
-    if (err) throw err;
-  });
+export async function editPassword(oldPassword, newPassword) {
+  try {
+    console.log(oldPassword);
+    console.log(newPassword);
+    const user = auth.currentUser;
+    await reauthenticate(oldPassword);
+    await user.updatePassword(newPassword).then(() => {
+      return "success";
+    });
+  } catch (err) {
+    return { err };
+  }
 }
+
+const reauthenticate = (currentPassword) => {
+  const user = auth.currentUser;
+  const cred = EmailAuthProvider.credential(user.email, currentPassword);
+  return user.reauthenticateAndRetrieveDataWithCredential(cred);
+};
 
 export async function getQuestions(roomtype) {
   console.log(">" + roomtype);

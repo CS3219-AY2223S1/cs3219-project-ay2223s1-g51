@@ -3,34 +3,34 @@ import { Box, Button, Container, Typography, Select, MenuItem, FormControl, Inpu
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { STATUS_CODE_FAIL, STATUS_CODE_DATABASE_ERROR } from "../constants";
-import { URL_USER_CHECKUSERJWT_SVC } from "../configs";
+// import { URL_USER_CHECKUSERJWT_SVC } from "../configs";
 
 export default function SelectRoom(props) {
   const { user, roomtype, setRoomType, socket, token, setToken } = props;
   const navigate = useNavigate();
 
-  useEffect(() => {
-    console.log("token in selectroom: " + token);
-    try {
-      if (token != "") {
-        const checkJwt = async () => {
-          return await axios.post(URL_USER_CHECKUSERJWT_SVC, { token }).catch((err) => {
-            if (err.response.status === STATUS_CODE_FAIL || STATUS_CODE_DATABASE_ERROR) {
-              window.location = "http://localhost:3000/login";
-            } else {
-              window.location = "http://localhost:3000/login";
-            }
-          });
-        };
-        checkJwt();
-      } else {
-        window.location = "http://localhost:3000/login";
-      }
+  // useEffect(() => {
+  //   console.log("token in selectroom: " + token);
+  //   try {
+  //     if (token != "") {
+  //       const checkJwt = async () => {
+  //         return await axios.post(URL_USER_CHECKUSERJWT_SVC, { token }).catch((err) => {
+  //           if (err.response.status === STATUS_CODE_FAIL || STATUS_CODE_DATABASE_ERROR) {
+  //             window.location = "http://localhost:3000/login";
+  //           } else {
+  //             window.location = "http://localhost:3000/login";
+  //           }
+  //         });
+  //       };
+  //       checkJwt();
+  //     } else {
+  //       window.location = "http://localhost:3000/login";
+  //     }
 
-    } catch (err) {
-      console.log(err);
-    }
-  }, []);
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // }, []);
 
   const handleChange = (event) => {
     event.preventDefault();
