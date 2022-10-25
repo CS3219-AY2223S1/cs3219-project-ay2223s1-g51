@@ -81,11 +81,18 @@ export async function findUser(params) {
   });
 }
 
-export async function deleteUser(username) {
-  var myquery = { username: { $eq: username } };
-  db.collection("usermodels").deleteOne(myquery, function (err, obj) {
-    if (err) throw err;
-  });
+export async function deleteUser(password) {
+  try {
+    const user = auth.currentUser;
+    await reauthenticate(auth, password);
+    await deleteUser(user).then(() => {
+    console.log("Deleted!")
+    return "account deleted"
+    })
+  } catch(error) {
+    console.log(error);
+    return error.code
+  }
 }
 
 export async function editPassword(oldPassword, newPassword) {

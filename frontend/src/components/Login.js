@@ -47,7 +47,7 @@ const themeLight = createTheme({
 
 export default function Login(props) {
   const navigate = useNavigate();
-  const {username, password, token, setUsername, setPassword, setToken} = props
+  const {username, password, token, user, setUsername, setPassword, setToken, setUser} = props
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [dialogTitle, setDialogTitle] = useState("");
   const [dialogMsg, setDialogMsg] = useState("");
@@ -62,10 +62,8 @@ export default function Login(props) {
     if (res && res.status === STATUS_CODE_SUCCESS) {
       setUsername(username);
       setPassword(password);
-
 	  const jwtToken = JSON.stringify(res.data.resp.obj.stsTokenManager.accessToken)
 	  setToken(jwtToken)
-
       setSuccessDialog("Successfully logged in!");
       navigate("/selectroom", { replace: true });
     }

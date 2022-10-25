@@ -110,17 +110,15 @@ export async function logOutUser(req, res) {
 
 export async function deleteUser(req, res) {
   try {
+    const user = req.params.user;
     const username = req.params.username;
-    if (username) {
+    console.log(user)
+    if (user) {
       const resp = await _deleteUser(username);
-      if (resp.err) {
-        return res.status(400).json({ message: "Could not delete user!" });
-      } else {
-        console.log(`Deleted user ${username} successfully!`);
-        return res.status(201).json({
+      console.log(`Deleted user ${username} successfully!`);
+      return res.status(200).json({
           message: `Deleted user ${username} successfully!`,
         });
-      }
     } else {
       return res.status(400).json({ message: "Username is missing!" });
     }

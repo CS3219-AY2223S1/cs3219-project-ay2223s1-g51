@@ -52,9 +52,12 @@ function ProfilePage(props) {
   };
 
   const confirmDelete = async () => {
-    var saltedPassword = saltPassword2(deleteAccountPassword);
-    if (deleteAccountPassword && props.password == saltedPassword) {
-      const res = await axios.delete(URL_USER_DELETE_SVC + props.username).catch((err) => {
+    //var saltedPassword = saltPassword2(deleteAccountPassword);
+    //if (deleteAccountPassword && props.password == saltedPassword) {
+    if (deleteAccountPassword) {
+      console.log("hello")
+      const res = await axios.delete(URL_USER_DELETE_SVC + user, {user, username}).catch((err) => {
+        console.log(err)
         if (err.response.status === STATUS_CODE_DATABASE_ERROR) {
           setErrorDialog("Server error, Please try again later.");
         } else {

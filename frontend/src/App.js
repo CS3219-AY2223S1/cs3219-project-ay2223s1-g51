@@ -96,11 +96,13 @@ function App(props) {
                 element={
                   <Login
                     username={username}
-                    password={password}
+                    password={password}                    
+                    token={token}
+                    user={user}
                     setUsername={setUsername}
                     setPassword={setPassword}
-                    token={token}
                     setToken={setToken}
+                    setUser={setUser}
                   />
                 }
               />
