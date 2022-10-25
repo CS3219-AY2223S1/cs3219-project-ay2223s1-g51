@@ -67,7 +67,7 @@ function ProfilePage(props) {
       }
       setIsDialogOpen(false);
     } else {
-      setErrorDialog("Incorret password. Please try again.");
+      setErrorDialog("Incorrect password. Please try again.");
     }
     setIsDeleteClicked(false);
   };
@@ -93,7 +93,6 @@ function ProfilePage(props) {
           }
         });
       if (res && res.status === STATUS_CODE_SUCCESS) {
-        props.setPassword(changedPassword);
         setSuccessDialog("Password successfully changed");
       }
     } else {

@@ -131,21 +131,12 @@ export async function deleteUser(req, res) {
 
 export async function editPassword(req, res) {
   try {
-    const { oldPassword, newPassword } = req.body;
-    console.log(req.body.oldPassword);
-    console.log(newPassword);
+    const { username ,oldPassword, newPassword } = req.body;
     if (oldPassword && newPassword) {
-      console.log(oldPassword);
-      console.log(newPassword);
       const resp = await _editPassword(oldPassword, newPassword);
-      if (resp.err) {
-        return res.status(400).json({ message: "Could not edit password!" });
-      } else {
-        console.log(`Edited password for user ${username} successfully!`);
-        return res.status(201).json({
-          message: `Edited password for user ${username} successfully!`,
+        return res.status(200).json({
+            message: `Edited password for user ${username} successfully!`,
         });
-      }
     } else {
       return res.status(400).json({ message: "Username and/or Password are missing!" });
     }

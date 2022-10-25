@@ -6,6 +6,7 @@ import {
   signOut,
   updatePassword,
   EmailAuthProvider,
+  reauthenticateWithCredential
 } from "firebase/auth";
 
 //Set up mongoose connection
@@ -89,22 +90,21 @@ export async function deleteUser(username) {
 
 export async function editPassword(oldPassword, newPassword) {
   try {
-    console.log(oldPassword);
-    console.log(newPassword);
     const user = auth.currentUser;
-    await reauthenticate(oldPassword);
-    await user.updatePassword(newPassword).then(() => {
+    await reauthenticate(auth, oldPassword);
+    await updatePassword(user, newPassword).then(() => {
       return "success";
     });
   } catch (err) {
-    return { err };
+      return { err };
   }
 }
 
-const reauthenticate = (currentPassword) => {
+export async function reauthenticate(auth, currentPassword) {
   const user = auth.currentUser;
   const cred = EmailAuthProvider.credential(user.email, currentPassword);
-  return user.reauthenticateAndRetrieveDataWithCredential(cred);
+  const result = await reauthenticateWithCredential(user, cred)
+  return result 
 };
 
 export async function getQuestions(roomtype) {

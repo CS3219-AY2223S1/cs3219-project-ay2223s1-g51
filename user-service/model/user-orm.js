@@ -81,8 +81,6 @@ export async function ormDeleteUser(username) {
 
 export async function ormEditPassword(oldPassword, newPassword) {
   try {
-    console.log(oldPassword);
-    console.log(newPassword);
     const user = await editPassword(oldPassword, newPassword);
     return true;
   } catch (err) {
