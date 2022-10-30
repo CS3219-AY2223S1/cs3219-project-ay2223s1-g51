@@ -1,6 +1,7 @@
 import "dotenv/config";
 import { auth } from "../firebase-config.js";
 import {
+  onAuthStateChanged,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
@@ -81,10 +82,13 @@ export async function findUser(params) {
   });
 }
 
-export async function deleteUser(password) {
+export async function deleteUser(currUser, password) {
   try {
-    const user = auth.currentUser;
+    console.log('4')
+    //const user = auth.currentUser;
+    const user = currUser;
     await reauthenticate(auth, password);
+    console.log('8')
     await deleteUser(user).then(() => {
     console.log("Deleted!")
     return "account deleted"
@@ -109,8 +113,13 @@ export async function editPassword(oldPassword, newPassword) {
 
 export async function reauthenticate(auth, currentPassword) {
   const user = auth.currentUser;
+  console.log('5')
+  console.log(user)
   const cred = EmailAuthProvider.credential(user.email, currentPassword);
+  console.log('6')
+  console.log(cred)
   const result = await reauthenticateWithCredential(user, cred)
+  console.log('7')
   return result 
 };
 

@@ -63,9 +63,11 @@ export async function logInUser(req, res) {
     const { username, password } = req.body;
     if (username && password) {
       try {
+        console.log('1')
         const resp = await _logInUser(username, password);
-
+        console.log('2')
         if (resp["key"] == "error") {
+          console.log('3')
           errorMsg = resp["obj"];
           console.log(errorMsg);
           if (resp["obj"] == "auth/wrong-password" || "auth/user-not-found" || "auth/invalid-email") {
@@ -77,10 +79,12 @@ export async function logInUser(req, res) {
         }
 
         if (resp["key"] == "user") {
+          //console.log(resp.obj)
           console.log(`Successfully logged into user account ${username}.`);
           return res.status(200).json({ resp });
         }
       } catch {
+        console.log('HELLO')
         return res.status(500).json({ message: `Database failure when logging in to user account!` });
       }
     } else {
@@ -110,17 +114,26 @@ export async function logOutUser(req, res) {
 
 export async function deleteUser(req, res) {
   try {
-    const user = req.params.user;
-    const username = req.params.username;
-    console.log(user)
-    if (user) {
-      const resp = await _deleteUser(username);
-      console.log(`Deleted user ${username} successfully!`);
+    //const user = req.params.user;
+    //const username = req.params.username;
+    //console.log(user)
+    //const { password } = req.body
+    const password = req.body.password
+    const user = req.body.user
+    console.log(req.body.password)
+    console.log(req.body.user)
+    if (user && password) {
+      console.log('2')
+      const resp = await _deleteUser(user, password);
+      console.log('10')
+      //console.log(`Deleted user ${username} successfully!`);
+      console.log(`Deleted user successfully!`);
       return res.status(200).json({
-          message: `Deleted user ${username} successfully!`,
+          //message: `Deleted user ${username} successfully!`,
+          message: `Deleted user successfully!`,
         });
     } else {
-      return res.status(400).json({ message: "Username is missing!" });
+      return res.status(400).json({ message: "Password is missing!" });
     }
   } catch (err) {
     return res.status(500).json({ message: "Database failure when deleting user!" });

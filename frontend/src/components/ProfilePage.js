@@ -55,8 +55,11 @@ function ProfilePage(props) {
     //var saltedPassword = saltPassword2(deleteAccountPassword);
     //if (deleteAccountPassword && props.password == saltedPassword) {
     if (deleteAccountPassword) {
-      console.log("hello")
-      const res = await axios.delete(URL_USER_DELETE_SVC + user, {user, username}).catch((err) => {
+      //const res = await axios.delete(URL_USER_DELETE_SVC + user, {user, username}).catch((err) => {
+      console.log(deleteAccountPassword)
+      console.log(user)
+      const res = await axios.delete(URL_USER_DELETE_SVC, { data: {user: user, password: deleteAccountPassword} }).catch((err) => {
+        console.log("hello")
         console.log(err)
         if (err.response.status === STATUS_CODE_DATABASE_ERROR) {
           setErrorDialog("Server error, Please try again later.");

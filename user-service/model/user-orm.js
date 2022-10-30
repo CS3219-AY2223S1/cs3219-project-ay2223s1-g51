@@ -34,6 +34,7 @@ export async function ormCreateUser(username, password) {
 export async function ormLogInUser(username, password) {
   try {
     const user = await logInUser({ username, password });
+    console.log(user)
     return user;
   } catch (err) {
     console.log(err);
@@ -69,9 +70,11 @@ export async function ormFindUser(username, password) {
   }
 }
 
-export async function ormDeleteUser(user, password) {
+export async function ormDeleteUser(currUser, password) {
   try {
-    await deleteUser(user);
+    console.log('3')
+    await deleteUser(currUser, password);
+    console.log('9')
     return true;
   } catch (err) {
     console.log("ERROR: Could not delete user");

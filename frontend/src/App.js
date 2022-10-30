@@ -82,6 +82,11 @@ function App(props) {
     console.log("token has changed");
     console.log("token: " + token);
   }, [token]);
+  
+  useEffect(() => {
+    console.log("user has changed");
+    console.log("user: " + user);
+  }, [user]);
 
   return (
     <SnackbarProvider>
