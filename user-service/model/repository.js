@@ -47,7 +47,6 @@ export async function createUser(params) {
 export async function logInUser(params) {
   const username = params.username;
   const password = params.password;
-  console.log(password);
 
   return signInWithEmailAndPassword(auth, username, password)
     .then((userCredential) => {

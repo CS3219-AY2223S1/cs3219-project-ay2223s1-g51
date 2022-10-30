@@ -1,26 +1,27 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import { Box, BottomNavigation, BottomNavigationAction } from "@mui/material";
-
+import { SnackbarProvider } from "notistack";
+import NavBar from "./components/NavBar";
+import AboutUs from "./components/AboutUs";
 import SignupPage from "./components/SignupPage";
 import Login from "./components/Login";
 import ProfilePage from "./components/ProfilePage";
-import AboutUs from "./components/AboutUs";
-
-import NavBar from "./components/NavBar";
-import Room from "./components/Room";
+import HistoryPage from "./components/HistoryPage";
 import SelectRoom from "./components/SelectRoom";
-import io from "socket.io-client";
+import Room from "./components/Room";
 import Editor from "./components/Editor/RealTimeEditor";
-import { SnackbarProvider } from "notistack";
 import InfoIcon from "@mui/icons-material/Info";
-
+import io from "socket.io-client";
 import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 import "../node_modules/bootstrap/dist/js/bootstrap.bundle";
+
 function App(props) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [roomtype, setRoomType] = useState("");
+  const [isLogin, setIsLogin] = useState(false);
+  const [showFooter, setShowFooter] = useState(true);
   const [room, setRoom] = useState("");
   const [token, setToken] = useState("");
   const [user, setUser] = useState("");
@@ -29,7 +30,6 @@ function App(props) {
     dynamicHeight: window.innerHeight,
   });
   const setDimension = () => {
-    console.log(window.innerHeight);
     getDimension({
       dynamicWidth: window.innerWidth,
       dynamicHeight: window.innerHeight,
@@ -57,11 +57,9 @@ function App(props) {
 
   useEffect(() => {
     if (isDisconnected === true) {
-      const s = io("http://localhost:5000");
-      console.log(s);
+      const s = io("http://localhost:8000");
+      console.log(`new socket: ${s}`);
       setSocket(s);
-      console.log("USEEFFECT");
-      window.location.reload();
       setIsDisconnected(false);
 
       return () => {
@@ -91,9 +89,9 @@ function App(props) {
   return (
     <SnackbarProvider>
       <Box sx={{ display: "flex", flexDirection: "column", flexFlow: "column", height: screenSize.dynamicHeight }}>
-        <NavBar username={username} password={password} setUsername={setUsername} setPassword={setPassword}></NavBar>
-        <Box sx={{ display: "flex", flexDirection: "column", padding: "4rem", height: { bodySize } }}>
+        <Box sx={{ display: "flex", flexDirection: "column" }}>
           <Router>
+            <NavBar isLogin={isLogin} setIsLogin={isLogin}></NavBar>
             <Routes>
               <Route exact path="/" element={<Navigate replace to="/login" />}></Route>
               <Route
@@ -117,6 +115,10 @@ function App(props) {
                 element={<ProfilePage username={username} password={password} user={user} setPassword={setPassword} />}
               />
               <Route
+                path="/history"
+                element={<HistoryPage username={username} password={password} setPassword={setPassword} />}
+              />
+              <Route
                 path="/selectroom"
                 element={
                   <SelectRoom
@@ -126,6 +128,7 @@ function App(props) {
                     socket={socket}
                     token={token}
                     setToken={setToken}
+                    setShowFooter={setShowFooter}
                   />
                 }
               />
@@ -150,19 +153,21 @@ function App(props) {
           </Router>
         </Box>
         <AboutUs openAboutUs={openAboutUs} setOpenAboutUs={setOpenAboutUs} />
-        <BottomNavigation
-          sx={{ background: "#667aff", height: { footerSize } }}
-          showLabels
-          value={value}
-          onChange={(event, newValue) => {
-            if (newValue === "aboutus") {
-              setValue(newValue);
-              setOpenAboutUs(true);
-            }
-          }}
-        >
-          <BottomNavigationAction label="AboutUs" icon={<InfoIcon />} value="aboutus" />
-        </BottomNavigation>
+        {showFooter && (
+          <BottomNavigation
+            sx={{ background: "#667aff", height: { footerSize }, width: "100%", bottom: "0", position: "fixed" }}
+            showLabels
+            value={value}
+            onChange={(event, newValue) => {
+              if (newValue === "aboutus") {
+                setValue(newValue);
+                setOpenAboutUs(true);
+              }
+            }}
+          >
+            <BottomNavigationAction style={{ color: "white" }} label="AboutUs" icon={<InfoIcon />} value="aboutus" />
+          </BottomNavigation>
+        )}
       </Box>
     </SnackbarProvider>
   );

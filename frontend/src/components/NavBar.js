@@ -10,16 +10,18 @@ import {
   DialogContentText,
   DialogTitle,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { URL_USER_LOGOUTUSER_SVC } from "../configs";
+import { URL_USER_LOGOUTUSER_SVC } from "../configs/user-service";
 import { STATUS_CODE_SUCCESS } from "../constants";
 
 const NavBar = (props) => {
+  const navigate = useNavigate();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [dialogTitle, setDialogTitle] = useState("");
   const [dialogMsg, setDialogMsg] = useState("");
-  const [isRefresh, setIsRefresh] = useState(false);
+  const { isLogin, setIsLogin } = props;
 
   const closeDialog = () => setIsDialogOpen(false);
 
@@ -45,13 +47,21 @@ const NavBar = (props) => {
     }
   };
 
-  useEffect(() => {}, [isRefresh]);
+  const homeHandler = () => {
+    navigate("/selectroom", { replace: true });
+  };
+
+  const profileHandler = () => {
+    navigate("/profile", { replace: true });
+  };
+
+  const historyHandler = () => {
+    navigate("/history", { replace: true });
+  };
 
   const logoutHandler = () => {
     setLogoutDialog("Are you sure you want to logout?");
   };
-
-  useEffect(() => {}, [isRefresh]);
 
   return (
     <AppBar position="static" style={{ background: "#667aff" }}>
@@ -59,23 +69,22 @@ const NavBar = (props) => {
         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
           PEERPREP
         </Typography>
-        <Stack direction="row" spacing={2}>
-          {window.location.pathname !== "/login" && window.location.pathname !== "/signup" && (
-            <Button color="inherit" href="/selectroom">
+        {isLogin && (
+          <Stack direction="row" spacing={2}>
+            <Button color="inherit" onClick={homeHandler}>
               Home
             </Button>
-          )}
-          {window.location.pathname !== "/login" && window.location.pathname !== "/signup" && (
-            <Button color="inherit" href="/profile">
+            <Button color="inherit" onClick={profileHandler}>
               Profile
             </Button>
-          )}
-          {window.location.pathname !== "/login" && window.location.pathname !== "/signup" && (
+            <Button color="inherit" onClick={historyHandler}>
+              History
+            </Button>
             <Button color="inherit" onClick={logoutHandler}>
               Logout
             </Button>
-          )}
-        </Stack>
+          </Stack>
+        )}
       </Toolbar>
       <Dialog open={isDialogOpen} onClose={closeDialog}>
         <DialogTitle>{dialogTitle}</DialogTitle>

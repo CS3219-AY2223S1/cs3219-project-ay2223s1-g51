@@ -6,11 +6,10 @@ import InputBox from "./Editor/Input";
 import { useSnackbar } from "notistack";
 import Messages from "./Chat/Messages";
 import Input from "./Chat/Input";
-import { Grid, Box, Stack, Container } from "@mui/material";
+import { Grid, Box, Stack } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-
 import Question from "./Question";
-
+import { URL_EXECUTE_API } from "../configs/matching-service";
 import "react-reflex/styles.css";
 
 export default function Room(props) {
@@ -31,7 +30,7 @@ export default function Room(props) {
     javascript: "nodejs",
   };
   const navigate = useNavigate();
-
+  const [question, setQuestion] = useState("");
   const [input, setInput] = useState("");
   const [languageInRoom, setlanguageInRoom] = useState("cpp");
   const [output, setOutput] = useState("");
@@ -40,6 +39,9 @@ export default function Room(props) {
   const [RoomFontSize, setRoomFontSize] = useState("");
   const [RoomTheme, setRoomTheme] = useState("vs-dark");
   const [isError, setisError] = useState(false);
+  const [users, setUsers] = useState([]);
+  const [room, setRoom] = useState("");
+  const [timeoutId, setTimeoutId] = useState(-1);
 
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
@@ -48,18 +50,13 @@ export default function Room(props) {
 
   const runCode = async () => {
     const script = codeInRoom;
-    // console.log("script:" + script);
-    // console.log("language in room-->" + languageInRoom);
     const language = getLanguage[languageInRoom];
     const versionIndex = getLanguageVersion[language];
     const stdin = input;
-    // console.log("languageinRunCode" + language);
-    // console.log("versionIndexinRunCode" + versionIndex);
-    // console.log("stdininRunCode" + stdin);
 
     const response = await axios({
       method: "POST",
-      url: `http://localhost:8000/execute`,
+      url: URL_EXECUTE_API,
       data: {
         script: script,
         language: language,
@@ -70,18 +67,14 @@ export default function Room(props) {
     });
 
     if (response.status === 200) {
-      // console.log(response);
-      // console.log(response.data);
       const data = response.data;
       if (data.memory === null || data.cpu === null) {
-        // console.log("in true");
         setisError(true);
         enqueueSnackbar("Compilation Error", {
           variant: "warning",
         });
         setOutput(data.output.substr(1));
       } else {
-        // console.log("in false");
         setisError(false);
         enqueueSnackbar("Code executed successfully", {
           variant: "success",
@@ -91,7 +84,6 @@ export default function Room(props) {
       const statement1 = `Memory used: ${data.memory} kilobyte(s).\n`;
       const statement2 = `CPU time: ${data.cpuTime} sec(s).`;
       var sta = statement1.concat(statement2);
-      // console.log(isError + "--");
       setStats(sta);
     } else {
       enqueueSnackbar("Some Error occurred", {
@@ -99,6 +91,26 @@ export default function Room(props) {
       });
     }
   };
+
+  const handleEmptyRoom = () => {
+    enqueueSnackbar("timed out!", {
+      variant: "warning",
+    });
+    // socket.disconnect();
+    // setIsDisconnected(true);
+    // navigate("/selectroom");
+  };
+
+  useEffect(() => {
+    if (users.length === 1) {
+      const id = setTimeout(handleEmptyRoom, 30000);
+      setTimeoutId(id);
+    }
+    if (users.length === 2) {
+      clearTimeout(timeoutId);
+      setTimeoutId(-1);
+    }
+  }, [users]);
 
   useEffect(() => {
     socket.on("receive-message", (message) => {
@@ -114,8 +126,14 @@ export default function Room(props) {
     });
 
     socket.on("input-update", (input) => {
-      // console.log("received input update!");
       setInput(input);
+    });
+
+    // Update participants
+    socket.on("joined-users", (data) => {
+      console.log(data.users);
+      setUsers(data.users);
+      setRoom(data.room);
     });
   }, []);
 
@@ -124,7 +142,6 @@ export default function Room(props) {
     if (socket === undefined) {
       navigate("/");
     } else {
-      // console.log("someone typed input!");
       socket.emit("input-change", input);
     }
   }, [input]);
@@ -144,7 +161,6 @@ export default function Room(props) {
     if (socket === undefined) {
       navigate("/");
     } else {
-      // console.log("someone typed input!");
       socket.emit("stats-change", stats);
     }
   }, [stats]);
@@ -169,16 +185,22 @@ export default function Room(props) {
             setRoomTheme={setRoomTheme}
             setRoomFontSize={setRoomFontSize}
             runCode={runCode}
+            users={users}
+            room={room}
             setcodeInRoom={setcodeInRoom}
             setlanguageInRoom={setlanguageInRoom}
+            question={question}
+            roomtype={roomtype}
           />
         </Grid>
         <Grid item xs={4} direction="column">
           <Stack>
-            <Question roomtype={roomtype}></Question>
-            <Box>
+            <Question roomtype={roomtype} setQuestion={setQuestion}></Question>
+            <div style={{ height: "2vh" }}></div>
+            <Box sx={{ mb: 2, p: 2.5 }}>
               <Messages messages={messages} username={username}></Messages>
               <Input message={message} setMessage={setMessage} sendMessage={sendMessage}></Input>
+              <div style={{ height: "vh" }}></div>
             </Box>
           </Stack>
         </Grid>
@@ -200,6 +222,7 @@ export default function Room(props) {
           <EditorBox feature="Stats" value={stats} theme={RoomTheme} fontSize={RoomFontSize} />
         </Grid>
       </Grid>
+      <div style={{ height: "7vh" }}></div>
     </Stack>
   );
 }

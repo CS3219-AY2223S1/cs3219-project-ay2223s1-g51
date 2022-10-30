@@ -16,7 +16,7 @@ import {
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useState } from "react";
 import axios from "axios";
-import { URL_USER_SVC } from "../configs";
+import { URL_USER_SVC } from "../configs/user-service";
 import { STATUS_CODE_CONFLICT, STATUS_CODE_CREATED, STATUS_CODE_FAIL } from "../constants";
 
 const themeLight = createTheme({

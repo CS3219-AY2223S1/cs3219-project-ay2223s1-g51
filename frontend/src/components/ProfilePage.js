@@ -13,7 +13,7 @@ import {
   Stack,
 } from "@mui/material";
 import axios from "axios";
-import { URL_USER_DELETE_SVC, URL_USER_EDITPASSWORD_SVC } from "../configs";
+import { URL_USER_DELETE_SVC, URL_USER_EDITPASSWORD_SVC } from "../configs/user-service";
 import { STATUS_CODE_DATABASE_ERROR, STATUS_CODE_SUCCESS } from "../constants";
 import { useState } from "react";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
@@ -111,16 +111,16 @@ function ProfilePage(props) {
   };
 
   const saltPassword = (e) => {
-    var userNamePassword = props.username + e.target.value;
-    var md5Hash = require("md5-hash");
-    var saltedPassword = md5Hash.default(userNamePassword);
+    let userNamePassword = props.username + e.target.value;
+    let md5Hash = require("md5-hash");
+    let saltedPassword = md5Hash.default(userNamePassword);
     return saltedPassword;
   };
 
   const saltPassword2 = (e) => {
-    var userNamePassword = props.username + e;
-    var md5Hash = require("md5-hash");
-    var saltedPassword = md5Hash.default(userNamePassword);
+    let userNamePassword = props.username + e;
+    let md5Hash = require("md5-hash");
+    let saltedPassword = md5Hash.default(userNamePassword);
     return saltedPassword;
   };
 
@@ -159,7 +159,7 @@ function ProfilePage(props) {
   return (
     <div>
       <ThemeProvider theme={themeLight}>
-        <Container component="main" maxWidth="xs">
+        <Container className="mt-5" component="main" maxWidth="xs">
           <CssBaseline />
           <Box
             sx={{
@@ -251,6 +251,9 @@ function ProfilePage(props) {
                 </DialogActions>
               </Dialog>
             </Stack>
+          </Box>
+          <Box>
+            <div style={{ height: "51vh" }}></div>
           </Box>
         </Container>
       </ThemeProvider>

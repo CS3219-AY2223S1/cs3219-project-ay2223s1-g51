@@ -2,13 +2,11 @@ import axios from "axios";
 import { Button, Container, Box, Typography, Stack } from "@mui/material";
 import { useState } from "react";
 import { useEffect } from "react";
-import { URL_QUESTION_GETQUESTION_SVC } from "../configs";
+import { URL_QUESTION_GETQUESTION_SVC } from "../configs/question-service";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import { STATUS_CODE_SUCCESS } from "../constants";
 
 export default function Question(props) {
-  const [question, setQuestion] = useState("");
   const [questions, setQuestions] = useState([]);
   const [difficulty, setDifficulty] = useState("");
   const [title, setTitle] = useState("");
@@ -16,7 +14,7 @@ export default function Question(props) {
   const [examples, setExamples] = useState("");
   const [constraints, setConstraints] = useState("");
   const [questionNum, setQuestionNum] = useState(0);
-  const { roomtype } = props;
+  const { roomtype, setQuestion } = props;
 
   const handleQuestions = (data) => {
     setQuestions(data);
@@ -26,7 +24,6 @@ export default function Question(props) {
     setDesc(data[questionNum].desc);
     setExamples(data[questionNum].examples);
     setConstraints(data[questionNum].constraints);
-    console.log("done setting");
   };
 
   const handleQuestion = () => {
@@ -35,7 +32,6 @@ export default function Question(props) {
     setDesc(questions[questionNum].desc);
     setExamples(questions[questionNum].examples);
     setConstraints(questions[questionNum].constraints);
-    // console.log("here monkey");
   };
 
   useEffect(() => {
@@ -45,7 +41,6 @@ export default function Question(props) {
       };
       const res = getQuestions();
       res.then((obj) => {
-        // console.log(obj.data.resp.questions);
         setDifficulty(obj.data.resp.difficulty);
         handleQuestions(obj.data.resp.questions);
       });
@@ -56,7 +51,6 @@ export default function Question(props) {
 
   useEffect(() => {
     if (questions.length !== 0) {
-      // console.log(questions);
       handleQuestion();
     } else {
       console.log("questions is empty");
@@ -65,18 +59,18 @@ export default function Question(props) {
 
   const increaseCounter = () => {
     if (questionNum < questions.length - 1) {
-      // console.log(questionNum + 1);
       setQuestionNum(questionNum + 1);
     } else {
+      setQuestionNum(0);
       console.log("no next question");
     }
   };
 
   const decreaseCounter = () => {
     if (questionNum > 0) {
-      // console.log(questionNum - 1);
       setQuestionNum(questionNum - 1);
     } else {
+      setQuestionNum(questions.length - 1);
       console.log("no previous question");
     }
   };
@@ -97,7 +91,7 @@ export default function Question(props) {
           overflowY: "scroll",
           display: "flex",
           flexDirection: "column",
-          height: 400,
+          height: "43vh",
         }}
       >
         <Typography variant="h5" textAlign="center">
