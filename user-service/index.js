@@ -6,7 +6,14 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cors()); // config cors so that front-end can use
 app.options("*", cors());
-import { createUser, logInUser, logOutUser, deleteUser, editPassword } from "./controller/user-controller.js";
+import {
+  createUser,
+  logInUser,
+  logOutUser,
+  deleteCurrUser,
+  editPassword,
+  verifyUserToken
+} from "./controller/user-controller.js";
 
 const router = express.Router();
 
@@ -15,7 +22,8 @@ router.get("/", (_, res) => res.send("Hello World from user-service"));
 router.post("/", createUser);
 router.post("/loginuser", logInUser);
 router.post("/logoutuser", logOutUser);
-router.delete("/::username", deleteUser);
+router.get('/verifyusertoken', verifyUserToken); //middleware
+router.delete("/deletecurruser", deleteCurrUser);
 router.put("/editpassword", editPassword);
 
 app.use("/api/user", router).all((_, res) => {

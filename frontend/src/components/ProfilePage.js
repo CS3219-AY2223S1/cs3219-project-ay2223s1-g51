@@ -14,9 +14,11 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import { URL_USER_DELETE_SVC, URL_USER_EDITPASSWORD_SVC } from "../configs/user-service";
-import { STATUS_CODE_DATABASE_ERROR, STATUS_CODE_SUCCESS } from "../constants";
+import { useNavigate } from "react-router-dom";
+import { STATUS_CODE_DATABASE_ERROR, STATUS_CODE_FAIL, STATUS_CODE_SUCCESS } from "../constants";
 import { useState } from "react";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { SettingsInputSvideoRounded } from "@material-ui/icons";
 
 const themeLight = createTheme({
   palette: {
@@ -27,7 +29,7 @@ const themeLight = createTheme({
 });
 
 function ProfilePage(props) {
-  const [username, setUsername] = useState("");
+  const { username, password, user, setUser, setPassword } = props;
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [dialogTitle, setDialogTitle] = useState("");
   const [dialogMsg, setDialogMsg] = useState("");
@@ -35,9 +37,10 @@ function ProfilePage(props) {
   const [isChangePasswordClicked, setIsChangePasswordClicked] = useState(false);
   const [changedPassword, setChangedPassword] = useState("");
   const [deleteAccountPassword, setDeleteAccountPassword] = useState("");
-  let oldPassword;
-  let newPassword;
-  let reEnterNewPassword;
+  const [oldPassword, setOldPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [reEnterPassword, setReEnterPassword] = useState("");
+  const navigate = useNavigate();
 
   //hardcoded for now, need to change to dynamic later
 
@@ -51,11 +54,12 @@ function ProfilePage(props) {
   };
 
   const confirmDelete = async () => {
-    let saltedPassword = saltPassword2(deleteAccountPassword);
-    if (deleteAccountPassword && props.password === saltedPassword) {
-      const res = await axios.delete(URL_USER_DELETE_SVC + props.username).catch((err) => {
+    if (deleteAccountPassword) {
+      const res = await axios.delete(URL_USER_DELETE_SVC, { data: {user: user, password: deleteAccountPassword} }).catch((err) => {
         if (err.response.status === STATUS_CODE_DATABASE_ERROR) {
           setErrorDialog("Server error, Please try again later.");
+        } else if (err.response.status === STATUS_CODE_FAIL) {
+          setErrorDialog("Wrong password, please enter correct password.");
         } else {
           setErrorDialog("Please try again later.");
         }
@@ -63,10 +67,12 @@ function ProfilePage(props) {
       setIsDeleteClicked(false);
       if (res && res.status === STATUS_CODE_SUCCESS) {
         setSuccessDialog("Account successfully deleted");
+        setUser("")
+        setIsDialogOpen(false);
+        navigate("/login", { replace: true });
       }
-      setIsDialogOpen(false);
     } else {
-      setErrorDialog("Incorret password. Please try again.");
+      setErrorDialog("Incorrect password. Please try again.");
     }
     setIsDeleteClicked(false);
   };
@@ -78,25 +84,26 @@ function ProfilePage(props) {
 
   //hardcoded for now, need to change to dynamic later
   const handleChangePassword = async () => {
-    if (newPassword && reEnterNewPassword && newPassword === reEnterNewPassword && oldPassword === props.password) {
+    if (newPassword && reEnterPassword && newPassword === reEnterPassword) {
       const res = await axios
         .put(URL_USER_EDITPASSWORD_SVC, {
-          username: props.username,
-          password: changedPassword,
+          oldPassword: oldPassword,
+          newPassword: newPassword,
         })
         .catch((err) => {
           if (err.response.status === STATUS_CODE_DATABASE_ERROR) {
             setErrorDialog("Server error, Please try again later.");
+          } else if (err.response.status === STATUS_CODE_FAIL) {
+            setErrorDialog("Wrong password, please enter correct password.");
           } else {
             setErrorDialog("Please try again later.");
           }
         });
       if (res && res.status === STATUS_CODE_SUCCESS) {
-        props.setPassword(changedPassword);
         setSuccessDialog("Password successfully changed");
       }
     } else {
-      setErrorDialog("Please re-entered the same new password and enter the correct old password ");
+      setErrorDialog("Please ensure new password fields are identical");
     }
   };
 
@@ -118,19 +125,11 @@ function ProfilePage(props) {
     return saltedPassword;
   };
 
-  const oldPasswordHandler = (e) => {
-    oldPassword = saltPassword(e);
-  };
+  const oldPasswordHandler = (e) => setOldPassword(e.target.value);
 
-  const passwordHandler = (e) => {
-    newPassword = saltPassword(e);
-    setChangedPassword(newPassword);
-  };
+  const passwordHandler = (e) => setNewPassword(e.target.value);
 
-  const reEnterPasswordHandler = (e) => {
-    reEnterNewPassword = saltPassword(e);
-    setChangedPassword(reEnterNewPassword);
-  };
+  const reEnterPasswordHandler = (e) => setReEnterPassword(e.target.value);
 
   const deleteAccountPasswordHandler = (e) => {
     setDeleteAccountPassword(e.target.value);

@@ -1,10 +1,13 @@
 import React, { useState } from "react";
 import { Box, Button, Container, Typography, Select, MenuItem, FormControl, InputLabel, Stack } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import { useSnackbar } from "notistack";
+import { STATUS_CODE_FAIL, STATUS_CODE_DATABASE_ERROR } from "../constants";
+// import { URL_USER_CHECKUSERJWT_SVC } from "../configs";
 
 export default function SelectRoom(props) {
-  const { user, roomtype, setRoomType, socket, setShowFooter } = props;
+  const { user, roomtype, setRoomType, socket, token, setToken, setShowFooter } = props;
   const navigate = useNavigate();
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const [selection, setSelection] = useState("");
@@ -12,8 +15,6 @@ export default function SelectRoom(props) {
   const handleChange = (event) => {
     event.preventDefault();
     setSelection(event.target.value);
-
-    // console.log(event);
   };
 
   const handleSubmit = (event) => {

@@ -10,6 +10,7 @@ import ProfilePage from "./components/ProfilePage";
 import HistoryPage from "./components/HistoryPage";
 import SelectRoom from "./components/SelectRoom";
 import Room from "./components/Room";
+import ProtectedRoutes from "./components/ProtectedRoutes";
 import Editor from "./components/Editor/RealTimeEditor";
 import InfoIcon from "@mui/icons-material/Info";
 import io from "socket.io-client";
@@ -20,10 +21,10 @@ function App(props) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [roomtype, setRoomType] = useState("");
-  const [isLogin, setIsLogin] = useState(false);
   const [showFooter, setShowFooter] = useState(true);
   const [room, setRoom] = useState("");
-
+  const [token, setToken] = useState("");
+  const [user, setUser] = useState("");
   const [screenSize, getDimension] = useState({
     dynamicWidth: window.innerWidth,
     dynamicHeight: window.innerHeight,
@@ -75,12 +76,22 @@ function App(props) {
     return screenSize.dynamicHeight * 0.08;
   };
 
+  useEffect(() => {
+    console.log("token has changed");
+    console.log("token: " + token);
+  }, [token]);
+  
+  useEffect(() => {
+    console.log("user has changed");
+    console.log("user: " + user);
+  }, [user]);
+
   return (
     <SnackbarProvider>
       <Box sx={{ display: "flex", flexDirection: "column", flexFlow: "column", height: screenSize.dynamicHeight }}>
         <Box sx={{ display: "flex", flexDirection: "column" }}>
           <Router>
-            <NavBar isLogin={isLogin} setIsLogin={isLogin}></NavBar>
+            <NavBar user={user} setUser={setUser} ></NavBar>
             <Routes>
               <Route exact path="/" element={<Navigate replace to="/login" />}></Route>
               <Route
@@ -88,51 +99,58 @@ function App(props) {
                 element={
                   <Login
                     username={username}
-                    password={password}
+                    password={password}                    
+                    token={token}
+                    user={user}
                     setUsername={setUsername}
                     setPassword={setPassword}
-                    setIsLogin={setIsLogin}
+                    setToken={setToken}
+                    setUser={setUser}
                   />
                 }
               />
               <Route path="/signup" element={<SignupPage />} />
-              <Route
-                path="/profile"
-                element={<ProfilePage username={username} password={password} setPassword={setPassword} />}
-              />
-              <Route
-                path="/history"
-                element={<HistoryPage username={username} password={password} setPassword={setPassword} />}
-              />
-              <Route
-                path="/selectroom"
-                element={
-                  <SelectRoom
-                    user={username}
-                    roomtype={roomtype}
-                    setRoomType={setRoomType}
-                    socket={socket}
-                    setShowFooter={setShowFooter}
-                  />
-                }
-              />
-              <Route
-                path="/room/:id"
-                element={
-                  <Room
-                    username={username}
-                    roomtype={roomtype}
-                    room={room}
-                    setRoom={setRoom}
-                    socket={socket}
-                    setIsDisconnected={setIsDisconnected}
-                  />
-                }
-              />
-              <Route
-                path="/editor"
-                element={<Editor username={username} room={room} setIsDisconnected={setIsDisconnected} />}
-              />
+              <Route element= {<ProtectedRoutes token={token} />}>
+                <Route
+                  path="/profile"
+                  element={<ProfilePage username={username} password={password} user={user} setUser={setUser} setPassword={setPassword} />}
+                />
+                <Route
+                  path="/history"
+                  element={<HistoryPage username={username} password={password} setPassword={setPassword} />}
+                />
+                <Route
+                  path="/selectroom"
+                  element={
+                    <SelectRoom
+                      user={username}
+                      roomtype={roomtype}
+                      setRoomType={setRoomType}
+                      socket={socket}
+                      token={token}
+                      setToken={setToken}
+                      setShowFooter={setShowFooter}
+                    />
+                  }
+                />
+                <Route
+                  path="/room/:id"
+                  element={
+                    <Room
+                      username={username}
+                      roomtype={roomtype}
+                      room={room}
+                      setRoom={setRoom}
+                      socket={socket}
+                      setIsDisconnected={setIsDisconnected}
+                    />
+                  }
+                />
+                <Route
+                  path="/editor"
+                  element={<Editor username={username} room={room} setIsDisconnected={setIsDisconnected} />}
+                />
+              </Route>
             </Routes>
           </Router>
         </Box>
