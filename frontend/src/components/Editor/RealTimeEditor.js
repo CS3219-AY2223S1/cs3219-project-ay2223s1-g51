@@ -1,11 +1,9 @@
 import React, { useRef, useState, useEffect } from "react";
 import Editor from "@monaco-editor/react";
 import axios from "axios";
-import { IconContext } from "react-icons";
-import { useNavigate, NavLink } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useSnackbar } from "notistack";
 import { IconButton } from "@material-ui/core";
-import { RiCheckFill } from "react-icons/ri";
 import { URL_POSTHISTORY_SVC } from "../../configs/history-service";
 
 import {
@@ -22,7 +20,6 @@ import {
   Box,
   AppBar,
   Toolbar,
-  Container,
   Typography,
   Grid,
 } from "@mui/material";
@@ -41,7 +38,6 @@ export default function RealTimeEditor(props) {
   const {
     socket,
     username,
-    room,
     runCode,
     setRoomFontSize,
     setIsDisconnected,
@@ -64,10 +60,6 @@ export default function RealTimeEditor(props) {
   const [editorCode, seteditorCode] = useState("");
   // Set value of editor
   const [value, setValue] = useState("");
-  const [sendInitialData, setSendInitialData] = useState(false);
-  const [title, setTitle] = useState("Untitled");
-  const [titleInfo, setTitleInfo] = useState("Untitled");
-  const [titleChange, setTitleChange] = useState(false);
   const [fileExtensionValue, setfileExtensionValue] = useState(0);
 
   const [fontsize, setFontsize] = useState(3);
@@ -113,7 +105,7 @@ export default function RealTimeEditor(props) {
       setIsDisconnected(true);
       navigate("/");
     } else {
-      socket.emit("language-change", language);
+      socket.emit("language-change", languages[language]);
     }
   }, [language]);
 
@@ -126,16 +118,6 @@ export default function RealTimeEditor(props) {
       socket.emit("code-change", editorCode);
     }
   }, [editorCode]);
-
-  // If there is a title change on a socket, emit to all other
-  useEffect(() => {
-    if (socket === undefined) {
-      setIsDisconnected(true);
-      navigate("/");
-    } else {
-      socket.emit("title-change", title);
-    }
-  }, [title]);
 
   // Recieve code, title and language changes
   useEffect(() => {
@@ -152,48 +134,22 @@ export default function RealTimeEditor(props) {
         setLanguage(data);
         setlanguageInRoom(data);
       });
-
-      socket.on("title-update", (data) => {
-        setTitleInfo(data);
-      });
-
-      socket.on("request-info", (data) => {
-        setSendInitialData(true);
-      });
     }
   }, []);
-
-  // If a new user join, send him current language and title used by other sockets.
-  useEffect(() => {
-    if (socket === undefined) {
-      setIsDisconnected(true);
-      navigate("/");
-    } else {
-      if (sendInitialData === true) {
-        socket.emit("user-join", { code: editorCode, title: title, language: language });
-        setSendInitialData(false);
-      }
-    }
-  }, [sendInitialData]);
 
   const languages = ["cpp", "python", "javascript", "c", "java", "go"];
   const languageExtension = ["cpp", "py", "js", "c", "java", "go"];
   const fontSizes = ["10px", "12px", "14px", "16px", "18px", "20px", "22px", "24px", "26px", "28px", "30px"];
 
   const changeLanguage = (e) => {
-    setLanguage(languages[e.target.value]);
+    setLanguage(e.target.value);
     setlanguageInRoom(languages[e.target.value]);
     setfileExtensionValue(e.target.value);
   };
 
   const changeFontSize = (e) => {
-    setFontsize(fontSizes[e.target.value]);
+    setFontsize(e.target.value);
     setRoomFontSize(fontSizes[e.target.value]);
-  };
-
-  const titleUpdating = (e) => {
-    setTitleInfo(e.target.value);
-    setTitleChange(true);
   };
 
   // Nav Bar buttons
@@ -207,11 +163,6 @@ export default function RealTimeEditor(props) {
       setIsDisconnected(true);
       navigate("/selectroom");
     }
-  };
-
-  const titleUpdated = (e) => {
-    setTitle(titleInfo);
-    setTitleChange(false);
   };
 
   const toggleSave = () => {
@@ -251,7 +202,7 @@ export default function RealTimeEditor(props) {
 
   const downloadCode = (e) => {
     e.preventDefault();
-    fileDownload(editorCode, `${title}.${languageExtension[fileExtensionValue]}`);
+    fileDownload(editorCode, `${"PeerPrep"}.${languageExtension[fileExtensionValue]}`);
   };
 
   const showFile = async (e) => {
@@ -310,9 +261,7 @@ export default function RealTimeEditor(props) {
                     id="select-fontsize"
                     value={fontsize}
                     label="Select Fontsize"
-                    onChange={(e) => {
-                      setFontsize(e.target.value);
-                    }}
+                    onChange={changeFontSize}
                   >
                     <MenuItem value={0}>10px</MenuItem>
                     <MenuItem value={1}>12px</MenuItem>
@@ -335,9 +284,7 @@ export default function RealTimeEditor(props) {
                     id="select-language"
                     value={language}
                     label="Select Language"
-                    onChange={(e) => {
-                      setLanguage(e.target.value);
-                    }}
+                    onChange={changeLanguage}
                   >
                     <MenuItem value={0}>C++</MenuItem>
                     <MenuItem value={1}>Python</MenuItem>
@@ -354,7 +301,7 @@ export default function RealTimeEditor(props) {
                 <Typography color="black">Participants:</Typography>
                 <Box display="flex">
                   {users.map((user) => (
-                    <Typography color="black">{user.username}</Typography>
+                    <Typography color="black">{user.username} &nbsp;</Typography>
                   ))}
                 </Box>
               </Box>

@@ -106,11 +106,6 @@ io.on("connection", (socket) => {
     io.sockets.in(socket.room).emit("language-update", msg);
   });
 
-  // If title changes, broadcast to sockets
-  socket.on("title-change", (msg) => {
-    io.sockets.in(socket.room).emit("title-update", msg);
-  });
-
   // If input box changes, broadcast to sockets
   socket.on("input-change", (msg) => {
     io.sockets.in(socket.room).emit("input-update", msg);

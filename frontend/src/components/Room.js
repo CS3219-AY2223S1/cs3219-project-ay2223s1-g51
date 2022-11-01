@@ -96,9 +96,9 @@ export default function Room(props) {
     enqueueSnackbar("timed out!", {
       variant: "warning",
     });
-    // socket.disconnect();
-    // setIsDisconnected(true);
-    // navigate("/selectroom");
+    socket.disconnect();
+    setIsDisconnected(true);
+    navigate("/selectroom");
   };
 
   useEffect(() => {
