@@ -2,27 +2,25 @@ import {
   ormCreateUser as _createUser,
   ormLogInUser as _logInUser,
   ormLogOutUser as _logOutUser,
-  ormDeleteUser as _deleteUser,
+  ormDeleteCurrUser as _deleteCurrUser,
   ormEditPassword as _editPassword,
-  /*ormCheckUserJwt as _checkUserJwt,*/
+  ormVerifyUserToken as _verifyUserToken
 } from "../model/user-orm.js";
 
-// export async function checkUserJwt(req, res) {
-//     try {
-//         const resp = await _checkUserJwt();
-//         console.log("resp: " + resp);
-//         if (resp == "valid") {
-//             console.log(`Current user has valid JWT`);
-//             return res.status(200).json({ message: `Current user has valid JWT` });
-//         } else {
-//             console.log(resp);
-//             return res.status(400).json({ message: `Invalid JWT` });
-//         }
-//     } catch (err) {
-//         console.log(err);
-//         return res.status(500).json({ message: `Database failure when checking JWT of current user!` });
-//     }
-// }
+export async function verifyUserToken(req, res) {
+    try {
+        const resp = await _verifyUserToken();
+        if (resp == null) {
+          return res.status(401).json({ message: `Not authorised` });
+        } else {
+          console.log(`Current user has valid token`);
+          return res.status(200).json( true );
+            
+        }
+    } catch (err) {
+        return res.status(500).json({ message: `Database failure when checking JWT of current user!` });
+    }
+}
 
 export async function createUser(req, res) {
   try {
@@ -32,7 +30,6 @@ export async function createUser(req, res) {
         const resp = await _createUser(username, password);
         if (resp["key"] == "error") {
           errorMsg = resp["obj"];
-          console.log(errorMsg);
           if (errorMsg == "auth/email-already-in-use") {
             console.log("Username already in use");
             return res.status(409).json({ message: errorMsg });
@@ -63,13 +60,9 @@ export async function logInUser(req, res) {
     const { username, password } = req.body;
     if (username && password) {
       try {
-        console.log('1')
         const resp = await _logInUser(username, password);
-        console.log('2')
         if (resp["key"] == "error") {
-          console.log('3')
           errorMsg = resp["obj"];
-          console.log(errorMsg);
           if (resp["obj"] == "auth/wrong-password" || "auth/user-not-found" || "auth/invalid-email") {
             console.log("Wrong username or password");
             return res.status(404).json({ message: errorMsg });
@@ -79,12 +72,10 @@ export async function logInUser(req, res) {
         }
 
         if (resp["key"] == "user") {
-          //console.log(resp.obj)
           console.log(`Successfully logged into user account ${username}.`);
           return res.status(200).json({ resp });
         }
       } catch {
-        console.log('HELLO')
         return res.status(500).json({ message: `Database failure when logging in to user account!` });
       }
     } else {
@@ -103,7 +94,6 @@ export async function logOutUser(req, res) {
       console.log(`Successfully logged out`);
       return res.status(200).json({ message: `Logged out successfully!` });
     } else {
-      console.log(resp);
       return res.status(400).json({ message: `Failed to log out` });
     }
   } catch (err) {
@@ -112,28 +102,20 @@ export async function logOutUser(req, res) {
   }
 }
 
-export async function deleteUser(req, res) {
+export async function deleteCurrUser(req, res) {
   try {
-    //const user = req.params.user;
-    //const username = req.params.username;
-    //console.log(user)
-    //const { password } = req.body
     const password = req.body.password
-    const user = req.body.user
-    console.log(req.body.password)
-    console.log(req.body.user)
-    if (user && password) {
-      console.log('2')
-      const resp = await _deleteUser(user, password);
-      console.log('10')
-      //console.log(`Deleted user ${username} successfully!`);
-      console.log(`Deleted user successfully!`);
-      return res.status(200).json({
-          //message: `Deleted user ${username} successfully!`,
-          message: `Deleted user successfully!`,
-        });
+    if (password) {
+      const resp = await _deleteCurrUser(password);
+      if (resp) {
+        console.log(`Deleted user successfully!`);
+        return res.status(200).json({message: `Deleted user successfully!`});
+      } else {
+        console.log(`Wrong password`)
+        return res.status(400).json({message: `Wrong password`});
+      }
     } else {
-      return res.status(400).json({ message: "Password is missing!" });
+      return res.status(404).json({ message: "Password is missing!" });
     }
   } catch (err) {
     return res.status(500).json({ message: "Database failure when deleting user!" });
@@ -142,12 +124,14 @@ export async function deleteUser(req, res) {
 
 export async function editPassword(req, res) {
   try {
-    const { username ,oldPassword, newPassword } = req.body;
+    const { username, oldPassword, newPassword } = req.body;
     if (oldPassword && newPassword) {
       const resp = await _editPassword(oldPassword, newPassword);
-        return res.status(200).json({
-            message: `Edited password for user ${username} successfully!`,
-        });
+      if (resp) {
+        return res.status(200).json({message: `Edited password for user ${username} successfully!`});
+      } else {
+        return res.status(400).json({message: `Wrong password`});
+      }
     } else {
       return res.status(400).json({ message: "Username and/or Password are missing!" });
     }

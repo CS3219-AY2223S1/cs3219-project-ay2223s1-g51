@@ -10,11 +10,10 @@ import {
   createUser,
   logInUser,
   logOutUser,
-  deleteUser,
+  deleteCurrUser,
   editPassword,
-  /*checkUserJwt,*/
+  verifyUserToken
 } from "./controller/user-controller.js";
-import { getQuestions } from "./controller/question-controller.js";
 
 const router = express.Router();
 
@@ -23,11 +22,9 @@ router.get("/", (_, res) => res.send("Hello World from user-service"));
 router.post("/", createUser);
 router.post("/loginuser", logInUser);
 router.post("/logoutuser", logOutUser);
-//router.delete("/::username", deleteUser);
-router.delete("/deleteuser", deleteUser);
+router.get('/verifyusertoken', verifyUserToken); //middleware
+router.delete("/deletecurruser", deleteCurrUser);
 router.put("/editpassword", editPassword);
-router.get("/getquestions/:difficulty", getQuestions);
-// router.post("/checkuserjwt", checkUserJwt);
 
 app.use("/api/user", router).all((_, res) => {
   res.setHeader("content-type", "application/json");

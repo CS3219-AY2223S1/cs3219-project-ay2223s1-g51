@@ -60,7 +60,6 @@ export default function Login(props) {
     if (res && res.status === STATUS_CODE_SUCCESS) {
       setUsername(username);
       setPassword(password);
-      //console.log(res.data.resp.obj)
 	    const jwtToken = JSON.stringify(res.data.resp.obj.stsTokenManager.accessToken)
       const currUser = JSON.stringify(res.data.resp.obj)
       setUser(currUser)

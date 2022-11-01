@@ -12,34 +12,9 @@ export default function SelectRoom(props) {
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const [selection, setSelection] = useState("");
 
-  // useEffect(() => {
-  //   console.log("token in selectroom: " + token);
-  //   try {
-  //     if (token != "") {
-  //       const checkJwt = async () => {
-  //         return await axios.post(URL_USER_CHECKUSERJWT_SVC, { token }).catch((err) => {
-  //           if (err.response.status === STATUS_CODE_FAIL || STATUS_CODE_DATABASE_ERROR) {
-  //             window.location = "http://localhost:3000/login";
-  //           } else {
-  //             window.location = "http://localhost:3000/login";
-  //           }
-  //         });
-  //       };
-  //       checkJwt();
-  //     } else {
-  //       window.location = "http://localhost:3000/login";
-  //     }
-
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // }, []);
-
   const handleChange = (event) => {
     event.preventDefault();
     setSelection(event.target.value);
-
-    // console.log(event);
   };
 
   const handleSubmit = (event) => {

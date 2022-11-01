@@ -21,7 +21,7 @@ const NavBar = (props) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [dialogTitle, setDialogTitle] = useState("");
   const [dialogMsg, setDialogMsg] = useState("");
-  const { isLogin, setIsLogin } = props;
+  const { user, setUser } = props;
 
   const closeDialog = () => setIsDialogOpen(false);
 
@@ -43,7 +43,9 @@ const NavBar = (props) => {
       setErrorDialog("Failed to logout, please try again later");
     });
     if (res && res.status === STATUS_CODE_SUCCESS) {
-      window.location = "http://localhost:3000/login";
+      setUser("")
+      closeDialog()
+      navigate("/login", { replace: true });
     }
   };
 
@@ -69,7 +71,7 @@ const NavBar = (props) => {
         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
           PEERPREP
         </Typography>
-        {isLogin && (
+        {user && (
           <Stack direction="row" spacing={2}>
             <Button color="inherit" onClick={homeHandler}>
               Home

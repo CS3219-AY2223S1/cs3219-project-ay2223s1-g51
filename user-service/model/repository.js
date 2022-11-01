@@ -1,34 +1,38 @@
 import "dotenv/config";
+import admin from "../firebase-admin-config.js"; //need for firebase service acc to verify tokens
 import { auth } from "../firebase-config.js";
 import {
-  onAuthStateChanged,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
+  deleteUser,
   updatePassword,
   EmailAuthProvider,
-  reauthenticateWithCredential
+  reauthenticateWithCredential,
 } from "firebase/auth";
 
-//Set up mongoose connection
-import mongoose from "mongoose";
+export async function verifyUserToken() {
+    const user = auth.currentUser;
+    
+    if (user == null) { //user not authenticated, not currently logged in
+      return user
+    }
 
-let mongoDB = process.env.ENV == "PROD" ? process.env.DB_CLOUD_URI : process.env.DB_LOCAL_URI;
+    const token = await user.getIdToken(true)
+    .then(function(idToken){
+      return idToken;
+    }).catch((err) => {
+      return err;
+    })
 
-mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true });
-
-let db = mongoose.connection;
-db.on("error", console.error.bind(console, "MongoDB connection error:"));
-
-// export async function checkUserJwt(params) {
-//     console.log("1");
-//     const token = params.token;
-//     auth.verifyIdToken(token)
-//         .then(() => "valid")
-//         .catch((error) => {
-//             return error;
-//         });
-// }
+    const verifiedToken = await admin.auth().verifyIdToken(token)
+    .then((decodedToken) => {
+      return decodedToken
+    }).catch((err) => {
+      return err;
+    })
+    return verifiedToken
+}
 
 export async function createUser(params) {
   const username = params.username;
@@ -64,63 +68,59 @@ export async function logOutUser(params) {
       return "1";
     })
     .catch((error) => {
-      console.log(error);
       return error.code;
     });
 }
 
-export async function findUser(params) {
-  const username = params.username;
-  const password = params.password;
-  //create a promise object which resolves to either an error or a user object from the DB
-  return new Promise((resolve, reject) => {
-    db.collection("usermodels").findOne({ username: username, password: password }, function (err, obj) {
-      if (err) reject(err);
-      resolve(obj);
-    });
-  });
-}
-
-export async function deleteUser(currUser, password) {
+export async function deleteCurrUser(password) {
   try {
-    console.log('4')
-    //const user = auth.currentUser;
-    const user = currUser;
-    await reauthenticate(auth, password);
-    console.log('8')
-    await deleteUser(user).then(() => {
-    console.log("Deleted!")
-    return "account deleted"
-    })
+    const result = await reauthenticate(password);
+
+    if (result == "auth/wrong-password") {
+      return null
+    }
+
+    return await deleteUser(result.user)
+      .then(function() {
+        return true
+      })
+      .catch(function() {
+        return null
+      })
+
   } catch(error) {
-    console.log(error);
-    return error.code
+    return error
   }
 }
+
+export async function reauthenticate(currentPassword) {
+  const user = auth.currentUser;
+  const cred = EmailAuthProvider.credential(user.email, currentPassword);
+  return await reauthenticateWithCredential(user, cred)
+    .then(function(userCred) {
+      return userCred
+    })
+    .catch(function(error) {
+      return error.code
+    })
+};
 
 export async function editPassword(oldPassword, newPassword) {
   try {
-    const user = auth.currentUser;
-    await reauthenticate(auth, oldPassword);
-    await updatePassword(user, newPassword).then(() => {
-      return "success";
-    });
+    const result = await reauthenticate(oldPassword);
+
+    if (result == "auth/wrong-password") {
+      return null
+    } else { 
+      return await updatePassword(result.user, newPassword)
+      .then(() => {
+        return true;
+      });
+    }
   } catch (err) {
-      return { err };
+      return null;
   }
 }
-
-export async function reauthenticate(auth, currentPassword) {
-  const user = auth.currentUser;
-  console.log('5')
-  console.log(user)
-  const cred = EmailAuthProvider.credential(user.email, currentPassword);
-  console.log('6')
-  console.log(cred)
-  const result = await reauthenticateWithCredential(user, cred)
-  console.log('7')
-  return result 
-};
 
 export async function getQuestions(roomtype) {
   console.log(">" + roomtype);

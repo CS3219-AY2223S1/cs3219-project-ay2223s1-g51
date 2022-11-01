@@ -2,23 +2,23 @@ import {
   createUser,
   logInUser,
   logOutUser,
-  deleteUser,
+  deleteCurrUser,
   editPassword,
-  findUser /*checkUserJwt*/,
+  verifyUserToken
 } from "./repository.js";
-import UserModel from "./user-model.js";
+//import UserModel from "./user-model.js";
 
-// export async function ormCheckUserJwt(token) {
-//     try {
-//         const token = await checkUserJwt({ token });
-//         //console.log("token in user-orm: " + token)
-//         return token;
-//     } catch (err) {
-//         console.log(err);
-//         console.log("ERROR: Checking the JWT of current user led to an error");
-//         throw err;
-//     }
-// }
+export async function ormVerifyUserToken(token) {
+    try {
+        const token = await verifyUserToken();
+        console.log(token)
+        return token;
+    } catch (err) {
+        console.log(err);
+        console.log("ERROR: Checking the JWT of current user led to an error");
+        throw err;
+    }
+}
 
 export async function ormCreateUser(username, password) {
   try {
@@ -70,12 +70,14 @@ export async function ormFindUser(username, password) {
   }
 }
 
-export async function ormDeleteUser(currUser, password) {
+export async function ormDeleteCurrUser(password) {
   try {
-    console.log('3')
-    await deleteUser(currUser, password);
-    console.log('9')
-    return true;
+    const result = await deleteCurrUser(password);
+    if (result == null) {
+      return null;
+    } else {
+      return result
+    }
   } catch (err) {
     console.log("ERROR: Could not delete user");
     return { err };
@@ -84,8 +86,11 @@ export async function ormDeleteUser(currUser, password) {
 
 export async function ormEditPassword(oldPassword, newPassword) {
   try {
-    const user = await editPassword(oldPassword, newPassword);
-    return true;
+    const result = await editPassword(oldPassword, newPassword);
+    if (result == null) {
+      return null;
+    }
+    return result
   } catch (err) {
     console.log("ERROR: Could not edit password");
     return { err };

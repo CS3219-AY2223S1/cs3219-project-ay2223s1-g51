@@ -14,9 +14,11 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import { URL_USER_DELETE_SVC, URL_USER_EDITPASSWORD_SVC } from "../configs/user-service";
-import { STATUS_CODE_DATABASE_ERROR, STATUS_CODE_SUCCESS } from "../constants";
+import { useNavigate } from "react-router-dom";
+import { STATUS_CODE_DATABASE_ERROR, STATUS_CODE_FAIL, STATUS_CODE_SUCCESS } from "../constants";
 import { useState } from "react";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { SettingsInputSvideoRounded } from "@material-ui/icons";
 
 const themeLight = createTheme({
   palette: {
@@ -27,8 +29,7 @@ const themeLight = createTheme({
 });
 
 function ProfilePage(props) {
-  const { username, password, user, setPassword } = props;
-  // const [username, setUsername] = useState("");
+  const { username, password, user, setUser, setPassword } = props;
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [dialogTitle, setDialogTitle] = useState("");
   const [dialogMsg, setDialogMsg] = useState("");
@@ -39,6 +40,7 @@ function ProfilePage(props) {
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [reEnterPassword, setReEnterPassword] = useState("");
+  const navigate = useNavigate();
 
   //hardcoded for now, need to change to dynamic later
 
@@ -52,17 +54,12 @@ function ProfilePage(props) {
   };
 
   const confirmDelete = async () => {
-    //var saltedPassword = saltPassword2(deleteAccountPassword);
-    //if (deleteAccountPassword && props.password == saltedPassword) {
     if (deleteAccountPassword) {
-      //const res = await axios.delete(URL_USER_DELETE_SVC + user, {user, username}).catch((err) => {
-      console.log(deleteAccountPassword)
-      console.log(user)
       const res = await axios.delete(URL_USER_DELETE_SVC, { data: {user: user, password: deleteAccountPassword} }).catch((err) => {
-        console.log("hello")
-        console.log(err)
         if (err.response.status === STATUS_CODE_DATABASE_ERROR) {
           setErrorDialog("Server error, Please try again later.");
+        } else if (err.response.status === STATUS_CODE_FAIL) {
+          setErrorDialog("Wrong password, please enter correct password.");
         } else {
           setErrorDialog("Please try again later.");
         }
@@ -70,8 +67,10 @@ function ProfilePage(props) {
       setIsDeleteClicked(false);
       if (res && res.status === STATUS_CODE_SUCCESS) {
         setSuccessDialog("Account successfully deleted");
+        setUser("")
+        setIsDialogOpen(false);
+        navigate("/login", { replace: true });
       }
-      setIsDialogOpen(false);
     } else {
       setErrorDialog("Incorrect password. Please try again.");
     }
@@ -94,6 +93,8 @@ function ProfilePage(props) {
         .catch((err) => {
           if (err.response.status === STATUS_CODE_DATABASE_ERROR) {
             setErrorDialog("Server error, Please try again later.");
+          } else if (err.response.status === STATUS_CODE_FAIL) {
+            setErrorDialog("Wrong password, please enter correct password.");
           } else {
             setErrorDialog("Please try again later.");
           }
@@ -102,7 +103,7 @@ function ProfilePage(props) {
         setSuccessDialog("Password successfully changed");
       }
     } else {
-      setErrorDialog("Please re-entered the same new password and enter the correct old password ");
+      setErrorDialog("Please ensure new password fields are identical");
     }
   };
 
