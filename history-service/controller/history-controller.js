@@ -6,10 +6,10 @@ export async function getHistory(req, res) {
     if (username) {
       const resp = await _getHistory(username);
       if (resp == null) {
-        console.log("res is null");
+        // console.log("res is null");
         return res.status(404).json({ resp });
       } else if (resp) {
-        console.log("success");
+        // console.log("success");
         return res.status(200).json({ resp });
       }
     } else {

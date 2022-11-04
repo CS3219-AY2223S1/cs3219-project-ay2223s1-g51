@@ -25,12 +25,12 @@ function HistoryPage(props) {
   useEffect(() => {
     try {
       const getHistory = async () => {
-        console.log(URL_GETHISTORY_SVC + username);
+        // console.log(URL_GETHISTORY_SVC + username);
         return await axios.get(URL_GETHISTORY_SVC + username);
       };
       const res = getHistory();
       res.then((obj) => {
-        console.log(obj.data.resp);
+        // console.log(obj.data.resp);
         setHistory(obj.data.resp);
       });
     } catch (err) {

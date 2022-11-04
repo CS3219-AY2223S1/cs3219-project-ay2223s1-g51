@@ -53,7 +53,7 @@ export default function Login(props) {
   const handleLogin = async (event) => {
     event.preventDefault();
     const res = await axios.post(URL_USER_LOGINUSER_SVC, { username, password }).catch((err) => {
-      console.log(err);
+      // console.log(err);
       setErrorDialog("Wrong username or password. Please try again.");
     });
 

@@ -95,7 +95,7 @@ export default function Room(props) {
     enqueueSnackbar("timed out!", {
       variant: "warning",
     });
-    console.log("disconnect from room");
+    // console.log("disconnect from room");
     socket.emit("leave-room", room);
     navigate("/selectroom");
   };

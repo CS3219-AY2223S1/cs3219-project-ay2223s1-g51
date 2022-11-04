@@ -159,7 +159,7 @@ export default function RealTimeEditor(props) {
       setIsDisconnected(true);
       navigate("/");
     } else {
-      console.log("disconnect from room");
+      // console.log("disconnect from room");
       socket.emit("leave-room", room);
       navigate("/selectroom");
     }
@@ -170,8 +170,8 @@ export default function RealTimeEditor(props) {
   };
 
   const handleSave = () => {
-    console.log("current progress:" + progress);
-    console.log("current code:" + editorCode);
+    // console.log("current progress:" + progress);
+    // console.log("current code:" + editorCode);
     const buddy = users.find((user) => user.username !== username);
     const buddyName = buddy ? buddy.username : "";
     const date = new Date().toLocaleDateString();
@@ -185,7 +185,7 @@ export default function RealTimeEditor(props) {
       date: date,
     };
 
-    console.log(history);
+    // console.log(history);
     axios.post(URL_POSTHISTORY_SVC, history).catch((err) => {
       console.log(err);
     });
@@ -194,7 +194,7 @@ export default function RealTimeEditor(props) {
 
   const handleChange = (e) => {
     e.preventDefault();
-    console.log(e.target.value);
+    // console.log(e.target.value);
     setProgress(e.target.value);
   };
 

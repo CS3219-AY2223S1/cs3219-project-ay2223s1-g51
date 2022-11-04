@@ -62,7 +62,7 @@ httpServer.listen(PORT, () => {
 });
 
 io.on("connection", (socket) => {
-  console.log("socket_id connected: " + socket.id);
+  // console.log("socket_id connected: " + socket.id);
 
   socket.on("connect_error", (err) => {
     console.log(`connect_error due to ${err.message}`);
@@ -79,13 +79,13 @@ io.on("connection", (socket) => {
     let user = getCurrentUserByName(username);
     let assignedRoom = "";
     if (user) {
-      console.log(`user exist!: ${user}`);
+      // console.log(`user exist!: ${user}`);
       assignedRoom = user.room;
       updateUserId(username, socket.id);
     } else {
       // Find an empty/currently occupied room for user
 
-      console.log(`user does not exist!: ${user}`);
+      // console.log(`user does not exist!: ${user}`);
       const retrieveRoom = await locateRoom(room);
       assignedRoom = retrieveRoom.roomname;
       user = userJoin(socket.id, username, assignedRoom);
@@ -133,7 +133,7 @@ io.on("connection", (socket) => {
   socket.on("leave-room", (room) => {
     const user = userLeave(socket.id);
     socket.leave(room);
-    console.log("user left: " + socket.id);
+    // console.log("user left: " + socket.id);
     if (user) {
       io.to(user.room).emit("receive-message", formatMessage(botName, `${user.username} has left the chat`));
       leaveRoom(user.username, user.room);
@@ -145,7 +145,7 @@ io.on("connection", (socket) => {
   // Runs when client disconnects
   socket.on("disconnect", () => {
     const user = userLeave(socket.id);
-    console.log("user left: " + socket.id);
+    // console.log("user left: " + socket.id);
     if (user) {
       io.to(user.room).emit("receive-message", formatMessage(botName, `${user.username} has left the chat`));
       leaveRoom(user.username, user.room);

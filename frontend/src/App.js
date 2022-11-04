@@ -44,7 +44,7 @@ function App(props) {
 
   useEffect(() => {
     const s = io("http://localhost:8000");
-    console.log(s);
+    // console.log(s);
     setSocket(s);
 
     return () => {
@@ -59,7 +59,7 @@ function App(props) {
   useEffect(() => {
     if (isDisconnected === true) {
       const s = io("http://localhost:8000");
-      console.log(s);
+      // console.log(s);
       setIsDisconnected(false);
       return () => {
         s.disconnect();
@@ -137,6 +137,7 @@ function App(props) {
                       token={token}
                       setToken={setToken}
                       setShowFooter={setShowFooter}
+                      currentRoom={room}
                     />
                   }
                 />

@@ -123,6 +123,6 @@ export async function editPassword(oldPassword, newPassword) {
 }
 
 export async function getQuestions(roomtype) {
-  console.log(">" + roomtype);
+  // console.log(">" + roomtype);
   return db.collection("questionmodels").findOne({ difficulty: roomtype });
 }

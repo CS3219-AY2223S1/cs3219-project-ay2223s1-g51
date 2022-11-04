@@ -39,13 +39,13 @@ const NavBar = (props) => {
 
   const handleLogout = async () => {
     const res = await axios.post(URL_USER_LOGOUTUSER_SVC).catch((err) => {
-      console.log(err);
+      // console.log(err);
       setErrorDialog("Failed to logout, please try again later");
     });
     if (res && res.status === STATUS_CODE_SUCCESS) {
       setUser("");
       if (room) {
-        console.log("disconnect from room: " + room);
+        // console.log("disconnect from room: " + room);
         socket.emit("leave-room", room);
       }
       closeDialog();

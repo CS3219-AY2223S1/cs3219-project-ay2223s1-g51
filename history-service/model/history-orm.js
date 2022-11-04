@@ -5,15 +5,15 @@ export async function ormGetHistory(username) {
   try {
     const history = await getHistory(username);
     if (history) {
-      console.log("history retrieved");
+      // console.log("history retrieved");
       return history;
     }
     if (history == null) {
-      console.log("No history found");
+      // console.log("No history found");
       return null;
     }
   } catch (err) {
-    console.log("ERROR: Getting the history led to an error");
+    // console.log("ERROR: Getting the history led to an error");
     return err;
   }
 }

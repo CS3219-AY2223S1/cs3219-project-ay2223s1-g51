@@ -38,7 +38,7 @@ async function updateRoomCount(room, v) {
   const r = await _findRoom(room);
   const count = r.count + v;
 
-  console.log("update roomname, count: " + room + ", " + count);
+  // console.log("update roomname, count: " + room + ", " + count);
 
   _updateRoomCount(room, count);
 }
@@ -78,12 +78,12 @@ export function createRoom(room) {
     roomname = room + "-" + mediumRoomCount;
     mediumRoomCount++;
   } else {
-    console.log(room);
+    // console.log(room);
     waitingRooms[room].push(room + "-" + hardRoomCount);
     roomname = room + "-" + hardRoomCount;
     hardRoomCount++;
   }
-  console.log("created room: ", roomname);
+  // console.log("created room: ", roomname);
   return _createRoom(roomname);
   // console.log(
   //     "after creating new room, waiting rooms: " +
@@ -123,9 +123,9 @@ export async function leaveRoom(username, roomname) {
 export function userJoin(id, username, room) {
   const user = { id, username, room };
   _addRoomUser(room, username);
-  console.log(user);
+  // console.log(user);
   users.push(user);
-  console.log("userlist: " + users);
+  // console.log("userlist: " + users);
   return user;
 }
 
@@ -145,7 +145,7 @@ export function getRoomUsers(room) {
 
 // Get current user by username
 export function getCurrentUserByName(username) {
-  console.log(`retrieving user list: ${username}`);
+  // console.log(`retrieving user list: ${username}`);
   return users.find((user) => user.username === username);
 }
 

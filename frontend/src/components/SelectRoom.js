@@ -7,7 +7,7 @@ import { STATUS_CODE_FAIL, STATUS_CODE_DATABASE_ERROR } from "../constants";
 // import { URL_USER_CHECKUSERJWT_SVC } from "../configs";
 
 export default function SelectRoom(props) {
-  const { user, roomtype, setRoomType, socket, token, setToken, setShowFooter } = props;
+  const { user, roomtype, setRoomType, socket, token, setToken, setShowFooter, currentRoom } = props;
   const navigate = useNavigate();
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const [selection, setSelection] = useState("");
@@ -20,8 +20,13 @@ export default function SelectRoom(props) {
   const handleSubmit = (event) => {
     event.preventDefault();
     if (selection) {
+      if ((roomtype !== "") & (roomtype !== selection)) {
+        // console.log("disconnect from room: " + currentRoom);
+        socket.emit("leave-room", currentRoom);
+      }
       setRoomType(selection);
       // console.log("emit join-room");
+
       const room = selection;
       const username = user;
       socket.emit("join-room", { username, room });
