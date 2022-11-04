@@ -1,14 +1,14 @@
-# CS3219-AY22-23-Project-Skeleton
+# CS3219-AY22-23-Project-G51
 
-This is a template repository for CS3219 project.
+This is a repository for CS3219 Group 51 Peerprep project.
 
-## User Service
-1. Rename `.env.sample` file to `.env`.
-2. Create a Cloud DB URL using Mongo Atlas.
-3. Enter the DB URL created as `DB_CLOUD_URI` in `.env` file.
-4. Install npm packages using `npm i`.
-5. Run User Service using `npm run dev`.
+## Step 1: Cloning the project repository
+1. Open Terminal. run `git clone https://github.com/CS3219-AY2223S1/cs3219-project-ay2223s1-g51.git` to clone the project repository.
 
-## Frontend
-1. Install npm packages using `npm i`.
-2. Run Frontend using `npm start`.
+## Step 2: Install packages
+1. `cd` into each of the services `frontend`, `user-service`, `matching-service`, `question-service`, `history-service` and run `npm install`.
+
+## Step 3: Running the services
+1. Run frontend using `npm start`.
+2. Run user-service, matching0-service, question-service, history-service using `npm run dev`.
+
