@@ -51,28 +51,36 @@ export async function removeRoomUser(roomname, username) {
   const data = await db.collection("roommodels").findOne({ roomname: roomname });
   const newUsers = data.users.filter((user) => user !== username);
   const newCount = data.count - 1;
-
-  let myquery = { roomname: { $eq: roomname } };
-  let newvalues = { $set: { count: newCount, users: newUsers } };
-  // console.log("query: ", myquery);
-  // console.log("value: ", newvalues);
-  db.collection("roommodels").updateOne(myquery, newvalues, function (err, obj) {
-    if (err) throw err;
-  });
+  if (newCount >= 0) {
+    let myquery = { roomname: { $eq: roomname } };
+    let newvalues = { $set: { count: newCount, users: newUsers } };
+    // console.log("query: ", myquery);
+    // console.log("value: ", newvalues);
+    db.collection("roommodels").updateOne(myquery, newvalues, function (err, obj) {
+      if (err) throw err;
+    });
+  }
 }
 
 export async function addRoomUser(roomname, username) {
-  const data = await db.collection("roommodels").findOne({ roomname: roomname });
-  const newUsers = data.users.filter((user) => user !== username);
-  const newCount = data.count + 1;
+  try {
+    console.log("adding user into room: " + roomname);
+    const data = await db.collection("roommodels").findOne({ roomname: roomname });
+    console.log(data);
+    const newUsers = data.users;
+    const newCount = data.count + 1;
+    newUsers.push(username);
+    console.log(newUsers);
 
-  let myquery = { roomname: { $eq: roomname } };
-  let newvalues = { $set: { count: newCount, users: newUsers } };
-  // console.log("query: ", myquery);
-  // console.log("value: ", newvalues);
-  db.collection("roommodels").updateOne(myquery, newvalues, function (err, obj) {
-    if (err) throw err;
-  });
+    let myquery = { roomname: { $eq: roomname } };
+    let newvalues = { $set: { count: newCount, users: newUsers } };
+    // console.log("query: ", myquery);
+    // console.log("value: ", newvalues);
+    db.collection("roommodels").updateOne(myquery, newvalues);
+  } catch (err) {
+    console.log(err);
+    throw err;
+  }
 }
 
 export async function getWaitingRooms(waitingRooms) {

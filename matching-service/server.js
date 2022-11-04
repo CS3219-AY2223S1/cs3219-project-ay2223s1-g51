@@ -74,16 +74,20 @@ io.on("connection", (socket) => {
   });
 
   // Join a room with username and specified room
-  socket.on("join-room", ({ username, room }) => {
+  socket.on("join-room", async ({ username, room }) => {
     // Check whether current user in any room
     let user = getCurrentUserByName(username);
     let assignedRoom = "";
     if (user) {
+      console.log(`user exist!: ${user}`);
       assignedRoom = user.room;
       updateUserId(username, socket.id);
     } else {
       // Find an empty/currently occupied room for user
-      assignedRoom = locateRoom(room);
+
+      console.log(`user does not exist!: ${user}`);
+      const retrieveRoom = await locateRoom(room);
+      assignedRoom = retrieveRoom.roomname;
       user = userJoin(socket.id, username, assignedRoom);
     }
     socket.join(user.room);
@@ -125,12 +129,25 @@ io.on("connection", (socket) => {
     io.sockets.in(socket.room).emit("stats-update", msg);
   });
 
+  // Runs when client leaves room
+  socket.on("leave-room", (room) => {
+    const user = userLeave(socket.id);
+    socket.leave(room);
+    console.log("user left: " + socket.id);
+    if (user) {
+      io.to(user.room).emit("receive-message", formatMessage(botName, `${user.username} has left the chat`));
+      leaveRoom(user.username, user.room);
+      // Send users and room info
+      io.to(user.room).emit("joined-users", { room: user.room, users: getRoomUsers(user.room) });
+    }
+  });
+
   // Runs when client disconnects
   socket.on("disconnect", () => {
     const user = userLeave(socket.id);
     console.log("user left: " + socket.id);
     if (user) {
-      io.to(user.room).emit("message", formatMessage(botName, `${user.username} has left the chat`));
+      io.to(user.room).emit("receive-message", formatMessage(botName, `${user.username} has left the chat`));
       leaveRoom(user.username, user.room);
       // Send users and room info
       io.to(user.room).emit("joined-users", { room: user.room, users: getRoomUsers(user.room) });

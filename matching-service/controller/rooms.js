@@ -44,16 +44,16 @@ async function updateRoomCount(room, v) {
 }
 
 export function locateRoom(roomType) {
-  let currentRoom = "";
+  let currentRoom = {};
   //   console.log("current waiting room: ", waitingRooms);
   //   console.log("current empty room: ", emptyRooms);
 
   if (waitingRooms[roomType].length > 0) {
-    currentRoom = waitingRooms[roomType][0];
+    currentRoom = { roomname: waitingRooms[roomType][0] };
     // console.log("Theres already a waiting room: ", currentRoom);
     const removedRoom = waitingRooms[roomType].shift();
   } else if (emptyRooms[roomType].length > 0) {
-    currentRoom = emptyRooms[roomType][0];
+    currentRoom = { roomname: emptyRooms[roomType][0] };
     // console.log("Theres already a empty room: ", currentRoom);
     const removedRoom = emptyRooms[roomType].shift();
     waitingRooms[roomType].push(removedRoom);
@@ -84,14 +84,13 @@ export function createRoom(room) {
     hardRoomCount++;
   }
   console.log("created room: ", roomname);
-  _createRoom(roomname);
+  return _createRoom(roomname);
   // console.log(
   //     "after creating new room, waiting rooms: " +
   //         waitingRooms["Easy"] +
   //         waitingRooms["Medium"] +
   //         waitingRooms["Hard"]
   // );
-  return roomname;
 }
 
 export async function leaveRoom(username, roomname) {
@@ -124,6 +123,7 @@ export async function leaveRoom(username, roomname) {
 export function userJoin(id, username, room) {
   const user = { id, username, room };
   _addRoomUser(room, username);
+  console.log(user);
   users.push(user);
   console.log("userlist: " + users);
   return user;

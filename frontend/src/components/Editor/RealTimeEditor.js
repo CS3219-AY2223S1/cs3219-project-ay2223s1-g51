@@ -47,6 +47,7 @@ export default function RealTimeEditor(props) {
     users,
     question,
     roomtype,
+    room,
   } = props;
 
   const navigate = useNavigate();
@@ -158,9 +159,8 @@ export default function RealTimeEditor(props) {
       setIsDisconnected(true);
       navigate("/");
     } else {
-      console.log("disconnect");
-      socket.disconnect();
-      setIsDisconnected(true);
+      console.log("disconnect from room");
+      socket.emit("leave-room", room);
       navigate("/selectroom");
     }
   };

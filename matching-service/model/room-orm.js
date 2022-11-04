@@ -29,10 +29,16 @@ export async function ormFindRoom(roomname) {
   }
 }
 //need to separate orm functions from repository to decouple business logic from persistence
-export function ormCreateRoom(roomname) {
-  let roomType = roomname.split("-")[0];
-  let roomMod = new RoomModel({ roomtype: roomType, roomname: roomname, count: 0, users: [] }); //Create new user
-  roomMod.save();
+export async function ormCreateRoom(roomname) {
+  try {
+    let roomType = roomname.split("-")[0];
+    let roomMod = new RoomModel({ roomtype: roomType, roomname: roomname, count: 0, users: [] }); //Create new user
+    const result = await roomMod.save();
+    return result;
+  } catch (err) {
+    console.log("ERROR: Creating a room led to an error");
+    return err;
+  }
 }
 
 export async function ormDeleteRoom(roomname) {

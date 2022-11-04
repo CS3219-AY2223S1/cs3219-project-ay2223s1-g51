@@ -13,7 +13,7 @@ import { URL_EXECUTE_API } from "../configs/matching-service";
 import "react-reflex/styles.css";
 
 export default function Room(props) {
-  const { username, socket, setIsDisconnected, roomtype } = props;
+  const { username, socket, setIsDisconnected, roomtype, room, setRoom } = props;
 
   const getLanguageVersion = {
     cpp17: "0", // g++ 17 GCC 9.10
@@ -40,7 +40,6 @@ export default function Room(props) {
   const [RoomTheme, setRoomTheme] = useState("vs-dark");
   const [isError, setisError] = useState(false);
   const [users, setUsers] = useState([]);
-  const [room, setRoom] = useState("");
   const [timeoutId, setTimeoutId] = useState(-1);
 
   const [message, setMessage] = useState("");
@@ -96,8 +95,8 @@ export default function Room(props) {
     enqueueSnackbar("timed out!", {
       variant: "warning",
     });
-    socket.disconnect();
-    setIsDisconnected(true);
+    console.log("disconnect from room");
+    socket.emit("leave-room", room);
     navigate("/selectroom");
   };
 
@@ -131,7 +130,6 @@ export default function Room(props) {
 
     // Update participants
     socket.on("joined-users", (data) => {
-      console.log(data.users);
       setUsers(data.users);
       setRoom(data.room);
     });

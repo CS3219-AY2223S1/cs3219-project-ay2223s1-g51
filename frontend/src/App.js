@@ -43,7 +43,7 @@ function App(props) {
   const [socket, setSocket] = useState();
 
   useEffect(() => {
-    const s = io("http://localhost:8000", { forceNew: true });
+    const s = io("http://localhost:8000");
     console.log(s);
     setSocket(s);
 
@@ -58,8 +58,7 @@ function App(props) {
 
   useEffect(() => {
     if (isDisconnected === true) {
-      const s = io("http://localhost:8000", { forceNew: true });
-      s.connect();
+      const s = io("http://localhost:8000");
       console.log(s);
       setIsDisconnected(false);
       return () => {
@@ -91,7 +90,7 @@ function App(props) {
       <Box sx={{ display: "flex", flexDirection: "column", flexFlow: "column", height: screenSize.dynamicHeight }}>
         <Box sx={{ display: "flex", flexDirection: "column" }}>
           <Router>
-            <NavBar user={user} setUser={setUser}></NavBar>
+            <NavBar user={user} setUser={setUser} room={room} socket={socket}></NavBar>
             <Routes>
               <Route exact path="/" element={<Navigate replace to="/login" />}></Route>
               <Route
@@ -153,10 +152,6 @@ function App(props) {
                       setIsDisconnected={setIsDisconnected}
                     />
                   }
-                />
-                <Route
-                  path="/editor"
-                  element={<Editor username={username} room={room} setIsDisconnected={setIsDisconnected} />}
                 />
               </Route>
             </Routes>

@@ -21,7 +21,7 @@ const NavBar = (props) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [dialogTitle, setDialogTitle] = useState("");
   const [dialogMsg, setDialogMsg] = useState("");
-  const { user, setUser } = props;
+  const { user, setUser, room, socket } = props;
 
   const closeDialog = () => setIsDialogOpen(false);
 
@@ -43,8 +43,12 @@ const NavBar = (props) => {
       setErrorDialog("Failed to logout, please try again later");
     });
     if (res && res.status === STATUS_CODE_SUCCESS) {
-      setUser("")
-      closeDialog()
+      setUser("");
+      if (room) {
+        console.log("disconnect from room: " + room);
+        socket.emit("leave-room", room);
+      }
+      closeDialog();
       navigate("/login", { replace: true });
     }
   };
