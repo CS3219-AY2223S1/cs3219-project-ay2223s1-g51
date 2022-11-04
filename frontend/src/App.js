@@ -41,8 +41,9 @@ function App(props) {
   }, []);
 
   const [socket, setSocket] = useState();
+
   useEffect(() => {
-    const s = io("http://localhost:8000");
+    const s = io("http://localhost:8000", { forceNew: true });
     console.log(s);
     setSocket(s);
 
@@ -57,13 +58,12 @@ function App(props) {
 
   useEffect(() => {
     if (isDisconnected === true) {
-      const s = io("http://localhost:8000");
-      console.log(`new socket: ${s}`);
-      setSocket(s);
+      console.log("attemp to connect socket");
+      socket.connect();
+      console.log(socket);
       setIsDisconnected(false);
-
       return () => {
-        s.disconnect();
+        socket.disconnect();
       };
     }
   }, [isDisconnected]);
@@ -80,7 +80,7 @@ function App(props) {
     console.log("token has changed");
     console.log("token: " + token);
   }, [token]);
-  
+
   useEffect(() => {
     console.log("user has changed");
     console.log("user: " + user);
@@ -91,7 +91,7 @@ function App(props) {
       <Box sx={{ display: "flex", flexDirection: "column", flexFlow: "column", height: screenSize.dynamicHeight }}>
         <Box sx={{ display: "flex", flexDirection: "column" }}>
           <Router>
-            <NavBar user={user} setUser={setUser} ></NavBar>
+            <NavBar user={user} setUser={setUser}></NavBar>
             <Routes>
               <Route exact path="/" element={<Navigate replace to="/login" />}></Route>
               <Route
@@ -99,7 +99,7 @@ function App(props) {
                 element={
                   <Login
                     username={username}
-                    password={password}                    
+                    password={password}
                     token={token}
                     user={user}
                     setUsername={setUsername}
@@ -110,10 +110,18 @@ function App(props) {
                 }
               />
               <Route path="/signup" element={<SignupPage />} />
-              <Route element= {<ProtectedRoutes token={token} />}>
+              <Route element={<ProtectedRoutes token={token} />}>
                 <Route
                   path="/profile"
-                  element={<ProfilePage username={username} password={password} user={user} setUser={setUser} setPassword={setPassword} />}
+                  element={
+                    <ProfilePage
+                      username={username}
+                      password={password}
+                      user={user}
+                      setUser={setUser}
+                      setPassword={setPassword}
+                    />
+                  }
                 />
                 <Route
                   path="/history"

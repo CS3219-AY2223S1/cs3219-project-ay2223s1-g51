@@ -21,6 +21,7 @@ export default function SelectRoom(props) {
     event.preventDefault();
     if (selection) {
       setRoomType(selection);
+      // console.log("emit join-room");
       const room = selection;
       const username = user;
       socket.emit("join-room", { username, room });

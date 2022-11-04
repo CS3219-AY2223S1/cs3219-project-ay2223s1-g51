@@ -64,6 +64,10 @@ httpServer.listen(PORT, () => {
 io.on("connection", (socket) => {
   console.log("socket_id connected: " + socket.id);
 
+  socket.on("connect_error", (err) => {
+    console.log(`connect_error due to ${err.message}`);
+  });
+
   // If code changes, broadcast to sockets
   socket.on("code-change", (msg) => {
     socket.broadcast.to(socket.room).emit("code-update", msg);

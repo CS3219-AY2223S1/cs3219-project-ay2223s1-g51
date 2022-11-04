@@ -131,7 +131,7 @@ export default function RealTimeEditor(props) {
         setcodeInRoom(data.code);
       });
       socket.on("language-update", (data) => {
-        setLanguage(data);
+        setLanguage(languages.indexOf(data));
         setlanguageInRoom(data);
       });
     }

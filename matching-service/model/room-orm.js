@@ -62,7 +62,7 @@ export async function ormUpdateRoomCount(roomname, count) {
 export async function ormRemoveRoomUser(roomname, username) {
   try {
     await removeRoomUser(roomname, username);
-    console.log(`SUCCESS: Updated Room Details for ${username} in ${roomname}`);
+    console.log(`REMOVE SUCCESS: Updated Room Details for ${username} in ${roomname}`);
 
     return true;
   } catch (err) {
@@ -74,7 +74,7 @@ export async function ormRemoveRoomUser(roomname, username) {
 export async function ormAddRoomUser(roomname, username) {
   try {
     await addRoomUser(roomname, username);
-    console.log(`SUCCESS: Updated Room Details for ${username} in ${roomname}`);
+    console.log(`ADD SUCCESS: Updated Room Details for ${username} in ${roomname}`);
 
     return true;
   } catch (err) {
