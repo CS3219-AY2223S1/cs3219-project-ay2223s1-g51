@@ -169,7 +169,7 @@ export default function Room(props) {
     event.preventDefault();
 
     if (message) {
-      socket.emit("sendMessage", message);
+      socket.emit("sendMessage", `${username} : ${message}`);
       setMessage("");
     }
   };

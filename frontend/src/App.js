@@ -58,12 +58,12 @@ function App(props) {
 
   useEffect(() => {
     if (isDisconnected === true) {
-      console.log("attemp to connect socket");
-      socket.connect();
-      console.log(socket);
+      const s = io("http://localhost:8000", { forceNew: true });
+      s.connect();
+      console.log(s);
       setIsDisconnected(false);
       return () => {
-        socket.disconnect();
+        s.disconnect();
       };
     }
   }, [isDisconnected]);
