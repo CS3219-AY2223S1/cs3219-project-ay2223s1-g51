@@ -11,10 +11,8 @@ import {
 export async function ormVerifyUserToken(token) {
     try {
         const token = await verifyUserToken();
-        // console.log(token)
         return token;
     } catch (err) {
-        // console.log(err);
         console.log("ERROR: Checking the JWT of current user led to an error");
         throw err;
     }
@@ -25,7 +23,6 @@ export async function ormCreateUser(username, password) {
     const newUser = await createUser({ username, password });
     return newUser;
   } catch (err) {
-    // console.log(err);
     console.log("ERROR: Creating the user led to an error");
     throw err;
   }
@@ -34,10 +31,8 @@ export async function ormCreateUser(username, password) {
 export async function ormLogInUser(username, password) {
   try {
     const user = await logInUser({ username, password });
-    // console.log(user)
     return user;
   } catch (err) {
-    // console.log(err);
     console.log("ERROR: Error occured when trying to log in");
     return err;
   }
@@ -48,7 +43,6 @@ export async function ormLogOutUser(username, password) {
     const user = await logOutUser();
     return user;
   } catch (err) {
-    // console.log(err);
     console.log("ERROR: Error occured when trying to log in");
     return err;
   }

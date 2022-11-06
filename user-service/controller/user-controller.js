@@ -62,12 +62,12 @@ export async function logInUser(req, res) {
       try {
         const resp = await _logInUser(username, password);
         if (resp["key"] == "error") {
-          errorMsg = resp["obj"];
-          if (resp["obj"] == "auth/wrong-password" || "auth/user-not-found" || "auth/invalid-email") {
+          const errorMsg = resp["obj"];
+          if (errorMsg == "auth/wrong-password" || errorMsg == "auth/user-not-found" || errorMsg == "auth/invalid-email") {
             console.log("Wrong username or password");
             return res.status(404).json({ message: errorMsg });
-          } else if (newUser["obj"] == "auth/too-many-requests") {
-            return res.status(500).json({ message: "Database failure when logging in to user account!" });
+          } else if (errorMsg == "auth/too-many-requests") {
+            return res.status(400).json({ message: errorMsg });
           }
         }
 
@@ -79,7 +79,7 @@ export async function logInUser(req, res) {
         return res.status(500).json({ message: `Database failure when logging in to user account!` });
       }
     } else {
-      return res.status(400).json({ message: "Username and/or Password are missing!" });
+      return res.status(404).json({ message: "Username and/or Password are missing!" });
     }
   } catch (err) {
     return res.status(500).json({ message: "Database failure when logging in to user account!" });
