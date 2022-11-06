@@ -20,7 +20,7 @@ import {
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import axios from "axios";
 import { URL_USER_LOGINUSER_SVC } from "../configs/user-service";
-import { STATUS_CODE_SUCCESS } from "../constants";
+import { STATUS_CODE_DATABASE_ERROR, STATUS_CODE_FAIL, STATUS_CODE_NOT_FOUND, STATUS_CODE_SUCCESS } from "../constants";
 
 function Copyright(props) {
   return (
@@ -53,8 +53,11 @@ export default function Login(props) {
   const handleLogin = async (event) => {
     event.preventDefault();
     const res = await axios.post(URL_USER_LOGINUSER_SVC, { username, password }).catch((err) => {
-      // console.log(err);
-      setErrorDialog("Wrong username or password. Please try again.");
+      if (err.response.status === STATUS_CODE_NOT_FOUND) {
+        setErrorDialog("Wrong username or password. Please try again.");  
+      } else if (err.response.status === STATUS_CODE_FAIL) {
+        setErrorDialog("Too many failed login attempts. Please try again later.")
+      }
     });
 
     if (res && res.status === STATUS_CODE_SUCCESS) {
