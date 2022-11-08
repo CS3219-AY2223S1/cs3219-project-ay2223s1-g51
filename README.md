@@ -4,11 +4,13 @@
 This is a repository for CS3219 Group 51 Peerprep project.
 The project is developed by Han Zong Yu, Ryan Chang Jia Jie, Sim Jia Ming and Tan Yu Qi.
 # Tech Stack
-MongoDB
-Express
-React
-Node
-Firebase
+MongoDB,
+Express,
+React,
+Node,
+Firebase,
+Socket IO
+
 
 ## Getting started
 # Step 1: Cloning the project repository
@@ -19,5 +21,5 @@ Firebase
 
 # Step 3: Running the services
 1. Run frontend using `npm start`.
-2. Run user-service, matching0-service, question-service, history-service using `npm run dev`.
+2. Run user-service, matching-service, question-service, history-service using `npm run dev`.
 
