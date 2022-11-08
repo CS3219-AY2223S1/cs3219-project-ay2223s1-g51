@@ -23,3 +23,8 @@ Socket IO
 1. Run frontend using `npm start`.
 2. Run user-service, matching-service, question-service, history-service using `npm run dev`.
 
+# Step 4: Open your browser
+1. Visit `http://localhost:3000/`
+2. Create an account and start using.
+
+![Screenshot 2022-11-09 at 12 55 22 AM](https://user-images.githubusercontent.com/75411350/200627242-d53d6a1d-9b87-4888-b5e2-0a274a40ba80.png)
